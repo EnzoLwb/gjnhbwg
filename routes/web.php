@@ -5,10 +5,6 @@ Route::get('/', function () {
 	return redirect('/admin');
 });
 
-// 首页
-Route::get('/', 'HomeController@index');
-Route::get('/home', 'HomeController@welcome');
-
 // 前台登录注册路由
 Auth::routes();
 
