@@ -23,5 +23,11 @@ class DatabaseSeeder extends Seeder
 		$this->call(SettingTableSeeder::class);
 		// 地区库
 		$this->call(RegionTableSeeder::class);
+		//证件类型
+		$this->call(CertificateTypeTableSeeder::class);
+		//人员构成
+		$this->call(ManningListTableSeeder::class);
+		//参观时间
+		$this->call(VisitTimeListTableSeeder::class);
 	}
 }
