@@ -193,7 +193,7 @@ class UsersController extends Controller
 
 		$phoneOremail = trim(request('username'));
 		if (empty($phoneOremail)) {
-			throw new ApiErrorException('phoneOremail不能为空');
+			throw new ApiErrorException('username不能为空');
 		}
 
 		$preg_email = '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
@@ -264,17 +264,15 @@ class UsersController extends Controller
 	}
 
 	/**
-	 * 第三方账号绑定注册
+	 * 第三方账号登录
 	 *
 	 * @author lxp 20170915
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {POST} /users/register_bind 8. 第三方账号绑定注册
+	 * @api {POST} /users/register_bind 7. 第三方账号登录
 	 * @apiGroup Users
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} phone 手机号
-	 * @apiParam {string} smscode 短信验证码
 	 * @apiParam {string} openid 第三方id
 	 * @apiParam {string="wx","wb","qq"} b_from 来源
 	 * @apiParam {string} b_nickname 第三方昵称
@@ -288,63 +286,69 @@ class UsersController extends Controller
 	public function register_bind()
 	{
 		$this->validate([
-			'phone' => 'required|mobile|unique:users',
-			'smscode' => 'required',
 			'openid' => 'required',
 			'b_from' => 'required|in:wx,qq,wb',
 			'b_nickname' => 'required',
 		]);
 
-		// 短信验证码
-		SmsVerifyDao::code_check(request('phone'), request('smscode'));
+		// 取出用户绑定数据
+		$userbind = UsersBind::where('openid', request('openid'))->where('b_from', request('b_from'))->first();
 
-		$user = DB::transaction(function () {
-			// 处理昵称
-			$nickname = trim(strip_tags(request('b_nickname')));
-			if (Users::where('nickname', $nickname)->count() > 0) {
-				$nickname = UsersDao::get_nickname($nickname);
-			}
-			// 生成密码盐
-			$salt = Str::random(6);
-
-			// 添加用户
-			$user = new Users();
-			$user->username = request('phone');
-			$user->password = get_password(Str::random(6), $salt);
-			$user->phone = request('phone');
-			$user->nickname = $nickname;
-			$user->salt = $salt;
-			$user->lastloginip = app('request')->ip();
-			$user->plat = request('p');
-			$user->save();
-			if (!$user->uid) {
-				throw new ApiErrorException('注册失败，请稍后重试');
-			}
-			// 保存头像
-			if (request('b_avatar')) {
-				$file = UploadedFileDao::saveRemoteFile(request('b_avatar'), 'FT_AVATAR', $user->uid);
-				if ($file['status']) {
-					$user->avatar = $file['data']->file_path . '/' . $file['data']->file_name;
+		if (is_null($userbind)) {
+			$user = DB::transaction(function () {
+				// 处理昵称
+				$nickname = trim(strip_tags(request('b_nickname')));
+				if (Users::where('nickname', $nickname)->count() > 0) {
+					$nickname = UsersDao::get_nickname($nickname);
 				}
-			}
-			// 生成API验证token
+				// 生成密码盐
+				$salt = Str::random(6);
+
+				// 添加用户
+				$user = new Users();
+				$user->username = $nickname;
+				$user->password = get_password(Str::random(6), $salt);
+				$user->nickname = $nickname;
+				$user->salt = $salt;
+				$user->lastloginip = app('request')->ip();
+				$user->plat = request('p');
+				$user->save();
+				if (!$user->uid) {
+					throw new ApiErrorException('注册失败，请稍后重试');
+				}
+				// 保存头像
+				if (request('b_avatar')) {
+					$file = UploadedFileDao::saveRemoteFile(request('b_avatar'), 'FT_AVATAR', $user->uid);
+					if ($file['status']) {
+						$user->avatar = $file['data']->file_path . '/' . $file['data']->file_name;
+					}
+				}
+				// 生成API验证token
+				$user->api_token = get_api_token($user->uid);
+				$user->save();
+
+				// 添加绑定信息
+				$userBind = new UsersBind();
+				$userBind->uid = $user->uid;
+				$userBind->openid = request('openid');
+				$userBind->b_from = request('b_from');
+				$userBind->b_nickname = request('b_nickname');
+				$userBind->b_avatar = request('b_avatar', '');
+				$userBind->save();
+
+				return $user;
+			});
+		}else{
+			$user = Users::findOrFail($userbind->uid);
+			// 登录成功，生成api token
 			$user->api_token = get_api_token($user->uid);
+			if (request('deviceno')) {
+				$user->deviceno = request('deviceno');
+			}
 			$user->save();
-
-			// 添加绑定信息
-			$userBind = new UsersBind();
-			$userBind->uid = $user->uid;
-			$userBind->openid = request('openid');
-			$userBind->b_from = request('b_from');
-			$userBind->b_nickname = request('b_nickname');
-			$userBind->b_avatar = request('b_avatar', '');
-			$userBind->save();
-
-			return $user;
-		});
+		}
 		return response_json(1, [
 			'uid' => $user->uid,
-			'phone' => $user->phone,
 			'api_token' => $user->api_token
 		]);
 	}
@@ -358,6 +362,7 @@ class UsersController extends Controller
 	 *
 	 * @api {POST} /users/login_bind 9. 第三方账号登录
 	 * @apiGroup Users
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
 	 * @apiParam {string} openid 第三方id
@@ -396,7 +401,7 @@ class UsersController extends Controller
 	}
 
 	/**
-	 * 短信认证，忘记（修改）密码
+	 * 验证码认证，忘记（修改）密码
 	 *
 	 * @author lxp 20170113
 	 * @return \Illuminate\Http\JsonResponse
@@ -406,8 +411,8 @@ class UsersController extends Controller
 	 * @apiGroup Users
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 请求平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} phone 手机号
-	 * @apiParam {string} smscode 短信验证码
+	 * @apiParam {string} username 手机号/邮箱
+	 * @apiParam {string} smscode 验证码
 	 * @apiParam {string} password 新密码
 	 * @apiParam {string} password_confirmation 确认密码
 	 * @apiSuccess {string} username 用户名
@@ -417,20 +422,44 @@ class UsersController extends Controller
 	 */
 	public function password()
 	{
+
+		$phoneOremail = trim(request('username'));
+		if (empty($phoneOremail)) {
+			throw new ApiErrorException('username不能为空');
+		}
+
+		$preg_email = '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+		$preg_phone = '/^1[34578]\d{9}$/ims';
+
+		if (preg_match($preg_phone, $phoneOremail)) {
+			$vtype = 1;
+		} elseif (preg_match($preg_email, $phoneOremail)) {
+			$vtype = 2;
+		} else {
+			throw new ApiErrorException('请填写正确的手机号或者邮箱');
+		}
+
+
 		$this->validate([
-			'phone' => 'required|mobile',
 			'smscode' => 'required',
 			'password' => 'required|min:6|confirmed',
 			'password_confirmation' => 'required'
 		]);
 
-		$user = Users::where('phone', request('phone'))->first();
+
+		if($vtype==1){
+			$user = Users::where('phone', request('username'))->first();
+
+		}elseif ($vtype == 2) {
+			$user = Users::where('email', request('username'))->first();
+		}
+
 		if (!$user) {
 			throw new ApiErrorException('用户不存在');
 		}
 
-		// 短信验证码
-		SmsVerifyDao::code_check(request('phone'), request('smscode'));
+		// 验证验证码
+		SmsVerifyDao::code_check(request('username'), request('smscode'),$vtype);
 
 		// 新密码不与老密码相同，允许修改密码
 		if (get_password(request('password'), $user->salt) != $user->password) {
