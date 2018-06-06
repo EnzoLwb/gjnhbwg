@@ -21,7 +21,8 @@ class CreateSmsVerifyTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments($this->primaryKey);
-			$table->string('mobile', 20)->comment('手机号');
+			$table->string('mobile', 20)->comment('手机号')->nullable();
+			$table->string('email', 100)->comment('邮箱')->nullable();
 			$table->char('smscode', 32)->comment('验证码');
 			$table->string('ip', 15)->comment('最后登录IP')->nullable();
 			$table->char('plat', 3)->comment('注册平台来源，i：IOS，a：安卓，w：Web，t：触摸屏或手机')->nullable();

@@ -8,8 +8,8 @@ Route::post('users/register', 'UsersController@register');
 Route::get('cpt/show', 'CptController@show');
 // 验证码显示
 Route::get('cpt/check', 'CptController@check');
-// 发送短信验证码
-Route::post('send_sms', 'CptController@send_sms');
+// 发送短信(邮箱)验证码
+Route::post('send_vcode', 'CptController@send_vcode');
 // 忘记（修改）密码
 Route::post('users/password', 'UsersController@password');
 // 第三方用户登录

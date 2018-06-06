@@ -30,7 +30,7 @@ class UsersController extends Controller
 	 * @apiGroup Users
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} phone 手机号
+	 * @apiParam {string} username 用户名（手机号/邮箱）
 	 * @apiParam {string} password 密码
 	 * @apiParam {string} [deviceno] 设备号
 	 * @apiSuccess {int} uid 用户ID
@@ -41,12 +41,12 @@ class UsersController extends Controller
 	public function login()
 	{
 		$this->validate([
-			'phone' => 'required',
+			'username' => 'required',
 			'password' => 'required'
 		]);
 
 		// 取出用户并验证密码
-		$user = Users::where('username', request('phone'))->first();
+		$user = Users::where('username', request('username'))->first();
 		if (is_null($user)) {
 			throw new ApiErrorException('用户不存在');
 		}
@@ -179,7 +179,8 @@ class UsersController extends Controller
 	 * @apiGroup Users
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} phone 手机号
+	 * @apiParam {string} username 用户名（手机号/邮箱）
+	 * @apiParam {string} smscode验证码
 	 * @apiParam {string} password 密码
 	 * @apiSuccess {int} uid 用户ID
 	 * @apiSuccess {string} phone 手机号
@@ -189,20 +190,49 @@ class UsersController extends Controller
 	 */
 	public function register()
 	{
-		$this->validate([
-			'phone' => 'required|mobile|unique:users',
-			'password' => 'required',
-		]);
 
+		$phoneOremail = trim(request('username'));
+		if (empty($phoneOremail)) {
+			throw new ApiErrorException('phoneOremail不能为空');
+		}
+
+		$preg_email = '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+		$preg_phone = '/^1[34578]\d{9}$/ims';
+
+		if (preg_match($preg_phone, $phoneOremail)) {
+			$vtype = 1;
+		} elseif (preg_match($preg_email, $phoneOremail)) {
+			$vtype = 2;
+		} else {
+			throw new ApiErrorException('请填写正确的手机号或者邮箱');
+		}
+
+
+
+		if($vtype==1){
+			$this->validate([
+				'username' => 'required|mobile|unique:users',
+				'smscode' => 'required',
+				'password' => 'required|min:6',
+			]);
+
+		}elseif ($vtype == 2) {
+			$this->validate([
+				'username' => 'required|email|unique:users',
+				'smscode' => 'required',
+				'password' => 'required|min:6',
+			]);
+		}
+
+		SmsVerifyDao::code_check(request('username'), request('smscode'),$vtype);
 
 		$user = DB::transaction(function () {
 			// 生成密码盐
 			$salt = Str::random(6);
 
 			$user = new Users();
-			$user->username = request('phone');
+			$user->username = request('username');
 			$user->password = get_password(request('password'), $salt);
-			$user->phone = request('phone');
 			$user->nickname = UsersDao::get_nickname();
 			$user->salt = $salt;
 			$user->lastloginip = app('request')->ip();
@@ -217,9 +247,18 @@ class UsersController extends Controller
 
 			return $user;
 		});
+
+		if($vtype==1){
+			$user->phone = request('username');
+			$user->save();
+		}elseif ($vtype == 2) {
+			$user->email = request('username');
+			$user->save();
+		}
+
 		return response_json(1, [
 			'uid' => $user->uid,
-			'phone' => $user->phone,
+			'username' => $user->username,
 			'api_token' => $user->api_token
 		]);
 	}

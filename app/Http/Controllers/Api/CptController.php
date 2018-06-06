@@ -6,6 +6,7 @@ use App\Exceptions\ApiErrorException;
 use App\Models\SmsVerify;
 use App\Utilities\Captcha\Securimage;
 use Illuminate\Support\Facades\Cache;
+use Mail;
 
 /**
  * 验证码控制器
@@ -26,17 +27,70 @@ class CptController extends Controller
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
 	 *
-	 * @api {POST} /send_sms 3. 发送短信验证码
+	 * @api {POST} /send_vcode 3. 发送短信(邮箱)验证码
 	 * @apiGroup Users
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 请求平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} phone 手机号
+	 * @apiParam {string} phoneOremail 手机号/邮箱
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":{},"msg":""}
 	 */
-	public function send_sms()
+	public function send_vcode()
 	{
-		$this->validate([
+		$phoneOremail = trim(request('phoneOremail'));
+		if (empty($phoneOremail)) {
+			throw new ApiErrorException('phoneOremail不能为空');
+		}
+
+		$preg_email = '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+		$preg_phone = '/^1[34578]\d{9}$/ims';
+
+		if (preg_match($preg_phone, $phoneOremail)) {
+			$vtype = 1;
+		} elseif (preg_match($preg_email, $phoneOremail)) {
+			$vtype = 2;
+		} else {
+			throw new ApiErrorException('请填写正确的手机号或者邮箱');
+		}
+
+		if ($vtype == 1) {
+			//短信验证码
+			$phone = $phoneOremail;
+
+		} elseif ($vtype == 2) {
+			//邮箱验证码
+			$email = $phoneOremail;
+
+			// 邮箱频繁验证
+			$lastVerify = SmsVerify::where('email', $email)->where('status', 1)->orderBy('created_at', 'DESC')->first();
+			if ($lastVerify && (date('U') - strtotime($lastVerify->created_at)) < 60) {
+				throw new ApiErrorException('操作过于频繁，请稍候再试');
+			}
+
+			// 将该邮箱之前的验证码都置为失效
+			SmsVerify::where('email', $email)->where('status', 1)->update(['status' => 3]);
+
+			// 生成手机验证码并保存
+			$smsObj = new SmsVerify();
+			$smsObj->email = $email;
+			$smsObj->smscode = rand(100000, 999999);
+			$smsObj->ip = request()->ip();
+			$smsObj->plat = request('p');
+			$smsObj->save();
+
+			// 发送邮件
+			$wenan = $smsObj->smscode . '为您的验证码，请于15分钟内填写。如非本人操作，请忽略。';
+			$flag = Mail::raw($wenan, function ($message) {
+				$message->to(trim(request('phoneOremail')))->subject('您的验证码');
+			});
+
+			return response_json(1, $flag, '发送成功');
+
+		} else {
+			throw new ApiErrorException('vtype error');
+		}
+
+		/*$this->validate([
 			//			'device_uuid' => 'required',
 			'phone' => 'required|mobile',
 			//			'code' => 'required'
@@ -69,7 +123,7 @@ class CptController extends Controller
 		// 发送短信
 		$smsObj->sendSmsNotification();
 
-		return response_json();
+		return response_json();*/
 	}
 
 	/**
