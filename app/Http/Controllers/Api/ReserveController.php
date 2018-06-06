@@ -16,6 +16,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /my_reserve_list 01.我的预约
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} api_token 用户token
@@ -38,6 +39,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /reserve_detail 02.预约信息详情
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} api_token 用户token
@@ -70,6 +72,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /personal_reserve 03.个人讲解预约提交
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} contacts 联系人姓名
@@ -93,6 +96,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /team_reserve 04.团队讲解预约提交
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} contacts 联系人姓名
@@ -118,6 +122,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /cancel_reserve 05.取消预约
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} api_token 用户token
@@ -136,6 +141,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /explain_evaluate 06.讲解评价提交
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} api_token 用户token
@@ -156,6 +162,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /certificate_type_list 07.证件类型下拉框
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiSuccess {array} data
@@ -174,6 +181,7 @@ class ReserveController extends Controller
 	 * @throws ApiErrorException
 	 * @api {GET} /visit_time_list 08.参观时间下拉框
 	 * @apiGroup Reserve
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiSuccess {array} data
@@ -190,6 +198,7 @@ class ReserveController extends Controller
 	 * @author lwb 20180605
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
+	 * @apiIgnore
 	 * @api {GET} /manning_list 09.人员构成下拉框
 	 * @apiGroup Reserve
 	 * @apiVersion 1.0.0
