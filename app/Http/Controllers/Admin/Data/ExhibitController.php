@@ -84,6 +84,10 @@ class ExhibitController extends BaseAdminController
 					'required',
 					'max:10'
 				],
+				'auto_num' =>[
+					'required',
+					'max:10'
+				],
 				'exhibition_id' => 'required',
 				'map_id' => 'required',
 				'x' => 'required',
@@ -101,6 +105,7 @@ class ExhibitController extends BaseAdminController
 
 			$data = [
 				'exhibit_num' => request('exhibit_num'),
+				'auto_num' => request('auto_num'),
 				'is_lb' => config('exhibit_config.exhibit.is_lb') ? request('is_lb') : 2,
 				'is_show_map' => request('is_show_map'),
 				'is_show_list' => request('is_show_list'),

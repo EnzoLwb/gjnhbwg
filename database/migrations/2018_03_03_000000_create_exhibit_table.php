@@ -32,6 +32,7 @@ class CreateExhibitTable extends Migration
 			$table->integer('x', false, true)->comment('x轴坐标');
 			$table->integer('y', false, true)->comment('y轴坐标');
 			$table->integer('exhibition_id', false, true)->comment('展厅id');
+			$table->integer('auto_num', false, true)->comment('多模蓝牙编号');
 			$table->string('exhibit_num',10)->comment('展品编号');
 			$table->text('exhibit_img')->comment('图片存储路径');
 			$table->integer('imgs_num', false, true)->comment('展品详情图片数量')->default(0);

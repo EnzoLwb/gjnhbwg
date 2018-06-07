@@ -30,6 +30,13 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">多模蓝牙编号(*)</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="auto_num" value="{{$info['auto_num'] or ''}}" class="form-control" maxlength="10" required/>
+                            </div>
+                        </div>
+
                         @if(config('exhibit_config.exhibit.is_lb'))
                         <div class="form-group">
                             <label class="col-sm-2 control-label">是否首页轮播(*)</label>

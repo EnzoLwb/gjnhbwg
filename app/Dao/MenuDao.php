@@ -64,6 +64,13 @@ class MenuDao extends BaseMdl
 						'priv' => 'admin-load-load',
 						'order_num' => 10,
 					],
+
+					[
+						'text' => '线路导航管理',
+						'url' => route('admin.navigation.show'),
+						'priv' => 'admin-navigation-navigation',
+						'order_num' => 11,
+					],
 				],
 			],
 			[
