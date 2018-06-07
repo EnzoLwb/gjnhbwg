@@ -115,7 +115,7 @@ class ExhibitController extends BaseAdminController
 				'map_id' => request('map_id'),
 				'x' => request('x'),
 				'y' => request('y'),
-				'imgs_num'=>count($imgs_arr['imgs']['exhibit_imgs']),
+				'imgs_num'=>is_array($imgs_arr['imgs']['exhibit_imgs'])?count($imgs_arr['imgs']['exhibit_imgs']):1,
 				'exhibit_name' => request('exhibit_name_1'),
 			];
 

@@ -55,22 +55,6 @@ return [
 		'imgs' => [
 			[
 				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
-				'key' => 'exhibit_lb',
-				//数据库存储类型
-				'upload_key' => 'FT_EXHIBIT_ONE',
-				//页面提示名称
-				'name' => '首页轮播图片',
-				//是否必传
-				'required' => true,
-				//是否上传多图
-				'is_more' => false,
-				//该资源是否打包
-				'is_zip' => false,
-				//资源打包时生成的图片名称
-				'zip_name' => 'lb'
-			],
-			[
-				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
 				'key' => 'exhibit_list',
 				//数据库存储类型
 				'upload_key' => 'FT_EXHIBIT_ONE',
@@ -89,17 +73,33 @@ return [
 				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
 				'key' => 'exhibit_imgs',
 				//数据库存储类型
-				'upload_key' => 'FT_EXHIBIT_MORE',
+				'upload_key' => 'FT_EXHIBIT_ONE',
 				//页面提示名称
 				'name' => '展品详情图片',
 				//是否必传
 				'required' => true,
 				//是否上传多图
-				'is_more' => true,
+				'is_more' => false,
 				//该资源是否打包
 				'is_zip' => true,
 				//资源打包时生成的图片名称
 				'zip_name' => 'imgs'
+			],
+			[
+				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
+				'key' => 'exhibit_imgs2',
+				//数据库存储类型
+				'upload_key' => 'FT_EXHIBIT_ONE',
+				//页面提示名称
+				'name' => '足迹小图',
+				//是否必传
+				'required' => true,
+				//是否上传多图
+				'is_more' => false,
+				//该资源是否打包
+				'is_zip' => true,
+				//资源打包时生成的图片名称
+				'zip_name' => 'imgs2'
 			],
 			[
 				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
@@ -117,22 +117,7 @@ return [
 				//资源打包时生成的图片名称
 				'zip_name' => 'map_icon1'
 			],
-			[
-				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
-				'key' => 'exhibit_icon2',
-				//数据库存储类型
-				'upload_key' => 'FT_EXHIBIT_ONE',
-				//页面提示名称
-				'name' => 'icon图片(暗)',
-				//是否必传
-				'required' => true,
-				//是否上传多图
-				'is_more' => false,
-				//该资源是否打包
-				'is_zip' => true,
-				//资源打包时生成的图片名称
-				'zip_name' => 'map_icon2'
-			],
+
 		],
 		//展品html字段，数据库初始默认含有content，knowledge两个字段,如需要编辑其他字段需要手动修改数据库文件2018_03_03_000000_create_exhibit_language_table.php，所添加的字段必须与content_arr中的key保持一致，如果资源需要导览机打包下载，需要在/public/resource_zip/下添加模板文件及css文件
 		'content_arr' => [
@@ -140,10 +125,10 @@ return [
 				'name' => '展品简介',
 				'key' => 'content',
 			],
-			[
+			/*[
 				'name' => '科普知识',
 				'key' => 'knowledge',
-			],
+			],*/
 		],
 	],
 	//是否手动标记蓝牙定位点坐标
