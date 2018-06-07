@@ -82,17 +82,18 @@ class Events
 			case 'create_group':
 				echo 'test_create_group1111';
 				$uid=$message_data['uid'];
+				$group_id=rand(10000,99999);
 				$group=new \App\Models\Group;
 				$group->holder = $uid;
-				$group->name = '测试群1';
+				$group->name = $message_data['group_name'];
 				$group->create_time = time();
-				$group->group_id= rand(10000,99999);
+				$group->group_id= $group_id;
 				$group->save();
 				//将群主加入该群 并且绑定client_id
 				$group_member=new \App\Models\GroupMember;
 				$group_member->member_id=$uid;
 				$group_member->add_time=time();
-				$group_member->group_id=$group->group_id;
+				$group_member->group_id=$group_id;
 				$group_member->save();
 				//绑定机器号
 				GatewayLib::bindUid($client_id, $uid);
