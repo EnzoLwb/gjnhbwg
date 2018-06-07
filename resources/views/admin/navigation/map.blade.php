@@ -42,7 +42,7 @@
 
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
     @if(empty($maps))
-        <h1>请添加地图</h1>
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;请先添加地图</h1>
     @else
         <div name='position' id='position' style="margin:20px auto;"></div>
     @endif
