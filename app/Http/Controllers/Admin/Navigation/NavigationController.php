@@ -56,10 +56,10 @@ class NavigationController extends BaseAdminController
 		if ($id) {
 			$map_id = $id;
 		} else {
-			$map_id = $maps[0]['id'];
+			$map_id = @$maps[0]['id'];
 		}
 		if (!$map_id) {
-			$map_id = $maps[0]['id'];
+			$map_id = @$maps[0]['id'];
 		}
 		$path = Map::where('id', '=', $map_id)->value('map_path');
 		$points = $this->getPointsByMapId($map_id);
