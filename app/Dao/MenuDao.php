@@ -58,12 +58,12 @@ class MenuDao extends BaseMdl
 						'priv' => 'admin-setting-systemlog',
 						'order_num' => 10,
 					],
-					[
+					/*[
 						'text' => '模块装载管理',
 						'url' => route('admin.load.load_list'),
 						'priv' => 'admin-load-load',
 						'order_num' => 10,
-					],
+					],*/
 
 					[
 						'text' => '线路导航管理',
