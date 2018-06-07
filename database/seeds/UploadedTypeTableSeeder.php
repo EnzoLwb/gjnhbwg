@@ -101,6 +101,14 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_size' => 1024 * 1024 * 50,
 				'allow_num' => 1
 			],
+			[
+				'type_key' => 'FT_EXHIBIT_ONE',
+				'path' => 'resource',
+				'desc' => '展品图',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 2,
+				'allow_num' => 1
+			],
 		]);
 	}
 }

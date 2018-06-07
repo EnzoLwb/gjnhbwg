@@ -126,6 +126,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label class="col-sm-2 control-label">展厅副标题({{$g['name']}})</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="exhibition_subtitle_{{$k}}" value="{{$info['language'][$k]['exhibition_subtitle'] or ''}}" class="form-control" maxlength="500">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-sm-2 control-label">展厅地址({{$g['name']}})</label>
                                             <div class="col-sm-4">
                                                 <input type="text" name="exhibition_address_{{$k}}" value="{{$info['language'][$k]['exhibition_address'] or ''}}" class="form-control" maxlength="500">
