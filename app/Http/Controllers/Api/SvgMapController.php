@@ -24,7 +24,7 @@ class SvgMapController extends Controller
 	 * @apiGroup SvgMap
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {string} floor_id 楼层id,floor_id为0则返回所有地图数据
 	 * @apiSuccess {array} data 数据详情
 	 * @apiSuccess {int} map_id 地图编号

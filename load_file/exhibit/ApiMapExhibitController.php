@@ -36,7 +36,7 @@ class MapExhibitController extends Controller
 	 * @apiGroup MapExhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} map_id 地图编号,传0返回所有数据
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibit_name 展品名称
@@ -118,7 +118,7 @@ class MapExhibitController extends Controller
 	 * @apiGroup MapExhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {string} autonum 收到的蓝牙号
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibition_name 展厅名称
@@ -164,7 +164,7 @@ class MapExhibitController extends Controller
 	 * @apiGroup MapExhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {string} autonum_str 收到的蓝牙号用#拼接例如101#102
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} exhibit_id 展品编号

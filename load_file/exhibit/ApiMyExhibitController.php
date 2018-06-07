@@ -32,7 +32,7 @@ class MyExhibitController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} api_token token
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} skip 数据偏移量默认0
 	 * @apiParam {int} take 查询数量默认10
 	 * @apiSuccess {string} date 日期
@@ -103,7 +103,7 @@ class MyExhibitController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} api_token token
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} skip 数据偏移量默认0
 	 * @apiParam {int} take 查询数量默认10
 	 * @apiSuccess {string} date 日期
@@ -151,7 +151,7 @@ class MyExhibitController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} api_token token
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} skip 数据偏移量默认0
 	 * @apiParam {int} take 查询数量默认10
 	 * @apiSuccess {json} data 结果详情
