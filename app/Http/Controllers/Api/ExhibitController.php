@@ -45,6 +45,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_address 展厅地址
 	 * @apiSuccess {string} exhibition_img 展厅图片
 	 * @apiSuccess {int} exhibition_id 展览id
+	 * @apiSuccess {string} remark 摘要
 	 */
 	public function exhibition_list()
 	{
@@ -60,10 +61,12 @@ class ExhibitController extends Controller
 			$data['temporary'][$k]['exhibition_img']=$img_arr['list_img'];
 		}
 		//获取主题展览
-		$data['theme'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 1)->where('exhibition_language.language', $language)->where('exhibition.is_show_list',1)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_address', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
+		$data['theme'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 1)->where('exhibition_language.language', $language)->where('exhibition.is_show_list',1)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_address','exhibition_language.content', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
 		foreach ($data['theme'] as $k=>$g){
 			$img_arr=json_decode($g['exhibition_img'],true);
 			$data['theme'][$k]['exhibition_img']=$img_arr['list_img'];
+			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
+			unset($data['theme'][$k]['content']);
 		}
 		return response_json(1, $data);
 	}
