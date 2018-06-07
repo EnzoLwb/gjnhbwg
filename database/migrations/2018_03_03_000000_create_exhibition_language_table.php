@@ -24,6 +24,7 @@ class CreateExhibitionLanguageTable extends Migration
 			$table->integer('language',false, true)->comment('语种类型1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语');
 			$table->text('content')->comment('展厅简介')->nullable();
 			$table->string('exhibition_name', 500)->comment('展厅名称')->nullable();
+			$table->string('exhibition_subtitle', 500)->comment('展厅副标题')->nullable();
 			$table->string('exhibition_address', 500)->comment('展出地址')->nullable();
 			$table->timestamps();
 

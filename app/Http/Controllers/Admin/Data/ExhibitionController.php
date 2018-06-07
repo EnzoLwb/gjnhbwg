@@ -126,6 +126,7 @@ class ExhibitionController extends BaseAdminController
 					$data2=[
 						'exhibition_id'=>$exhibition_id,
 						'exhibition_name'=>request('exhibition_name_'.$k),
+						'exhibition_subtitle'=>request('exhibition_subtitle_'.$k),
 						'exhibition_address'=>request('exhibition_address_'.$k),
 						'content'=>request('content_'.$k),
 						'language'=>$k
@@ -166,7 +167,7 @@ class ExhibitionController extends BaseAdminController
 		if($id!='add'){
 			$info = Exhibition::where('id', $id)->first()->toArray();
 			$info['exhibition_img']=empty(json_decode($info['exhibition_img'],true))?[]:json_decode($info['exhibition_img'],true);
-			$language_info=ExhibitionLanguage::where('exhibition_id',$id)->select('exhibition_name','exhibition_address','content','language')->get()->toArray();
+			$language_info=ExhibitionLanguage::where('exhibition_id',$id)->select('exhibition_name','exhibition_subtitle','exhibition_address','content','language')->get()->toArray();
 			foreach ($language_info as $k=>$g){
 				$info['language'][$g['language']]=$g;
 			}
