@@ -69,9 +69,10 @@ class Events
 	{
 		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " get message...\n";
 		// 客户端传递的是json数据
+
 		$message_data = json_decode($message, true);
 		if(!$message_data) return ;
-
+		dump($message);
 		// 根据类型执行不同的业务
 		switch($message_data['type'])
 		{
@@ -87,7 +88,20 @@ class Events
 				$group->create_time = time();
 				$group->group_id= rand(10000,99999);
 				$group->save();
-			// 客户端登录 message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
+				//将群主加入该群 并且绑定client_id
+				$group_member=new \App\Models\GroupMember;
+				$group_member->member_id=$uid;
+				$group_member->add_time=time();
+				$group_member->group_id=$group->group_id;
+				$group_member->save();
+				//绑定机器号
+				GatewayLib::bindUid($client_id, $uid);
+				//对他说
+				$new_message=['content'=>"你已成功创建并加入群组"];
+				Gateway::sendToClient($client_id, json_encode($new_message));
+				Gateway::sendToUid($uid, json_encode($new_message));
+				break;
+			// 加入群组  message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
 			case 'login':
 				// 判断是否有房间号
 				if(!isset($message_data['room_id']))
