@@ -37,7 +37,7 @@ class ExhibitController extends Controller
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {array} temporary 临时展览
 	 * @apiSuccess {array} theme 主题展览
@@ -78,7 +78,7 @@ class ExhibitController extends Controller
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} exhibition_id 展厅编号
 	 * @apiParam {int} skip 数据偏移量默认0
 	 * @apiParam {int} take 查询数量默认10
@@ -127,7 +127,7 @@ class ExhibitController extends Controller
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} exhibit_id 展品编号
 	 * @apiParam {string} [api_token] token(登录后上传)
 	 * @apiSuccess {json} data 数据详情
@@ -200,7 +200,7 @@ class ExhibitController extends Controller
 	 * 展品详情页
 	 *
 	 * @author yyj 20180321
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @param  int $exhibit_id 展品编号
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
@@ -217,7 +217,7 @@ class ExhibitController extends Controller
 	 * 展品科普知识页
 	 *
 	 * @author yyj 20180321
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @param  int $exhibit_id 展品编号
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
@@ -234,7 +234,7 @@ class ExhibitController extends Controller
 	 * 展品分享页
 	 *
 	 * @author yyj 20180321
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @param  int $exhibit_id 展品编号
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
@@ -496,7 +496,7 @@ class ExhibitController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} keyword 展品名或编号
-	 * @apiParam {int} language 语种，1中文，2英语，3日语，4韩语，5法语，6西班牙语，7德语，8俄语，9意大利，10蒙语
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} exhibit_id 展品编号
 	 * @apiSuccess {string} exhibit_name 展品名称
