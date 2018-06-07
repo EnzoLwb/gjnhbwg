@@ -92,7 +92,15 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_type' => 'mp3',
 				'allow_size' => 1024 * 1024 * 20,
 				'allow_num' => 1
-			]
+			],
+			[
+				'type_key' => 'FT_SVGMAP',
+				'path' => 'svg',
+				'desc' => 'svg地图',
+				'allow_type' => 'svg',
+				'allow_size' => 1024 * 1024 * 50,
+				'allow_num' => 1
+			],
 		]);
 	}
 }
