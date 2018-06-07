@@ -82,13 +82,15 @@ class Events
 			case 'create_group':
 				echo 'test_create_group1111';
 				$uid=$message_data['uid'];
-				$group_id=rand(10000,99999);
-				$group=new \App\Models\Group;
-				$group->holder = $uid;
-				$group->name = $message_data['group_name'];
-				$group->create_time = time();
-				$group->group_id= $group_id;
-				$group->save();
+
+				$group=\App\Models\Group::create([
+					'holder' => $uid,
+					'name' => $message_data['group_name'],
+					'create_time' => time(),
+					'group_id' => rand(10000,99999),
+				]);
+
+				$group_id=$group->id;
 				//将群主加入该群 并且绑定client_id
 				$group_member=new \App\Models\GroupMember;
 				$group_member->member_id=$uid;
@@ -99,8 +101,8 @@ class Events
 				GatewayLib::bindUid($client_id, $uid);
 				//对他说
 				$new_message=['content'=>"你已成功创建并加入群组"];
-				Gateway::sendToClient($client_id, json_encode($new_message));
-				Gateway::sendToUid($uid, json_encode($new_message));
+				GatewayLib::sendToClient($client_id, json_encode($new_message));
+				GatewayLib::sendToUid($uid, json_encode($new_message));
 				break;
 			// 加入群组  message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
 			case 'login':
