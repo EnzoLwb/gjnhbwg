@@ -55,7 +55,8 @@ class Events
 	 */
 	public static function onConnect($client_id)
 	{
-		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " connected ...\n";
+		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " connected 1...\n";
+
 	}
 
 	/**
@@ -66,6 +67,107 @@ class Events
 	 */
 	public static function onMessage($client_id, $message)
 	{
+		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " get message...\n";
+		// 客户端传递的是json数据
+
+		$message_data = json_decode($message, true);
+		if(!$message_data) return ;
+		dump($message);
+		// 根据类型执行不同的业务
+		switch($message_data['type'])
+		{
+			// 客户端回应服务端的心跳
+			case 'pong':	return;
+			// 创建群组
+			case 'create_group':
+				echo 'test_create_group1111';
+				$uid=$message_data['uid'];
+				$group=new \App\Models\Group;
+				$group->holder = $uid;
+				$group->name = '测试群1';
+				$group->create_time = time();
+				$group->group_id= rand(10000,99999);
+				$group->save();
+				//将群主加入该群 并且绑定client_id
+				$group_member=new \App\Models\GroupMember;
+				$group_member->member_id=$uid;
+				$group_member->add_time=time();
+				$group_member->group_id=$group->group_id;
+				$group_member->save();
+				//绑定机器号
+				GatewayLib::bindUid($client_id, $uid);
+				//对他说
+				$new_message=['content'=>"你已成功创建并加入群组"];
+				Gateway::sendToClient($client_id, json_encode($new_message));
+				Gateway::sendToUid($uid, json_encode($new_message));
+				break;
+			// 加入群组  message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
+			case 'login':
+				// 判断是否有房间号
+				if(!isset($message_data['room_id']))
+				{
+					throw new \Exception("\$message_data['room_id'] not set. client_ip:{$_SERVER['REMOTE_ADDR']} \$message:$message");
+				}
+				// 把房间号昵称放到session中
+				$room_id = $message_data['room_id'];
+				$client_name = htmlspecialchars($message_data['client_name']);
+				$_SESSION['room_id'] = $room_id;
+				$_SESSION['client_name'] = $client_name;
+
+				// 获取房间内所有用户列表
+				$clients_list = Gateway::getClientSessionsByGroup($room_id);
+				foreach($clients_list as $tmp_client_id=>$item)
+				{
+					$clients_list[$tmp_client_id] = $item['client_name'];
+				}
+				$clients_list[$client_id] = $client_name;
+
+				// 转播给当前房间的所有客户端，xx进入聊天室 message {type:login, client_id:xx, name:xx}
+				$new_message = array('type'=>$message_data['type'], 'client_id'=>$client_id, 'client_name'=>htmlspecialchars($client_name), 'time'=>date('Y-m-d H:i:s'));
+				Gateway::sendToGroup($room_id, json_encode($new_message));
+				Gateway::joinGroup($client_id, $room_id);
+
+				// 给当前用户发送用户列表
+				$new_message['client_list'] = $clients_list;
+				Gateway::sendToCurrentClient(json_encode(``));
+				return;
+
+			// 客户端发言 message: {type:say, to_client_id:xx, content:xx}
+			case 'say':
+				// 非法请求
+				if(!isset($_SESSION['room_id']))
+				{
+					throw new \Exception("\$_SESSION['room_id'] not set. client_ip:{$_SERVER['REMOTE_ADDR']}");
+				}
+				$room_id = $_SESSION['room_id'];
+				$client_name = $_SESSION['client_name'];
+
+				// 私聊
+				if($message_data['to_client_id'] != 'all')
+				{
+					$new_message = array(
+						'type'=>'say',
+						'from_client_id'=>$client_id,
+						'from_client_name' =>$client_name,
+						'to_client_id'=>$message_data['to_client_id'],
+						'content'=>"<b>对你说: </b>".nl2br(htmlspecialchars($message_data['content'])),
+						'time'=>date('Y-m-d H:i:s'),
+					);
+					Gateway::sendToClient($message_data['to_client_id'], json_encode($new_message));
+					$new_message['content'] = "<b>你对".htmlspecialchars($message_data['to_client_name'])."说: </b>".nl2br(htmlspecialchars($message_data['content']));
+					return Gateway::sendToCurrentClient(json_encode($new_message));
+				}
+
+				$new_message = array(
+					'type'=>'say',
+					'from_client_id'=>$client_id,
+					'from_client_name' =>$client_name,
+					'to_client_id'=>'all',
+					'content'=>nl2br(htmlspecialchars($message_data['content'])),
+					'time'=>date('Y-m-d H:i:s'),
+				);
+				return Gateway::sendToGroup($room_id ,json_encode($new_message));
+		}
 	}
 
 	/**
@@ -97,7 +199,7 @@ $gatewayPort = env('WM_GATEWAY_PORT', '9100');
 $register = new Register("text://0.0.0.0:{$registerPort}");
 
 // gateway 进程，这里使用Text协议，可以用telnet测试
-$gateway = new Gateway("tcp://0.0.0.0:{$gatewayPort}");
+$gateway = new Gateway("Websocket://0.0.0.0:{$gatewayPort}");
 // gateway名称，status方便查看
 $gateway->name = 'DM_Gateway';
 // gateway进程数
