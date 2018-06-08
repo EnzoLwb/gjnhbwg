@@ -32,9 +32,9 @@ class GatewayController extends Controller
 	 * (1.bind:机器号绑定;2.heart:心跳响应;3.chat:信息推送),
 	 * type等于bind 机器号/uid绑定,执行uid/设备绑定接口,
 	 * type等于heart 心跳响应,使用tcp链接向服务器发送string数据'pong';
-	 * type等于chat 并且send_type等于1表示普通发送消息 2 表示语音消息
+	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息
 	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
-	 * @apiSuccess {string} send_type 信息类型,标题
+	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
 	 * @apiSuccess {string} send_content 信息内容
 	 * @apiSuccess {string} group_id 群组ID
 	 */
@@ -79,6 +79,7 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid 导览机传唯一设备号
 	 * @apiParam {string} client_id 链接上tcp后获得的client_id
 	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {string} uid 私聊等地方用到的uid
 	 */
 	public function bind()
 	{
@@ -103,9 +104,8 @@ class GatewayController extends Controller
 		} else {
 			return response_json(0, [], 'client_id无效');
 		}
-		return response_json(1, [], '绑定成功');
+		return response_json(1, ['uid'=>$user_number], '绑定成功');
 	}
-
 
 	/**
 	 * 创建群组
@@ -174,5 +174,43 @@ class GatewayController extends Controller
 	public function join_group(){
 		$uid=Auth::id();
 
+	}
+
+	/**
+	 * 私聊发送消息
+	 *
+	 * @author lwb 20180608
+	 *
+	 * @api {Get} /gateway/send_msg 06.私聊发送消息
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number 发送给的对象的user_number    之前返回了user_number
+	 * @apiParam {string} content 发送内容
+	 * @apiParam {int} type 内容类型 1为文本 2为语音
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function send_msg()
+	{
+		$this->validate([
+			'user_number' => 'required',
+			'content' => 'required'
+		]);
+		$type=request('type',1);
+		$user_number=request('user_number');
+		$content=request('content');
+		$to_client_id= current(GatewayLib::getClientIdByUid($user_number));
+		if (empty($to_client_id)) {
+			//断开连接或者uid输入错误
+			//					$arr['client_id'] = $client_id;
+			$arr['type'] = 'sent_msg';
+			$arr['send_type'] = 'error_msg';
+			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
+		}else{
+			$arr['type'] = 'sent_msg';
+			$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
+			$arr['send_content'] = $content;
+		}
+		return GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 	}
 }

@@ -11,4 +11,6 @@ Route::group([
 	Route::get('gateway/create_group', 'GatewayController@create_group');
 	//加入群组
 	Route::get('gateway/join_group', 'GatewayController@join_group');
+	//私聊
+	Route::post('gateway/send_msg', 'GatewayController@send_msg');
 });

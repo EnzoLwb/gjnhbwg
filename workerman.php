@@ -81,13 +81,7 @@ class Events
 			case 'pong':	return;
 			// bindUid {type:login, uid:1234} (在选择加入群组和创建群组界面就应该绑定上 返回client_id 和类型)
 			// 客户端发言 message: {type:sent_msg, to_client_id:uid, content:xx}
-			case 'chat':
-				// 私聊
-				$to_client_id= GatewayLib::getClientIdByUid($message_data['to_client_id']);
-				$arr['type'] = 'sent_msg';
-				$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
-				$arr['send_content'] = $message_data['content'];
-				return GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+
 		}
 	}
 
