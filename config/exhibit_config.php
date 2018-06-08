@@ -69,22 +69,7 @@ return [
 		//轮播数量限制
 		'lb_num' => 5,
 		'imgs' => [
-			[
-				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
-				'key' => 'exhibit_list',
-				//数据库存储类型
-				'upload_key' => 'FT_EXHIBIT_ONE',
-				//页面提示名称
-				'name' => '列表图片',
-				//是否必传
-				'required' => true,
-				//是否上传多图
-				'is_more' => false,
-				//该资源是否打包
-				'is_zip' => true,
-				//资源打包时生成的图片名称
-				'zip_name' => 'list'
-			],
+
 			[
 				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
 				'key' => 'exhibit_imgs',
@@ -107,7 +92,7 @@ return [
 				//数据库存储类型
 				'upload_key' => 'FT_EXHIBIT_ONE',
 				//页面提示名称
-				'name' => '足迹小图',
+				'name' => '展品详情图片(导览机，列表圆图，足迹小图)',
 				//是否必传
 				'required' => true,
 				//是否上传多图
@@ -132,6 +117,22 @@ return [
 				'is_zip' => true,
 				//资源打包时生成的图片名称
 				'zip_name' => 'map_icon1'
+			],
+			[
+				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
+				'key' => 'exhibit_icon2',
+				//数据库存储类型
+				'upload_key' => 'FT_EXHIBIT_ONE',
+				//页面提示名称
+				'name' => 'icon图片(暗)',
+				//是否必传
+				'required' => true,
+				//是否上传多图
+				'is_more' => false,
+				//该资源是否打包
+				'is_zip' => true,
+				//资源打包时生成的图片名称
+				'zip_name' => 'map_icon2'
 			],
 
 		],
