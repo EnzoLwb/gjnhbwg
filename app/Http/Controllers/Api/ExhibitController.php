@@ -183,6 +183,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibit_name 展品名称
 	 * @apiSuccess {string} exhibit_list_img 展品图片
+	 * @apiSuccess {string} audio 音频
 	 * @apiSuccess {int} exhibit_id 展品id
 	 * @apiSuccess {int} look_num 浏览数量
 	 * @apiSuccess {int} like_num 点赞数量
@@ -200,13 +201,14 @@ class ExhibitController extends Controller
 		$take = request('take', 10);
 		$exhibition_id=request('exhibition_id', 0);
 		$data = [];
-		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name','exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
 		foreach ($exhibit_list as $k => $g) {
 			$imgs = json_decode($g['exhibit_img'], true);
 			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
 			$data[$k]['exhibit_list_img'] = $imgs;
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_name'] = $g['exhibit_name'];
+			$data[$k]['audio'] = $g['audio'];
 			$data[$k]['look_num'] = $g['look_num'];
 			$data[$k]['like_num'] = $g['like_num'];
 		}
