@@ -15,6 +15,67 @@ use Illuminate\Support\Facades\DB;
  */
 class ExhibitDao extends Exhibit
 {
+
+	/**
+	 * 展品列表距离排序
+	 *
+	 * @author yyj 20171111
+	 * @param int $type
+	 * @param int $language
+	 * @param int $skip
+	 * @param int $take
+	 * @param string $auto_num_str
+	 * @param int $exhibition_id
+	 * @return array
+	 */
+	public static function exhibit_list($type, $language, $skip, $take, $auto_num_str, $exhibition_id = 0)
+	{
+		if($language==10){
+			$language=1;
+		}
+		if ($type == 1) {
+			//获取所有展品
+			$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num');
+			if (!empty($exhibition_id)) {
+				$exhibit_list = $exhibit_list->where('exhibit.exhibition_id', $exhibition_id);
+			}
+			$exhibit_list = $exhibit_list->orderBy('exhibit.look_num', 'desc')->skip($skip)->take($take)->get();
+			if (!empty($exhibit_list)) {
+				$exhibit_list = $exhibit_list->toArray();
+			}
+		} else {
+			$exhibit_list = [];
+			$arr = explode('#', $auto_num_str);
+			if ($skip == 0 && !empty(count($arr))) {
+				foreach ($arr as $k => $g) {
+					$info = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->where('exhibit.auto_num', $g)->where('exhibit.exhibition_id', $exhibition_id)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->get();
+					if (!empty($info)) {
+						if (count($exhibit_list)) {
+							$exhibit_list = array_merge($exhibit_list, $info->toArray());
+						} else {
+							$exhibit_list = $info->toArray();
+						}
+					}
+				}
+			}
+			$info2 = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1);
+			if (!empty($arr)) {
+				$info2 = $info2->whereNotIn('auto_num', $arr);
+			}
+			if (!empty($exhibition_id)) {
+				$info2 = $info2->where('exhibit.exhibition_id', $exhibition_id);
+			}
+			$info2 = $info2->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->orderBy('exhibit.exhibit_num', 'desc')->skip($skip)->take($take)->get();
+			if (count($exhibit_list)) {
+				$exhibit_list = array_merge($exhibit_list, $info2->toArray());
+			} else {
+				$exhibit_list = $info2->toArray();
+			}
+		}
+		return $exhibit_list;
+	}
+
+
 	/**
 	 * 评论列表
 	 *

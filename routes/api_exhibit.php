@@ -7,6 +7,11 @@
  */
 //获取所有展厅
 Route::get('exhibition_list', 'ExhibitController@exhibition_list');
+//获取展厅详情
+Route::get('exhibition_info', 'ExhibitController@exhibition_info');
+//展厅详情页
+Route::get('exhibition_content_info/{language}/{exhibition_id}', 'ExhibitController@exhibition_content_info');
+
 //获取所有展品
 Route::get('exhibit_list', 'ExhibitController@exhibit_list');
 //获取展品详情

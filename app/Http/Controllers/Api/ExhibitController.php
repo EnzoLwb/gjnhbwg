@@ -33,7 +33,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibition_list 01.获取所有展厅接口
+	 * @api {GET} /exhibition_list 00.获取所有展厅接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -70,6 +70,101 @@ class ExhibitController extends Controller
 		}
 		return response_json(1, $data);
 	}
+
+
+
+	/**
+	 * 展厅详情接口
+	 *
+	 * @author yyj 20171110
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /exhibition_info 01.展厅详情接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} exhibition_id 展厅编号
+	 * @apiParam {int} language 语种，1中文，2英语，10蒙语
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {array} exhibition_info 展厅详情
+	 * @apiSuccess {string} exhibition_name 展厅名称
+	 * @apiSuccess {string} content 展厅简介
+	 * @apiSuccess {string} exhibition_img 展厅图片
+	 */
+	public function exhibition_info()
+	{
+		$language = request('language', 1);
+		if($language==10){
+			//$language=1;
+			//$language_img='my_';
+			$language_img='';
+		}
+		else{
+			$language_img='';
+		}
+		$type = request('type', 1);
+		$skip = request('skip', 0);
+		$take = request('take', 10);
+		$auto_num_str=request('auto_num_str', 0);
+		$exhibition_id=request('exhibition_id', 0);
+		$data = [];
+		$p = request('p', 'a');
+		//获取展览简介
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition_language.content', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id')->first();
+		if(!empty($exhibition)){
+			$exhibition['content']=strip_tags($exhibition['content']);
+			$data['exhibition_info']=$exhibition;
+			//$data['exhibition_info']['exhibition_share_url'] = '/api/exhibition_share_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
+			$data['exhibition_info']['content_url'] = '/api/exhibition_content_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
+		}
+		else{
+			$data['exhibition_info']=[];
+		}
+		/*$exhibit_list=ExhibitDao::exhibit_list($type, $language, $skip, $take,$auto_num_str,$exhibition_id);
+		$data['exhibit_list'] = [];
+		$uid=0;
+		$user = Auth::user();
+		if (false == empty($user)) {
+			$uid = $user->uid;
+		}
+		foreach ($exhibit_list as $k => $g) {
+			$imgs=json_decode($g['exhibit_img'], true);
+			$imgs=isset($imgs[$language_img.'exhibit_list'])?$imgs[$language_img.'exhibit_list']:'';
+			$data['exhibit_list'][$k]['exhibit_list_img'] = $imgs;
+			$data['exhibit_list'][$k]['exhibit_id'] = $g['exhibit_id'];
+			$data['exhibit_list'][$k]['exhibit_name'] = $g['exhibit_name'];
+			$data['exhibit_list'][$k]['look_num'] = $g['look_num'];
+			$data['exhibit_list'][$k]['like_num'] = $g['like_num'];
+			if($uid){
+				$data['exhibit_list'][$k]['is_like'] = ExhibitLike::where('uid', $uid)->where('exhibit_id', $g['exhibit_id'])->where('type', 1)->count();
+			}
+			else{
+				$data['exhibit_list'][$k]['is_like'] = 0;
+			}
+		}
+		$data['comment_list']=ExhibitDao::comment_list(1,$language,0,5,$exhibition_id,$uid);*/
+		return response_json(1, $data);
+	}
+
+	/**
+	 * 展厅详情页
+	 *
+	 * @author yyj 20171111
+	 * @param  int $language 语种1中文2英文10蒙文
+	 * @param  int $exhibition_id 展厅编号
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function exhibition_content_info($language,$exhibition_id){
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_subtitle', 'exhibition_language.exhibition_address', 'exhibition_language.content', 'exhibition.exhibition_img as exhibition_img', 'exhibition.id as exhibition_id')->first();
+		return view('api.exhibit.exhibition_content_info', array(
+			'info' => $exhibition,
+			'language'=>$language,
+		));
+	}
+
+
+
+
 
 	/**
 	 * 展品列表接口
