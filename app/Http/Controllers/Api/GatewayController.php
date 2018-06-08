@@ -14,7 +14,7 @@ class GatewayController extends Controller
 	{
 		$registerIP = env('WM_REGISTER_IP', '127.0.0.1');
 		$registerPort = env('WM_REGISTER_PORT', '1238');
-		GatewayLib::$registerAddress = "$registerIP:$registerPort";
+		GatewayLib::$registerAddress = $registerIP.':'.$registerPort;
 	}
 	/**
 	 * 创建群组
