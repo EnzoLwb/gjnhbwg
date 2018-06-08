@@ -118,17 +118,17 @@ class GatewayController extends Controller
 	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
-	 * @apiParam {int} user_number app传uid 导览机传唯一设备号
+	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
 	 * @apiParam {string} group_name 群组名称
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
 	public function create_group(){
 		$this->validate([
-			'uid' => 'required',
+			'user_number' => 'required',
 			'group_name' => 'required'
 		]);
-		$uid=request('uid');
-		$client_id = request('client_id');
+		$uid=request('user_number');
+		$client_id = current(GatewayLib::getClientIdByUid($uid));;
 		$group=Group::create([
 			'holder' => $uid,
 			'name' => request('group_name'),
@@ -141,6 +141,7 @@ class GatewayController extends Controller
 		$group_member->member_id=$uid;
 		$group_member->add_time=time();
 		$group_member->group_id=$group_id;
+		$group_member->device_type=request('p')!='d' ? '1':'2';
 		$group_member->save();
 		//显示群组信息(我的头像 我的昵称 群组名称 群成员的头像和名称)
 		$users_list=GroupMember::join('users', 'users.uid', '=', 'group_member.member_id')
