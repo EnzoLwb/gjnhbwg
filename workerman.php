@@ -71,18 +71,6 @@ class Events
 	public static function onMessage($client_id, $message)
 	{
 		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " get message...\n";
-		// 客户端传递的是json数据
-		$message_data = json_decode($message, true);
-		if(!$message_data) return ;
-		// 根据类型执行不同的业务
-		switch($message_data['type'])
-		{
-			// 客户端回应服务端的心跳
-			case 'pong':	return;
-			// bindUid {type:login, uid:1234} (在选择加入群组和创建群组界面就应该绑定上 返回client_id 和类型)
-			// 客户端发言 message: {type:sent_msg, to_client_id:uid, content:xx}
-
-		}
 	}
 
 	/**

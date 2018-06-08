@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\ChatMessage;
 use App\Models\Dlj;
 use App\Models\Group;
 use App\Models\GroupMember;
@@ -185,7 +186,8 @@ class GatewayController extends Controller
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
-	 * @apiParam {string} user_number 发送给的对象的user_number    之前返回了user_number
+	 * @apiParam {string} to_user_number 发送给的对象的user_number    之前列表返回了user_number
+	 * @apiParam {string} from_user_number 我的user_number    之前返回了user_number
 	 * @apiParam {string} content 发送内容
 	 * @apiParam {int} type 内容类型 1为文本 2为语音
 	 * @apiSuccess {int} data 操作结果1成功0失败
@@ -197,9 +199,11 @@ class GatewayController extends Controller
 			'content' => 'required'
 		]);
 		$type=request('type',1);
-		$user_number=request('user_number');
+		$to_user_number=request('to_user_number');
+		$from_user_number=request('from_user_number');
 		$content=request('content');
-		$to_client_id= current(GatewayLib::getClientIdByUid($user_number));
+		$device_type=strstr($to_user_number, self::BIND_APP) !== false ? 1:2;
+		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
 		if (empty($to_client_id)) {
 			//断开连接或者uid输入错误
 			//					$arr['client_id'] = $client_id;
@@ -207,10 +211,20 @@ class GatewayController extends Controller
 			$arr['send_type'] = 'error_msg';
 			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
 		}else{
+			//保存数据库
+			ChatMessage::create([
+				'send_msg'=>$content,
+				'from_user_number'=>$from_user_number,
+				'to_user_number'=>$to_user_number,
+				'to_client_id'=>$to_client_id,
+				'send_type'=>$type,
+				'device_type'=>$device_type,
+			]);
 			$arr['type'] = 'sent_msg';
 			$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
 			$arr['send_content'] = $content;
 		}
-		return GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		 GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		return response_json(1,[],'发送成功');
 	}
 }
