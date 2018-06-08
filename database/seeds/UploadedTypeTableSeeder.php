@@ -133,6 +133,14 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_size' => 1024 * 1024 * 2,
 				'allow_num' => 5
 			],
+			[
+				'type_key' => 'FT_EXHIBIT_MP3',
+				'path' => 'mp3',
+				'desc' => '展品音频',
+				'allow_type' => 'mp3',
+				'allow_size' => 1024 * 1024 * 50,
+				'allow_num' => 1
+			],
 		]);
 	}
 }

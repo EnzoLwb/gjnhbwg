@@ -88,8 +88,9 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {array} exhibition_info 展厅详情
 	 * @apiSuccess {string} exhibition_name 展厅名称
-	 * @apiSuccess {string} content 展厅简介
 	 * @apiSuccess {string} exhibition_img 展厅图片
+	 * @apiSuccess {int} floor  所在楼层
+	 * @apiSuccess {string} content_url 内容h5
 	 */
 	public function exhibition_info()
 	{
@@ -110,9 +111,8 @@ class ExhibitController extends Controller
 		$data = [];
 		$p = request('p', 'a');
 		//获取展览简介
-		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition_language.content', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id')->first();
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id','exhibition.floor_id as floor')->first();
 		if(!empty($exhibition)){
-			$exhibition['content']=strip_tags($exhibition['content']);
 			$data['exhibition_info']=$exhibition;
 			//$data['exhibition_info']['exhibition_share_url'] = '/api/exhibition_share_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
 			$data['exhibition_info']['content_url'] = '/api/exhibition_content_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
@@ -598,6 +598,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} exhibit_id 展品编号
 	 * @apiSuccess {string} exhibit_name 展品名称
+	 * @apiSuccess {string} audio 音频
 	 * @apiSuccess {string} exhibition_name 展厅名称
 	 * @apiSuccess {string} floor 所在楼层
 	 */
@@ -617,7 +618,7 @@ class ExhibitController extends Controller
 		})->where('exhibit.is_show_list', 1)->where(function ($query) use ($keyword) {
 			$query->where('exhibit.exhibit_num', 'like', '%'.$keyword.'%')
 				->orwhere('exhibit_language.exhibit_name', 'like', '%'.$keyword.'%');
-		})->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibition_language.exhibition_name','exhibition.floor_id')->orderBy('exhibit.look_num', 'desc')->get();
+		})->select('exhibit_language.exhibit_name','exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibition_language.exhibition_name','exhibition.floor_id')->orderBy('exhibit.look_num', 'desc')->get();
 		$data=[];
 		foreach ($exhibit_list as $k=>$g){
 			$imgs=json_decode($g->exhibit_img, true);
@@ -625,6 +626,7 @@ class ExhibitController extends Controller
 			$data[$k]['exhibit_name']=$g->exhibit_name;
 			$data[$k]['exhibit_id']=$g->exhibit_id;
 			$data[$k]['exhibit_list_img'] = $imgs;
+			$data[$k]['audio']=$g->audio;
 			$data[$k]['exhibition_name']=$g->exhibition_name;
 			$data[$k]['floor']=config('floor')[$g->floor_id];
 		}
