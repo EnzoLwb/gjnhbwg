@@ -88,7 +88,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {array} exhibition_info 展厅详情
 	 * @apiSuccess {string} exhibition_name 展厅名称
-	 * @apiSuccess {string} exhibition_img 展厅图片
+	 * @apiSuccess {string} exhibition_imgs 展厅图片
 	 * @apiSuccess {int} floor  所在楼层
 	 * @apiSuccess {string} content_url 内容h5
 	 */
@@ -119,7 +119,8 @@ class ExhibitController extends Controller
 
 			$data['exhibition_info']=$exhibition;
 			//$data['exhibition_info']['exhibition_share_url'] = '/api/exhibition_share_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
-			$data['exhibition_info']['exhibition_img'] = $imgs;
+			$data['exhibition_info']['exhibition_imgs'] = $imgs;
+			unset($data['exhibition_info']['exhibition_img']);
 			$data['exhibition_info']['content_url'] = '/api/exhibition_content_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
 		}
 		else{
