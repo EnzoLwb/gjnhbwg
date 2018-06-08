@@ -353,6 +353,9 @@ class ResourceDao extends Controller
 			if (!file_exists($html_path)) {
 				mkdir($html_path, 0777, true);
 			}
+			if (!file_exists($version_html_path)) {
+				mkdir($version_html_path, 0777, true);
+			}
 			//html资源更新
 			foreach (config('exhibit_config.exhibit.content_arr') as $kkk => $ggg) {
 				$base_html = base_path() . '/public/resource_zip/exhibit_' . $ggg['key'] . '.html';
