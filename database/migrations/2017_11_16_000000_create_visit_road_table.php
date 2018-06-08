@@ -23,6 +23,7 @@ class CreateVisitRoadTable extends Migration
 			$table->unsignedInteger('type')->comment('路线类别1后台设定2自定义路线');
 			$table->text('road_list')->comment('展品列表');
 			$table->text('road_info')->comment('路线详情');
+			$table->text('weight_exhibit_ids')->comment('展品排序集合');
 			$table->integer('uid', false, true)->comment('用户id')->default(0);
 			$table->timestamps();
 
