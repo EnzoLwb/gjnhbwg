@@ -20,15 +20,31 @@ class GatewayController extends Controller
 		parent::_init();
 		GatewayLib::$registerAddress = env('WM_REGISTER_IP', '127.0.0.1').':'.env('WM_REGISTER_PORT', '1238');
 	}
-	/*
-	 * 设备开始租赁时告诉我 现在这个设备的绑定人的身份证号，用户名。我在我自己的表中添加或者修改这个设备的信息。
-	 * */
 	/**
-	 * 绑定导览机信息
+	 * tcp监听协议
 	 *
 	 * @author lwb 20180608
 	 *
-	 * @api {Get} /gateway/device_info 00.租赁时调取接口
+	 * @api {GET} tcp://192.168.10.158:9501 01.监听地址
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiSuccess {string} type 信息类型
+	 * (1.bind:机器号绑定;2.heart:心跳响应;3.chat:信息推送),
+	 * type等于bind 机器号/uid绑定,执行uid/设备绑定接口,
+	 * type等于heart 心跳响应,使用tcp链接向服务器发送string数据'pong';
+	 * type等于chat 并且send_type等于1表示普通发送消息 2 表示语音消息
+	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
+	 * @apiSuccess {string} send_type 信息类型,标题
+	 * @apiSuccess {string} send_content 信息内容
+	 * @apiSuccess {string} group_id 群组ID
+	 */
+
+	/**
+	 * 绑定导览机信息
+	 * 设备开始租赁时告诉我 现在这个设备的绑定人的身份证号，用户名。我在我自己的表中添加或者修改这个设备的信息。
+	 * @author lwb 20180608
+	 *
+	 * @api {Get} /gateway/device_info 02.租赁时调取接口
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p   d：导览机
@@ -52,11 +68,11 @@ class GatewayController extends Controller
 		return response_json(1, [], '添加成功');
 	}
 	/**
-	 * uid绑定接口
+	 * uid/设备绑定接口
 	 *
 	 * @author lwb 20180608
 	 *
-	 * @api {Get} /gateway/bind 01.uid或设备号绑定接口(绑定时自然会断开之前的链接)
+	 * @api {Get} /gateway/bind 03.uid或设备号绑定接口(绑定时自然会断开之前的链接)
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
@@ -86,7 +102,7 @@ class GatewayController extends Controller
 			GatewayLib::bindUid($client_id, $user_number);
 		} else {
 			return response_json(0, [], 'client_id无效');
-		};
+		}
 		return response_json(1, [], '绑定成功');
 	}
 
@@ -97,7 +113,7 @@ class GatewayController extends Controller
 	 * @author lwb 20180607
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
-	 * @api {GET} /gateway/create_group 03.创建群组
+	 * @api {GET} /gateway/create_group 04.创建群组
 	 * @apiGroup GateWay
 	 * @apiIgnore
 	 * @apiVersion 1.0.0
@@ -146,7 +162,7 @@ class GatewayController extends Controller
 	 * @author lwb 20180607
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
-	 * @api {GET} /gateway/join_group 04.加入群组
+	 * @api {GET} /gateway/join_group 05.加入群组
 	 * @apiGroup GateWay
 	 * @apiIgnore
 	 * @apiVersion 1.0.0

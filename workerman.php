@@ -80,62 +80,14 @@ class Events
 			// 客户端回应服务端的心跳
 			case 'pong':	return;
 			// bindUid {type:login, uid:1234} (在选择加入群组和创建群组界面就应该绑定上 返回client_id 和类型)
-
-			// 加入群组  message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
-			case 'join_group':
-				// 判断是否有房间号
-				if(!isset($message_data['group_id']))
-				{
-					return response_json(0,1,'请输入群组id');
-				}
-				$group=\App\Models\Group::where('group_id',$message_data['group_id'])->first()->toArray();
-				if(!$group)
-				{
-					return response_json(0,1,'该群组不存在');
-				}
-				$group_id=$group['id'];
-				// 转播给当前房间的所有客户端，xx进入聊天室 message {type:login, client_id:xx, name:xx}
-				$new_message = array('type'=>$message_data['type'], 'client_id'=>$client_id,'time'=>date('Y-m-d H:i:s'));
-				GatewayLib::sendToGroup($group_id, json_encode($new_message));
-				GatewayLib::joinGroup($client_id, $group_id);
-
-				return;
-
-			// 客户端发言 message: {type:say, to_client_id:xx, content:xx}
-			case 'say':
-				// 非法请求
-				if(!isset($_SESSION['room_id']))
-				{
-					throw new \Exception("\$_SESSION['room_id'] not set. client_ip:{$_SERVER['REMOTE_ADDR']}");
-				}
-				$room_id = $_SESSION['room_id'];
-				$client_name = $_SESSION['client_name'];
-
+			// 客户端发言 message: {type:sent_msg, to_client_id:uid, content:xx}
+			case 'chat':
 				// 私聊
-				if($message_data['to_client_id'] != 'all')
-				{
-					$new_message = array(
-						'type'=>'say',
-						'from_client_id'=>$client_id,
-						'from_client_name' =>$client_name,
-						'to_client_id'=>$message_data['to_client_id'],
-						'content'=>"<b>对你说: </b>".nl2br(htmlspecialchars($message_data['content'])),
-						'time'=>date('Y-m-d H:i:s'),
-					);
-					GatewayLib::sendToClient($message_data['to_client_id'], json_encode($new_message));
-					$new_message['content'] = "<b>你对".htmlspecialchars($message_data['to_client_name'])."说: </b>".nl2br(htmlspecialchars($message_data['content']));
-					return GatewayLib::sendToCurrentClient(json_encode($new_message));
-				}
-
-				$new_message = array(
-					'type'=>'say',
-					'from_client_id'=>$client_id,
-					'from_client_name' =>$client_name,
-					'to_client_id'=>'all',
-					'content'=>nl2br(htmlspecialchars($message_data['content'])),
-					'time'=>date('Y-m-d H:i:s'),
-				);
-				return GatewayLib::sendToGroup($room_id ,json_encode($new_message));
+				$to_client_id= GatewayLib::getClientIdByUid($message_data['to_client_id']);
+				$arr['type'] = 'sent_msg';
+				$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
+				$arr['send_content'] = $message_data['content'];
+				return GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		}
 	}
 

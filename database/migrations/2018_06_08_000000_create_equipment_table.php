@@ -20,8 +20,8 @@ class CreateEquipmentTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->string('device_no',30)->comment('唯一设备号');
-			$table->string('name',30)->comment('姓名')->nullable();
-			$table->integer('certificate_number',false,true)->comment('身份证号')->nullable();
+			$table->string('name',10)->comment('姓名')->nullable();
+			$table->string('certificate_number')->comment('身份证号')->nullable();
 			$table->timestamps();
 
 			if (env('DB_CONNECTION') == 'oracle') {
