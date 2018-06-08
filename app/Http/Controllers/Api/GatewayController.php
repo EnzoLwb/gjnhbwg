@@ -88,8 +88,7 @@ class GatewayController extends Controller
 			'client_id' => 'required|string|max:20',
 			'user_number' => 'required',
 		]);
-		$prefix=request('p')=='d' ? self::BIND_DLJ :self::BIND_APP;
-		$user_number = $prefix.request('user_number');
+		$user_number = request('user_number');
 		$client_id = request('client_id');
 		if (GatewayLib::isOnline($client_id)) {
 			//判断当前机器号是否绑定过client_id
@@ -105,7 +104,7 @@ class GatewayController extends Controller
 		} else {
 			return response_json(0, [], 'client_id无效');
 		}
-		return response_json(1, ['uid'=>$user_number], '绑定成功');
+		return response_json(1, [], '绑定成功');
 	}
 
 	/**
@@ -156,7 +155,6 @@ class GatewayController extends Controller
 		return response_json(1,$data,'你已成功创建并加入群组');
 	}
 
-
 	/**
 	 * 加入群组
 	 *
@@ -176,7 +174,6 @@ class GatewayController extends Controller
 		$uid=Auth::id();
 
 	}
-
 	/**
 	 * 私聊发送消息
 	 *
@@ -195,14 +192,14 @@ class GatewayController extends Controller
 	public function send_msg()
 	{
 		$this->validate([
-			'user_number' => 'required',
+			'to_user_number' => 'required',
 			'content' => 'required'
 		]);
 		$type=request('type',1);
 		$to_user_number=request('to_user_number');
 		$from_user_number=request('from_user_number');
 		$content=request('content');
-		$device_type=strstr($to_user_number, self::BIND_APP) !== false ? 1:2;
+		$device_type= request('p') !='d' ? 1:2;
 		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
 		if (empty($to_client_id)) {
 			//断开连接或者uid输入错误
@@ -224,7 +221,7 @@ class GatewayController extends Controller
 			$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
 			$arr['send_content'] = $content;
 		}
-		 GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1,[],'发送成功');
 	}
 }
