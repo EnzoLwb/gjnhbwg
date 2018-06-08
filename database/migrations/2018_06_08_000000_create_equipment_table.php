@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateWordsTable extends Migration
+class CreateEquipmentTable extends Migration
 {
 	private $tableName = 'equipment';
 	private $tableComment = '导览机租赁绑定信息';
