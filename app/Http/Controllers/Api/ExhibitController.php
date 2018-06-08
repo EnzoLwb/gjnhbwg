@@ -90,6 +90,8 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_name 展厅名称
 	 * @apiSuccess {string} content 展厅简介
 	 * @apiSuccess {string} exhibition_img 展厅图片
+	 * @apiSuccess {int} floor_id 楼层
+	 * @apiSuccess {string} content_url 内容h5
 	 */
 	public function exhibition_info()
 	{
@@ -110,7 +112,7 @@ class ExhibitController extends Controller
 		$data = [];
 		$p = request('p', 'a');
 		//获取展览简介
-		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition_language.content', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id')->first();
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition_language.content', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id','exhibition.floor_id')->first();
 		if(!empty($exhibition)){
 			$exhibition['content']=strip_tags($exhibition['content']);
 			$data['exhibition_info']=$exhibition;
