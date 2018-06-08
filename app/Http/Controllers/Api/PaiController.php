@@ -8,6 +8,7 @@ use App\Models\Pai;
 use App\Exceptions\ApiErrorException;
 use App\Models\PaiComment;
 use App\Models\PaiLike;
+use App\Models\Words;
 use Illuminate\Support\Facades\Auth;
 
 class PaiController extends Controller
@@ -18,18 +19,19 @@ class PaiController extends Controller
 	}
 
 	/**
-	 * 随手拍图片上传
+	 * 随手拍图片/留言图片上传
 	 *
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
 	 *
-	 * @api {POST} /pai_uploadimg 01.随手拍图片上传
+	 * @api {POST} /pai_uploadimg 00.随手拍图片/留言图片上传
 	 * @apiGroup  Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
 	 * @apiParam {string} api_token 用户token
-	 * @apiParam {file} pai 随手拍图片最大上传5M,app上传前压缩处理一下
+	 * @apiParam {int} type 类型 1代表随手拍 2代表留言
+	 * @apiParam {file} img_file 图片最大上传5M,app上传前压缩处理一下
 	 * @apiSuccess {string} data 图片地址
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":"\u65b0\u6635\u79f0","msg":""}
@@ -37,88 +39,83 @@ class PaiController extends Controller
 	public function pai_uploadimg()
 	{
 		$this->validate([
-			'pai' => 'required|file'
+			'img_file' => 'required|file'
 		]);
-		$uid = Auth::user()->uid;
-
+		$uid = Auth::id();
+		$type=request('type',1)==1?'FT_PAI':'FT_MESSAGE';
 		// 保存图片
-		$file = UploadedFileDao::saveFile('pai', 'FT_PAI', $uid);
+		$file = UploadedFileDao::saveFile('img_file', $type, $uid);
 		if (!$file['status']) {
 			throw new ApiErrorException($file['data']);
 		}
-		/*//用户上传头像次数+1
-		$u_ex_info=ExUserVisit::where('uid',$uid)->first();
-		if(empty($u_ex_info)){
-			ExUserVisit::create(['uid'=>$uid,'use_time'=>0,'listen_num'=>0,'photo_num'=>1]);
-		}
-		else{
-			ExUserVisit::where('uid',$uid)->increment('photo_num');
-		}*/
-
 		return response_json(1, $file['data']->file_path . '/' . $file['data']->file_name);
 	}
-
 	/**
-	 * 微信图片上传
+	 * 留言
 	 *
-	 * @author yyj 20170422
+	 * @author lwb 20180608
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws ApiErrorException
 	 *
-	 * @api {POST} /wx_upload_img 09.微信图片上传
-	 * @apiGroup Pai
+	 * @api {POST} /send_words 01.留言
+	 * @apiGroup  Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} img_url 微信图片存储网址
 	 * @apiParam {string} api_token 用户token
-	 * @apiSuccess {string} data 图片地址
+	 * @apiParam {string} word_content 内容最多输入500个字符
+	 * @apiParam {string} contacts 联系方式 手机号或者邮箱
+	 * @apiParam {string} word_img[] 调用图片上传接口后返回的图片地址 可提交多个 最多上传九张
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 *
 	 */
-	public function wx_upload_img()
+	public function send_words()
 	{
 		$this->validate([
-			'img_url' => 'required'
+			'word_content' => 'max:500|string',
+			'contacts' => 'required',
 		]);
-		$img_url = request('img_url');
-		$save_path = public_path() . '/uploadfiles/wx_pai/' . date('Ymd', time()) . '/';
-		$savename = ltrim(strrchr($img_url, '='), '=') . '.jpg';
-		$filepath = $save_path . $savename;
-		if (empty($img_url) || $savename == '.jpg') {
-			return response_json(0, [], '请填写图片网址');
-		}
-		if (!file_exists($save_path)) {
-			mkdir($save_path, 0777, true);
-		}
-		$type = 0;//0浏览器自动弹窗下载  1远程图片链接下载
-		if ($type) {
-			$ch = curl_init();
-			$timeout = 5;
-			curl_setopt($ch, CURLOPT_URL, $img_url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-			$img = curl_exec($ch);
-			curl_close($ch);
-		} else {
-			ob_start();
-			readfile($img_url);
-			$img = ob_get_contents();
-			ob_end_clean();
-		}
-		//$size=strlen($img);
-		//文件大小
-		$fp2 = fopen($filepath, 'a');
-		fwrite($fp2, $img);
-		fclose($fp2);
-		if (file_exists($filepath)) {
-			//用户上传头像次数+1
-			/*$uid = Auth::user()->uid;
-			$u_ex_info=ExUserVisit::where('uid',$uid)->first();
-			if(empty($u_ex_info)){
-				ExUserVisit::create(['uid'=>$uid,'use_time'=>0,'listen_num'=>0,'photo_num'=>1]);
+		$uid = Auth::user()->uid;
+		$content = request('word_content');
+		// 处理图片
+		$img = request('word_img');
+		$imgs = [];
+		$allowedExts = array(
+			"gif",
+			"jpeg",
+			"jpg",
+			"png"
+		);
+		if (is_array($imgs)) {
+			foreach ($img as $k => $v) {
+				if (!empty($v)) {
+					$temp = explode(".", $v);
+					$extension = end($temp);
+					if (in_array($extension, $allowedExts)) {
+						array_push($imgs, $v);
+					} else {
+						return response_json(0, [], '图片格式错误');
+					}
+				}
 			}
-			else{
-				ExUserVisit::where('uid',$uid)->increment('photo_num');
-			}*/
-			return response_json(1, '/uploadfiles/wx_pai/' . date('Ymd', time()) . '/' . $savename, '图片下载成功');
+		}
+		$num = count($imgs);
+		if ($num > 9) {
+			throw new ApiErrorException('最多上传9张图片');
+		}
+		$imgs = json_encode($imgs);
+		if (empty($content) && empty($num)) {
+			throw new ApiErrorException('文字和图片至少要提交一项');
+		}
+		$r = Words::create([
+			'uid' => $uid,
+			'content' => $content,
+			'imgs' => $imgs,
+			'contacts' => request('contacts')
+		]);
+		if ($r) {
+			return response_json(1, 1);
 		} else {
-			return response_json(0, '图片下载失败');
+			return response_json(1, 0);
 		}
 	}
 
@@ -160,7 +157,7 @@ class PaiController extends Controller
 				if (!empty($v)) {
 					$temp = explode(".", $v);
 					$extension = end($temp);
-					if (in_array($extension, $allowedExts) && (strstr($v, '/uploadfiles/pai/') !== false || strstr($v, '/uploadfiles/wx_pai/') !== false)) {
+					if (in_array($extension, $allowedExts)) {
 						array_push($imgs, $v);
 					} else {
 						return response_json(0, [], '图片格式错误');
@@ -204,8 +201,8 @@ class PaiController extends Controller
 	 * @apiGroup Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
-	 * @apiParam {int} skip 数据偏移量
-	 * @apiParam {int} take 查询数量
+	 * @apiParam {int} skip 数据偏移量 默认为0 表示第一页
+	 * @apiParam {int} take 查询数量  默认为10 表示一页显示多少
 	 * @apiParam {string} [api_token] 用户token登录后判断是否点赞
 	 * @apiSuccess {array} data 数据详情
 	 * @apiSuccess {int} pid 编号
@@ -271,7 +268,7 @@ class PaiController extends Controller
 			'pai_comment' => 'required|max:200|string',
 			'pid' => 'required|min:1|integer',
 		]);
-		$uid = Auth::user()->uid;
+		$uid = Auth::id();
 		$comment = request('pai_comment');
 		$pid = request('pid');
 		if (config('app_check')['pai_comment']) {
@@ -312,9 +309,9 @@ class PaiController extends Controller
 
 	public function pai_dolike()
 	{
-		$this->validate([
+		/*$this->validate([
 			'type' => 'required|min:1|max:2|integer',
-		]);
+		]);*/
 		$uid = Auth::user()->uid;
 		$type = request('type', 1);
 		if ($type == 1) {
@@ -424,7 +421,7 @@ class PaiController extends Controller
 	}
 
 	/**
-	 * 我的随手怕列表
+	 * 我的随手拍列表
 	 *
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse
@@ -477,7 +474,7 @@ class PaiController extends Controller
 	}
 
 	/**
-	 * 8我的随手怕删除接口
+	 * 8我的随手拍删除接口
 	 *
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse

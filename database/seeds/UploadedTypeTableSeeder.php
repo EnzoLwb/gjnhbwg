@@ -38,6 +38,22 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_num' => 1
 			],
 			[
+				'type_key' => 'FT_PAI',
+				'path' => 'pai',
+				'desc' => '随手拍的图片',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 5,
+				'allow_num' => 1
+			],
+			[
+				'type_key' => 'FT_MESSAGE',
+				'path' => 'words',
+				'desc' => '留言的图片',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 5,
+				'allow_num' => 1
+			],
+			[
 				'type_key' => 'FT_ARTICLE_DESC_FILE',
 				'path' => 'article_content_file',
 				'desc' => '文章内容文件(ueditor)',
