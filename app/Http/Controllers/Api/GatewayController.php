@@ -12,6 +12,7 @@ class GatewayController extends Controller
 {
 	public function __construct()
 	{
+		parent::_init();
 		$registerIP = env('WM_REGISTER_IP', '127.0.0.1');
 		$registerPort = env('WM_REGISTER_PORT', '1238');
 		GatewayLib::$registerAddress = $registerIP.':'.$registerPort;
