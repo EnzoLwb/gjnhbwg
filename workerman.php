@@ -70,7 +70,6 @@ class Events
 	{
 		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " get message...\n";
 		// 客户端传递的是json数据
-
 		$message_data = json_decode($message, true);
 		if(!$message_data) return ;
 		// 根据类型执行不同的业务
@@ -78,11 +77,14 @@ class Events
 		{
 			// 客户端回应服务端的心跳
 			case 'pong':	return;
-			// 绑定client_id(在选择加入群组和创建群组界面就应该绑定上)
+			// bindUid {type:login, uid:1234} (在选择加入群组和创建群组界面就应该绑定上 返回client_id 和类型)
 			case 'login':
 				$uid=$message_data['uid'];
+				$data['type']='bind';
+				$data['client_id']=$client_id;
 				GatewayLib::bindUid($client_id,$uid);
-				echo '绑定成功';
+				GatewayLib::sendToClient($client_id,json_encode($data));
+				echo '绑定成功'.$client_id;
 			// 加入群组  message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
 			case 'join_group':
 				// 判断是否有房间号
