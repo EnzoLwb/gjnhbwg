@@ -113,8 +113,13 @@ class ExhibitController extends Controller
 		//获取展览简介
 		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id','exhibition.floor_id as floor')->first();
 		if(!empty($exhibition)){
+
+			$imgs = json_decode($exhibition['exhibition_img'], true);
+			$imgs = isset($imgs['exhibition_imgs']) ? $imgs['exhibition_imgs'] : '';
+
 			$data['exhibition_info']=$exhibition;
 			//$data['exhibition_info']['exhibition_share_url'] = '/api/exhibition_share_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
+			$data['exhibition_info']['exhibition_img'] = $imgs;
 			$data['exhibition_info']['content_url'] = '/api/exhibition_content_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
 		}
 		else{

@@ -44,6 +44,22 @@ return [
 				//资源打包时生成的图片名称
 				'zip_name' => 'list'
 			],
+			[
+				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
+				'key' => 'exhibition_imgs',
+				//数据库存储类型
+				'upload_key' => 'FT_EXHIBIT_MORE',
+				//页面提示名称
+				'name' => '展厅详情图片',
+				//是否必传
+				'required' => true,
+				//是否上传多图
+				'is_more' => true,
+				//该资源是否打包
+				'is_zip' => true,
+				//资源打包时生成的图片名称
+				'zip_name' => 'imgs'
+			],
 		]
 	],
 	//展品配置
