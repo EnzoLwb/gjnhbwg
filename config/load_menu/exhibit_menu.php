@@ -24,4 +24,10 @@ return [
 		'priv' => 'admin-data-autonum',
 		'order_num' => 10,
 	],
+	[
+		'text' => '推荐线路设置',
+		'url' => '/' . env('ADMIN_ENTRANCE', 'admin') .'/approad/road_list',
+		'priv' => 'admin-approad-road_list',
+		'order_num' => 10,
+	],
 ];
