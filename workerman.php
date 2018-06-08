@@ -56,10 +56,12 @@ class Events
 	public static function onConnect($client_id)
 	{
 		echo '[' . date('Y-m-d H:i:s') . '] ' . $_SERVER['REMOTE_ADDR'] . ':' . $_SERVER['REMOTE_PORT'] . " connected 1...\n";
-
-
+		$arr['client_id'] = $client_id;
+		$arr['type'] = 'bind';
+		$arr['send_type'] = '';
+		$arr['send_content'] = ['msg'=>'设备绑定'];
+		GatewayLib::sendToClient($client_id, json_encode($arr));
 	}
-
 	/**
 	 * 当客户端发来消息时触发
 	 *
@@ -78,13 +80,7 @@ class Events
 			// 客户端回应服务端的心跳
 			case 'pong':	return;
 			// bindUid {type:login, uid:1234} (在选择加入群组和创建群组界面就应该绑定上 返回client_id 和类型)
-			case 'login':
-				$uid=$message_data['uid'];
-				$data['type']='bind';
-				$data['client_id']=$client_id;
-				GatewayLib::bindUid($client_id,$uid);
-				GatewayLib::sendToClient($client_id,json_encode($data));
-				echo '绑定成功'.$client_id;
+
 			// 加入群组  message格式: {type:login, name:xx, room_id:1} ，添加到客户端，广播给所有客户端xx进入聊天室
 			case 'join_group':
 				// 判断是否有房间号
@@ -184,7 +180,7 @@ $gateway->registerAddress = "$registerIP:$registerPort";
 // 心跳间隔
 //$gateway->pingInterval = 10;
 // 心跳数据
-//$gateway->pingData = '{"type":"ping"}';
+$gateway->pingData = '{"type":"pong"}';
 
 // bussinessWorker 进程
 $worker = new BusinessWorker();
