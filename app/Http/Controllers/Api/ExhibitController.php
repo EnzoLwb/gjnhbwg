@@ -88,7 +88,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {array} exhibition_info 展厅详情
 	 * @apiSuccess {string} exhibition_name 展厅名称
-	 * @apiSuccess {string} exhibition_img 展厅图片
+	 * @apiSuccess {string} exhibition_imgs 展厅图片
 	 * @apiSuccess {int} floor  所在楼层
 	 * @apiSuccess {string} content_url 内容h5
 	 */
@@ -113,8 +113,14 @@ class ExhibitController extends Controller
 		//获取展览简介
 		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition.'.$language_img.'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id','exhibition.floor_id as floor')->first();
 		if(!empty($exhibition)){
+
+			$imgs = json_decode($exhibition['exhibition_img'], true);
+			$imgs = isset($imgs['exhibition_imgs']) ? $imgs['exhibition_imgs'] : '';
+
 			$data['exhibition_info']=$exhibition;
 			//$data['exhibition_info']['exhibition_share_url'] = '/api/exhibition_share_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
+			$data['exhibition_info']['exhibition_imgs'] = $imgs;
+			unset($data['exhibition_info']['exhibition_img']);
 			$data['exhibition_info']['content_url'] = '/api/exhibition_content_info/' . $language . '/' . $exhibition_id . '?p=' . $p.'&language='.$language;
 		}
 		else{
@@ -183,6 +189,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibit_name 展品名称
 	 * @apiSuccess {string} exhibit_list_img 展品图片
+	 * @apiSuccess {string} audio 音频
 	 * @apiSuccess {int} exhibit_id 展品id
 	 * @apiSuccess {int} look_num 浏览数量
 	 * @apiSuccess {int} like_num 点赞数量
@@ -200,13 +207,14 @@ class ExhibitController extends Controller
 		$take = request('take', 10);
 		$exhibition_id=request('exhibition_id', 0);
 		$data = [];
-		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name','exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
 		foreach ($exhibit_list as $k => $g) {
 			$imgs = json_decode($g['exhibit_img'], true);
 			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
 			$data[$k]['exhibit_list_img'] = $imgs;
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_name'] = $g['exhibit_name'];
+			$data[$k]['audio'] = $g['audio'];
 			$data[$k]['look_num'] = $g['look_num'];
 			$data[$k]['like_num'] = $g['like_num'];
 		}

@@ -221,4 +221,140 @@ class ExhibitDao extends Exhibit
 			ExhibitComment::whereIn('id', $idArray)->where('type',2)->delete();
 		}
 	}
+
+
+	/**
+	 * 路线列表
+	 *
+	 * @author yyj 20171112
+	 * @param int $language
+	 * @param array $road_list 路线列表
+	 * @param int $uid
+	 * @return array
+	 */
+	public static function road_list($language,$road_list,$uid){
+		if($language==10){
+			//$language=1;
+			//$language_img='my_';
+			$language_img='';
+		}
+		else{
+			$language_img='';
+		}
+		$data=[];
+		//获取展品详情
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit.is_show_map', 1)->where('exhibit_language.language', $language)->select('exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibit_language.exhibit_name','exhibit.exhibition_id','exhibit.like_num')->get();
+		//获取展厅列表
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name','exhibition.floor_id','exhibition.id as exhibition_id')->get();
+		if(!empty($exhibition)){
+			foreach ($exhibition as $k=>$g) {
+				$data[$g->exhibition_id]=[
+					'exhibition_name'=>config('floor')[$g->floor_id].' '.$g->exhibition_name,
+					'exhibition_id'=>$g->exhibition_id,
+					'is_all_check'=>1,
+					'exhibit_list'=>[]
+				];
+			}
+		}
+		/*foreach (config('exhibition')[$language] as $k=>$g){
+			$data[$k]=[
+				'exhibition_name'=>$g,
+				'exhibition_id'=>$k,
+				'is_all_check'=>1,
+				'exhibit_list'=>[]
+			];
+		}*/
+		//获取已点赞的展品
+		$like_list=ExhibitLike::where('uid', $uid)->where('type', 1)->pluck('exhibit_id');
+		if(count($like_list)==0){
+			$like_list=[0];
+		}
+		else{
+			$like_list=$like_list->toArray();
+		}
+		foreach ($exhibit_list as $k=>$g){
+			$imgs=json_decode($g->exhibit_img, true);
+			$imgs=isset($imgs[$language_img.'exhibit_list'])?$imgs[$language_img.'exhibit_list']:'';
+			$exhibit_info=[
+				'exhibiti_name'=>$g->exhibit_name,
+				'exhibit_img'=>$imgs,
+				'exhibit_id'=>$g->exhibit_id,
+				'like_num'=>$g->like_num,
+				'is_check'=>in_array($g->exhibit_id,$road_list)?1:0,
+				'is_like'=>in_array($g->exhibit_id,$like_list)?1:0,
+			];
+			$data[$g->exhibition_id]['exhibit_list'][]=$exhibit_info;
+			if($exhibit_info['is_check']==0){
+				$data[$g->exhibition_id]['is_all_check']=0;
+			}
+		}
+		sort($data);
+		return $data;
+	}
+
+
+
+
+	/**
+	 * 路线列表
+	 *
+	 * @author yyj 20171112
+	 * @param int $language
+	 * @param int $road_id
+	 * @return array
+	 */
+	public static function road_list_exhibit($language,$road_id){
+		if($language==10){
+			//$language=1;
+			//$language_img='my_';
+			$language_img='';
+		}
+		else{
+			$language_img='';
+		}
+		$exhibit_arr=VisitRoad::where('id',$road_id)->value('road_list');
+		$exhibit_arr=empty($exhibit_arr)?[0]:json_decode($exhibit_arr,true);
+		//获取展品详情
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit.is_show_map', 1)->whereIn('exhibit.id',$exhibit_arr)->where('exhibit_language.language', $language)->select('exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibit_language.exhibit_name','exhibit.exhibition_id','exhibit.like_num')->get();
+		//获取展厅列表
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name','exhibition.floor_id','exhibition.id as exhibition_id')->get();
+		if(!empty($exhibition)){
+			foreach ($exhibition as $k=>$g) {
+				$data[$g->exhibition_id]=[
+					'exhibition_name'=>config('floor')[$g->floor_id].' '.$g->exhibition_name,
+					'exhibition_id'=>$g->exhibition_id,
+					'exhibit_list'=>[]
+				];
+			}
+		}
+		/*foreach (config('exhibition')[$language] as $k=>$g){
+			$data[$k]=[
+				'exhibition_name'=>$g,
+				'exhibition_id'=>$k,
+				'exhibit_list'=>[]
+			];
+		}*/
+
+		foreach ($exhibit_list as $k=>$g){
+			$imgs=json_decode($g->exhibit_img, true);
+			$imgs=isset($imgs[$language_img.'exhibit_list'])?$imgs[$language_img.'exhibit_list']:'';
+			$exhibit_info=[
+				'exhibiti_name'=>$g->exhibit_name,
+				'exhibit_img'=>$imgs,
+				'exhibit_id'=>$g->exhibit_id,
+				'like_num'=>$g->like_num,
+			];
+			$data[$g->exhibition_id]['exhibit_list'][]=$exhibit_info;
+		}
+		foreach ($data as $k=>$g){
+			if(count($g['exhibit_list'])==0){
+				unset($data[$k]);
+			}
+		}
+		sort($data);
+		return $data;
+	}
+
+
+
 }
