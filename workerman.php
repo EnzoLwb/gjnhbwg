@@ -9,7 +9,7 @@
  * /etc/rc.d/rc.local 加入
  * php /home/www/wwwroot/headking/workerman.php restart -d 1>/home/www/wwwroot/headking/storage/logs/workerman_output.log 2>&1 &
  *
- * php /alidata1/wwwroot/tnwz/workerman.php restart -d 1>/alidata1/wwwroot/tnwz/storage/logs/workerman_output.log 2>&1 &
+ * php /home/www/wwwroot/gjnhbwg/workerman.php restart -d 1>/home/www/wwwroot/gjnhbwg/storage/logs/workerman_output.log 2>&1 &
  *
  * 客户端连接测试
  * curl -v telnet://127.0.0.1:9100
@@ -172,7 +172,7 @@ $gatewayPort = env('WM_GATEWAY_PORT', '9100');
 $register = new Register("text://0.0.0.0:{$registerPort}");
 
 // gateway 进程，这里使用Text协议，可以用telnet测试
-$gateway = new Gateway("Websocket://0.0.0.0:{$gatewayPort}");
+$gateway = new Gateway("tcp://0.0.0.0:{$gatewayPort}");
 // gateway名称，status方便查看
 $gateway->name = 'DM_Gateway';
 // gateway进程数
