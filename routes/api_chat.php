@@ -11,6 +11,10 @@ Route::group([
 	Route::get('gateway/create_group', 'GatewayController@create_group');
 	//加入群组
 	Route::get('gateway/join_group', 'GatewayController@join_group');
+	//退出群聊
+	Route::get('gateway/exit_group', 'GatewayController@exit_group');
 	//私聊
 	Route::post('gateway/send_msg', 'GatewayController@send_msg');
+	//发送语音信息
+	Route::post('gateway/upload_audio', 'GatewayController@upload_audio');
 });
