@@ -48,8 +48,8 @@ class MyExhibitController extends Controller
 	{
 		$this->validate([
 			'language' => 'required|min:0|integer',
-			'skip' => 'required|man:0|integer',
-			'take' => 'required|man:0|integer',
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
 		]);
 		$uid = Auth::user()->uid;
 		$language = request('language', 1);
@@ -117,8 +117,8 @@ class MyExhibitController extends Controller
 	{
 		$this->validate([
 			'language' => 'required|min:0|integer',
-			'skip' => 'required|man:0|integer',
-			'take' => 'required|man:0|integer',
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
 		]);
 		$uid = Auth::user()->uid;
 		$language = request('language', 1);
@@ -166,8 +166,8 @@ class MyExhibitController extends Controller
 	public function my_comment(){
 		$this->validate([
 			'language' => 'required|min:0|integer',
-			'skip' => 'required|man:0|integer',
-			'take' => 'required|man:0|integer',
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
 		]);
 		$uid = Auth::user()->uid;
 		$language = request('language', 1);

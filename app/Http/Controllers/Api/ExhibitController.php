@@ -204,7 +204,7 @@ class ExhibitController extends Controller
 		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
 		foreach ($exhibit_list as $k => $g) {
 			$imgs = json_decode($g['exhibit_img'], true);
-			$imgs = isset($imgs['exhibit_imgs2']) ? $imgs['exhibit_imgs2'] : '';
+			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
 			$data[$k]['exhibit_list_img'] = $imgs;
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_name'] = $g['exhibit_name'];
@@ -232,7 +232,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibit_name 展品名称
 	 * @apiSuccess {array} exhibit_imgs 展品图片
-	 * @apiSuccess {array} exhibit_imgs2 展品图片(导览机，导览机，列表圆图，足迹小图)
+	 * @apiSuccess {array} exhibit_list 展品图片(导览机，导览机，列表圆图，足迹小图)
 	 * @apiSuccess {string} exhibit_icon1 地图页图片(亮)
 	 * @apiSuccess {string} exhibit_icon2 地图页图片(暗)
 	 * @apiSuccess {int} exhibit_id 展品id
@@ -268,7 +268,7 @@ class ExhibitController extends Controller
 			$data['exhibit_id'] = $exhibit_info->exhibit_id;
 			$data['exhibit_name'] = $exhibit_info->exhibit_name;
 			$data['exhibit_imgs'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_imgs'];
-			$data['exhibit_imgs2'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_imgs2'];
+			$data['exhibit_list'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_list'];
 			$data['exhibit_icon1'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_icon1'];
 			$data['exhibit_icon2'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_icon2'];
 			$data['audio'] = $exhibit_info->audio;

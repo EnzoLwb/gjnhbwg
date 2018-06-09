@@ -62,7 +62,7 @@
                         @foreach($info as $g)
                         <li>
                             <div class="list-pic">
-                                <img src="{{json_decode($g['exhibit_img'],true)['exhibit_imgs2']}}">
+                                <img src="{{json_decode($g['exhibit_img'],true)['exhibit_list']}}">
                                 <a class="btn-edit" href="{{route('admin.data.exhibit.edit', $g['id'])}}">编辑</a>
                                 <a class="ajaxBtn btn-delete" href="javascript:void(0);" uri="{{route('admin.data.exhibit.delete' ,$g['id'])}}" msg="是否删除该展览？">删除</a>
                                 @if(config('exhibit_config.exhibit.is_lb'))

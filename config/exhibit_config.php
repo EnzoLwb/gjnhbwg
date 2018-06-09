@@ -88,7 +88,7 @@ return [
 			],
 			[
 				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
-				'key' => 'exhibit_imgs2',
+				'key' => 'exhibit_list',
 				//数据库存储类型
 				'upload_key' => 'FT_EXHIBIT_ONE',
 				//页面提示名称
@@ -100,7 +100,7 @@ return [
 				//该资源是否打包
 				'is_zip' => true,
 				//资源打包时生成的图片名称
-				'zip_name' => 'imgs2'
+				'zip_name' => 'list'
 			],
 			[
 				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
