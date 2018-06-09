@@ -15,14 +15,11 @@
 {{$info->exhibit_name or ''}}
 <h1>展品详情图</h1>
 @if(!empty($info->exhibit_img))
-    @foreach(json_decode($info->exhibit_img,true)['exhibit_imgs'] as $k=>$g)
-        <img src="{{get_file_url($g)}}">
-    @endforeach
+        <img src="{{get_file_url(json_decode($info->exhibit_img,true)['exhibit_imgs'])}}">
 @endif
 <h1>展品语音</h1>
 <audio src="{{$info->audio or ''}}" id="audio"></audio>
 <h1>展品内容</h1>
 {!! $info->content or '' !!}
-<h1>展品科普知识</h1>
-{!! $info->knowledge or '' !!}
+
 </body>
