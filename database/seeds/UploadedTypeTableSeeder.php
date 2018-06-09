@@ -110,6 +110,14 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_num' => 1
 			],
 			[
+				'type_key' => 'FT_CHAT_AUDIO',
+				'path' => 'mp3',
+				'desc' => '聊天语音文件',
+				'allow_type' => 'mp3',
+				'allow_size' => 1024 * 1024 * 20,
+				'allow_num' => 1
+			],
+			[
 				'type_key' => 'FT_SVGMAP',
 				'path' => 'svg',
 				'desc' => 'svg地图',

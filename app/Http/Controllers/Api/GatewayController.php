@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Dao\UploadedFileDao;
+use App\Exceptions\ApiErrorException;
 use App\Models\ChatMessage;
 use App\Models\Dlj;
 use App\Models\Group;
@@ -176,6 +178,10 @@ class GatewayController extends Controller
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 */
 	public function join_group(){
+		$this->validate([
+			'user_number' => 'required',
+			'group_number' => 'required'
+		]);
 		$user_number=request('user_number');
 		$group_number=request('group_number');
 		$plat=request('p')!='d'?'1':'2';
@@ -208,13 +214,14 @@ class GatewayController extends Controller
 			unset($v['member_id'],$v['uid']);
 		}
 		//加入群组
-		$group=GroupMember::create([
+		GroupMember::create([
 			'member_id' => $user_number,
 			'group_id' => $group_info['id'],
 			'add_time' =>time(),
 			'device_type' =>$plat,
 		]);
 		GatewayLib::joinGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_info['id']);
+
 		return response_json(1, $data, '加入成功');
 	}
 	/**
@@ -266,5 +273,87 @@ class GatewayController extends Controller
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1,[],'发送成功');
+	}
+	/**
+	 * 退出群组
+	 *
+	 * @author lwb 20180608
+	 *
+	 * @api {Get} /gateway/exit_group 07.退出群组
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number  我的id   之前列表返回了user_number
+	 * @apiParam {string} group_number 对外的群组ID
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function exit_group()
+	{
+		$this->validate([
+			'user_number' => 'required',
+			'group_number' => 'required'
+		]);
+		$user_number=request('user_number');
+		$group_number=request('group_number');
+		$group_id=Group::where('group_number',$group_number)->value('id');
+		GroupMember::where(['member_id','=',$user_number],['group_id','=',$group_id])->delete();
+		Gateway::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
+		$group_list=GatewayLib::getAllGroupIdList($group_id);
+		dump($group_list);
+		return response_json(1, [], '退出成功');
+	}
+	/**
+	 * 上传语音文件
+	 *
+	 * @author lwb 20180608
+	 *
+	 * @api {Get} /gateway/upload_audio 08.上传语音文件
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
+	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
+	 * @apiParam {file} audio 语音文件 最大不超过20m MP3格式
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function upload_audio()
+	{
+		$this->validate([
+			'from_user_number' => 'required',
+			'to_user_number' => 'required',
+			'audio' => 'required|file'
+		]);
+		$from_user_number = request('from_user_number');
+		$to_user_number = request('to_user_number');
+		// 保存图片
+		$file = UploadedFileDao::saveFile('chat_audio', 'FT_CHAT_AUDIO');
+		if (!$file['status']) {
+			throw new ApiErrorException($file['data']);
+		}
+		$path=$file['data']->file_path . '/' . $file['data']->file_name;
+		$device_type= request('p') !='d' ? 1:2;
+		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
+		if (empty($to_client_id)) {
+			//断开连接或者uid输入错误
+			//					$arr['client_id'] = $client_id;
+			$arr['type'] = 'sent_msg';
+			$arr['send_type'] = 'error_msg';
+			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
+		}else{
+			//保存数据库
+			ChatMessage::create([
+				'send_msg'=>$path,
+				'from_user_number'=>$from_user_number,
+				'to_user_number'=>$to_user_number,
+				'to_client_id'=>$to_client_id,
+				'send_type'=>2,
+				'device_type'=>$device_type,
+			]);
+			$arr['type'] = 'sent_msg';
+			$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
+			$arr['send_content'] = $path;
+		}
+		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		return response_json(1, $arr,'发送成功');
 	}
 }
