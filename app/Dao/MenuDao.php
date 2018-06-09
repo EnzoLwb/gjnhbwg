@@ -106,6 +106,39 @@ class MenuDao extends BaseMdl
 				'url' => route('admin.log.login_log'),
 				'order_num' => 10,
 			],
+			[
+				'text' => '服务信息',
+				'priv' => 'service',
+				'icon' => 'fa fa-book',
+				'order_num' => 10,
+				'nodes' => [
+					[
+						'text' => '场馆简介',
+						'url' => route('admin.service.intro'),
+						'priv' => 'admin-service-intro',
+						'order_num' => 10,
+					],
+					[
+						'text' => '参观指南',
+						'url' => route('admin.service.cgzn'),
+						'priv' => 'admin-setting-adminusers',
+						'order_num' => 10,
+					],
+					[
+						'text' => '文创管理',
+						'url' => route('admin.service.wenchuang'),
+						'priv' => 'admin-setting-admingroup',
+						'order_num' => 10,
+					],
+					[
+						'text' => '宣教活动',
+						'url' => route('admin.service.xjhd'),
+						'priv' => 'admin-setting-admingroup',
+						'order_num' => 10,
+					],
+				]
+			],
+
 		];
 
 		//功能模块配置加载
