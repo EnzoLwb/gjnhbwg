@@ -141,6 +141,30 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_size' => 1024 * 1024 * 50,
 				'allow_num' => 1
 			],
+			[
+				'type_key' => 'FT_INTRO',
+				'path' => 'intro',
+				'desc' => '场馆简介',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 2,
+				'allow_num' => 5
+			],
+			[
+				'type_key' => 'FT_WENCHUANG',
+				'path' => 'wenchuang',
+				'desc' => '文创',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 2,
+				'allow_num' => 5
+			],
+			[
+				'type_key' => 'FT_XJHD',
+				'path' => 'xjhd',
+				'desc' => '宣教活动',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 2,
+				'allow_num' => 5
+			],
 		]);
 	}
 }
