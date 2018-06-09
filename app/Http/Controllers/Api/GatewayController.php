@@ -15,7 +15,6 @@ class GatewayController extends Controller
 	//导览机前缀
 	const BIND_APP='app_';
 	const BIND_DLJ='dlj_';
-
 	public function __construct()
 	{
 		parent::_init();
@@ -39,7 +38,6 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} send_content 信息内容
 	 * @apiSuccess {string} group_id 群组ID
 	 */
-
 	/**
 	 * 返回到主页面(断开连接)/退还导览机
 	 * 设备退出租赁时告诉我 将他断开tcp。
@@ -108,7 +106,6 @@ class GatewayController extends Controller
 		}
 		return response_json(1, [], '绑定成功');
 	}
-
 	/**
 	 * 创建群组
 	 *
@@ -137,7 +134,7 @@ class GatewayController extends Controller
 		//显示我的信息(我的头像 我的昵称 )
 		if ($plat==1){
 			//app
-			$my_info=Users::where('uid',$uid)->select('avatar','nickname')->first()->toArray();
+			$my_info=Users::where('uid',$uid)->select('avatar','nickname')->first();
 		}else{
 			//dlj
 			$my_info=[];
@@ -158,12 +155,11 @@ class GatewayController extends Controller
 		$group_member->save();
 
 		$data['my_info']=$my_info;
-		$data['group_id']=$group_id;
+		$data['group_id']=$group->group_number;
 		$data['group_name']=request('group_name');
 		GatewayLib::joinGroup($client_id, $group_id);
 		return response_json(1,$data,'你已成功创建并加入群组');
 	}
-
 	/**
 	 * 加入群组
 	 *
@@ -183,8 +179,8 @@ class GatewayController extends Controller
 		$user_number=request('user_number');
 		$group_number=request('group_number');
 		$plat=request('p')!='d'?'1':'2';
-		$group_info=Group::where('group_number',$group_number)->first()->toArray();
-		if (!$group_info){
+		$group_info=Group::where('group_number',$group_number)->first();
+		if (is_null($group_info)){
 			return response_json(0,[],'不存在的群组号，加入失败！');
 		}
 		$group=GatewayLib::getAllGroupIdList($group_info['id']);
@@ -192,7 +188,7 @@ class GatewayController extends Controller
 		//显示我的信息(我的头像 我的昵称 )
 		if ($plat==1){
 			//app
-			$my_info=Users::where('uid',$user_number)->select('avatar','nickname')->first()->toArray();
+			$my_info=Users::where('uid',$user_number)->select('avatar','nickname')->first();
 		}else{
 			//dlj
 			$my_info=[];
