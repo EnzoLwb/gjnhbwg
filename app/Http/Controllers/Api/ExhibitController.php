@@ -238,6 +238,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {int} exhibit_id 展品id
 	 * @apiSuccess {string} audio 音频地址
 	 * @apiSuccess {string} content_url 内容详细url
+	 * @apiSuccess {string} share_url 分享url
 	 * @apiSuccess {int} is_like 是否点赞1已点赞0未点赞
 	 * @apiSuccess {int} is_collection 是否收藏1已收藏0未收藏
 	 * @apiSuccess {int} map_id 地图编号
@@ -246,6 +247,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_name 展览名
 	 * @apiSuccess {string} floor 所在楼层
 	 * @apiSuccess {string} reorder 上一页下一页所需排序
+	 * @apiSuccess {int} is_have_wenda 是否有问题，0没有   大于0表示有
 	 */
 	public function exhibit_info()
 	{
@@ -275,7 +277,7 @@ class ExhibitController extends Controller
 			$data['y'] = $exhibit_info->y;
 			$data['content_url'] = '/api/exhibit_content_info/' . $language . '/' . $exhibit_id . '?p=' . $p . '&language=' . $language;
 			//$data['knowledge_url'] = '/api/exhibit_knowledge_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
-			//$data['share_url'] = '/api/exhibit_share_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
+			$data['share_url'] = '/api/exhibit_share_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
 			$data['exhibition_name'] = $exhibit_info->exhibition_name;
 			$data['floor'] = config('floor')[$exhibit_info->floor_id];
 			$user = Auth::user();
@@ -313,6 +315,7 @@ class ExhibitController extends Controller
 
 			}
 
+			$data['is_have_wenda']=0;
 			return response_json(1, $data);
 		} else {
 			return response_json(0, '', 'error exhibit_id');
