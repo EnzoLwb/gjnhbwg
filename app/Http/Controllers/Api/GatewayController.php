@@ -33,7 +33,7 @@ class GatewayController extends Controller
 	 * (1.bind:机器号绑定;2.heart:心跳响应;3.chat:信息推送),
 	 * type等于bind 机器号/uid绑定,执行uid/设备绑定接口,
 	 * type等于heart 心跳响应,使用tcp链接向服务器发送string数据'pong';
-	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息
+	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息 'error_msg' 表示 断开连接或者其它问题
 	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
 	 * @apiSuccess {string} send_content 信息内容
@@ -41,32 +41,34 @@ class GatewayController extends Controller
 	 */
 
 	/**
-	 * 绑定导览机信息
-	 * 设备开始租赁时告诉我 现在这个设备的绑定人的身份证号，用户名。我在我自己的表中添加或者修改这个设备的信息。
+	 * 返回到主页面(断开连接)/退还导览机
+	 * 设备退出租赁时告诉我 将他断开tcp。
 	 * @author lwb 20180608
 	 *
-	 * @api {Get} /gateway/device_info 02.租赁时调取接口
+	 * @api {Get} /gateway/close_client 02.返回到主页面(断开连接)/退还导览机
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
-	 * @apiParam {string} p   d：导览机
-	 * @apiParam {string} device_no  导览机唯一设备号
-	 * @apiParam {string} certificate_number 租赁者的身份证号
-	 * @apiParam {string} [name] 租赁者的姓名
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number app传uid 导览机传唯一设备号
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
-	public function device_info(){
+	public function close_client(){
 		$this->validate([
-			'device_no' => 'required|string|max:20',
-			'certificate_number' => 'required|string|max:20',
+			'user_number' => 'required|max:20',
 		]);
-		$device_no=request('device_no');
-		$certificate_number=request('certificate_number');
-		$equipment = Dlj::findOrNew($device_no);
-		$equipment->device_no=$device_no;
-		$equipment->certificate_number=$certificate_number;
-		$equipment->name=request('name');
-		$equipment->save();
-		return response_json(1, [], '添加成功');
+		$user_number=request('user_number');
+		if (!GatewayLib::isUidOnline($user_number)) {
+			//判断当前机器号是否绑定过client_id
+			$is_bind_arr = GatewayLib::getClientIdByUid($user_number);
+			if (!empty($is_bind_arr)) {
+				foreach ($is_bind_arr as $g) {
+					//断开之前绑定的client_id
+					GatewayLib::closeClient($g);
+				}
+			}
+		}
+		return response_json(1, [], '已经断开连接');
+
 	}
 	/**
 	 * uid/设备绑定接口
@@ -120,7 +122,10 @@ class GatewayController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
 	 * @apiParam {string} group_name 群组名称
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {object} my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
+	 * @apiSuccess {int} group_id 群组ID号
+	 * @apiSuccess {int} group_name 群组名称
 	 */
 	public function create_group(){
 		$this->validate([
@@ -128,11 +133,19 @@ class GatewayController extends Controller
 			'group_name' => 'required'
 		]);
 		$uid=request('user_number');
-		$client_id = current(GatewayLib::getClientIdByUid($uid));;
+		$plat=request('p')!='d' ? '1':'2';
+		//显示我的信息(我的头像 我的昵称 )
+		if ($plat==1){
+			//app
+			$my_info=Users::where('uid',$uid)->select('avatar','nickname')->first()->toArray();
+		}else{
+			//dlj
+			$my_info=[];
+		}
+		$client_id = current(GatewayLib::getClientIdByUid($uid));
 		$group=Group::create([
 			'holder' => $uid,
 			'group_name' => request('group_name'),
-			'create_time' => time(),
 			'group_number' => rand(10000,99999),
 		]);
 		$group_id=$group->id;
@@ -141,18 +154,13 @@ class GatewayController extends Controller
 		$group_member->member_id=$uid;
 		$group_member->add_time=time();
 		$group_member->group_id=$group_id;
-		$group_member->device_type=request('p')!='d' ? '1':'2';
+		$group_member->device_type=$plat;
 		$group_member->save();
-		//显示群组信息(我的头像 我的昵称 群组名称 群成员的头像和名称)
-		$users_list=GroupMember::join('users', 'users.uid', '=', 'group_member.member_id')
-			->where('group_id',$group_id)->select('users.avatar','users.nickname','users.uid')->get()->toArray();
-		dump($users_list);
 
-		$data['users_list']=$users_list;
+		$data['my_info']=$my_info;
 		$data['group_id']=$group_id;
 		$data['group_name']=request('group_name');
 		GatewayLib::joinGroup($client_id, $group_id);
-
 		return response_json(1,$data,'你已成功创建并加入群组');
 	}
 
@@ -167,13 +175,45 @@ class GatewayController extends Controller
 	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
-	 * @apiParam {string} api_token 签名
+	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiParam {int} group_number 对外显示的群组id号
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {object} data 操作结果1成功0失败
 	 */
 	public function join_group(){
-		$uid=Auth::id();
+		$user_number=request('user_number');
+		$group_number=request('group_number');
+		$plat=request('p')!='d'?'1':'2';
+		$group_info=Group::where('group_number',$group_number)->first()->toArray();
+		if (!$group_info){
+			return response_json(0,[],'不存在的群组号，加入失败！');
+		}
+		$group=GatewayLib::getAllGroupIdList($group_info['id']);
+		if (!in_array($group_info['id'],$group)) return response_json(0,[],'不存在的群组ID，加入失败！');
+		//显示我的信息(我的头像 我的昵称 )
+		if ($plat==1){
+			//app
+			$my_info=Users::where('uid',$user_number)->select('avatar','nickname')->first()->toArray();
+		}else{
+			//dlj
+			$my_info=[];
+		}
+		$data['group_info']=['group_id'=>$group_info['id'],'group_number'=>$group_number,'name'=>$group_info['group_name']];
+		$data['my_info']=$my_info;
 
+		$where=array('group_id'=>$group_info['id']);
+		$data['user_list']=GroupMember::leftjoin('users','users.uid','=','group_member.member_id')
+			->where($where)->where('member_id','!=',$user_number)->select('users.avatar','users.nickname','users.uid','member_id')->get()->toArray();
+		foreach ($data['user_list'] as &$v){
+			if (!$v['uid']){
+				$v['avatar']='';
+				$v['nickname']=$v['member_id'];
+			}
+			$v['user_number']=$v['member_id'];
+			unset($v['member_id'],$v['uid']);
+		}
+		//加入群组
+		GatewayLib::joinGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_info['id']);
+		return response_json(1, [], '加入成功');
 	}
 	/**
 	 * 私聊发送消息

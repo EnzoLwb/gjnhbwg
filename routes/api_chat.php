@@ -5,8 +5,8 @@ Route::group([
 ], function () {
 	//绑定用户
 	Route::get('gateway/bind', 'GatewayController@bind');
-	//获取导览机租赁信息
-	Route::get('gateway/device_info', 'GatewayController@device_info');
+	//返回到主页面(断开连接)/退还导览机
+	Route::get('gateway/close_client', 'GatewayController@close_client');
 	//创建群组
 	Route::get('gateway/create_group', 'GatewayController@create_group');
 	//加入群组
