@@ -208,8 +208,14 @@ class GatewayController extends Controller
 			unset($v['member_id'],$v['uid']);
 		}
 		//加入群组
+		$group=GroupMember::create([
+			'member_id' => $user_number,
+			'group_id' => $group_info['id'],
+			'add_time' =>time(),
+			'device_type' =>$plat,
+		]);
 		GatewayLib::joinGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_info['id']);
-		return response_json(1, [], '加入成功');
+		return response_json(1, $data, '加入成功');
 	}
 	/**
 	 * 私聊发送消息
