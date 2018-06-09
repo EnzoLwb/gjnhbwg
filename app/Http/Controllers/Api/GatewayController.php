@@ -131,7 +131,7 @@ class GatewayController extends Controller
 		$client_id = current(GatewayLib::getClientIdByUid($uid));;
 		$group=Group::create([
 			'holder' => $uid,
-			'name' => request('group_name'),
+			'group_name' => request('group_name'),
 			'create_time' => time(),
 			'group_number' => rand(10000,99999),
 		]);
