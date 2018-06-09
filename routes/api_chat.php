@@ -13,6 +13,8 @@ Route::group([
 	Route::get('gateway/join_group', 'GatewayController@join_group');
 	//退出群聊
 	Route::get('gateway/exit_group', 'GatewayController@exit_group');
+	//获取聊天记录
+	Route::get('gateway/chat_list', 'GatewayController@chat_list');
 	//私聊
 	Route::post('gateway/send_msg', 'GatewayController@send_msg');
 	//发送语音信息

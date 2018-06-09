@@ -26,6 +26,7 @@ class CreateChatMessageTable extends Migration
 			$table->string('to_client_id')->comment('接收者client_id')->nullable();
 			$table->tinyInteger('send_type')->comment('发送类型 1为文本 2为语音')->default(1);
 			$table->tinyInteger('device_type')->comment(' 1为手机 2为导览机')->default(1);
+			$table->integer('audio_duration')->comment('语音时间长度')->nullable()->default(0);
 			$table->timestamps();
 
 			if (env('DB_CONNECTION') == 'oracle') {
