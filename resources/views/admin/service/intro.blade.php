@@ -66,7 +66,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">内容</label>
                                 <div class="col-sm-6">
-                                    <textarea name="content" class="form-control" id="content">{{$data->content or ''}}</textarea>
+                                    <textarea name="content"  id="content">{{$data->content or ''}}</textarea>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
