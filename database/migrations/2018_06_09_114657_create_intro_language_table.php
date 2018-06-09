@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-class CreateIntroTable extends Migration
+class CreateIntroLanguageTable extends Migration
 {
-	private $tableName = 'intro';
-	private $tableComment = '场馆介绍表';
+	private $tableName = 'intro_language';
+	private $tableComment = '场馆介绍多语种表';
 	private $primaryKey = 'id';
 	/**
 	 * Run the migrations.
@@ -18,9 +18,10 @@ class CreateIntroTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments('id');
-			$table->text('imgs')->comment('APP图片')->nullable();
-			$table->text('d_imgs')->comment('导览机图片')->nullable();
-			$table->timestamp('add_time')->comment('创建时间');
+			$table->integer('intro_id', false, true)->comment('场馆简介id');
+			$table->integer('language_id', false, true)->comment('多语种id');
+			$table->text('title')->comment('名称')->nullable();
+			$table->text('content')->comment('简介')->nullable();
 			if (env('DB_CONNECTION') == 'oracle') {
 				$table->comment = $this->tableComment;
 			}

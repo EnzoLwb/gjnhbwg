@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Service;
 
 use App\Models\Intro;
 use App\Http\Controllers\Api\Controller;
+use App\Models\IntroLanguage;
 
 /**
  * 场馆简介接口
@@ -30,10 +31,15 @@ class IntroController extends Controller
 	 * @apiGroup Service
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
+	 * @apiParam {int} language 1中文，2英语，3韩语，4日语，5法语，6俄语
 	 */
 	public function intro_html(){
 		$p = request('p');
-		$data = Intro::orderBy('id','desc')->first();
+		$data = Intro::leftJoin('intro_language','intro.id','intro_language.intro_id')
+			->where('language_id',request('language',1))
+			->where('intro.id',1)->first();
+
+
 		$data['d_imgs'] = explode(',',$data['d_imgs']);
 		if($p=='d'){
 			return view('api.service.dlj_intro',[
@@ -55,6 +61,7 @@ class IntroController extends Controller
 	 * @apiGroup Service
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓
+	 * @apiParam {int} language 1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiSuccess {array} data 数据
 	 * @apiSuccess {int} data.title 标题
 	 * @apiSuccess {array} data.imgs 图片
@@ -62,7 +69,9 @@ class IntroController extends Controller
 	 * {"status":1,"msg":"","data":{"title":"\u4e2d\u56fd\uff08\u6d77\u5357\uff09\u5357\u6d77\u535a\u7269\u9986","imgs":["\/uploadfiles\/intro\/20180609\/201806091041493571.png","\/uploadfiles\/intro\/20180609\/201806091042382457.png"]}}
 	 */
 	public function intro(){
-		$data = Intro::orderBy('id','desc')->select('title','imgs')->first();
+		$data = Intro::leftJoin('intro_language','intro.id','intro_language.intro_id')
+			->where('language_id',request('language',1))
+			->where('intro.id',1)->select('intro.imgs','intro_language.title')->first();
 		$data['imgs'] = explode(',',$data['imgs']);
 		return response_json(1, $data);
 	}
