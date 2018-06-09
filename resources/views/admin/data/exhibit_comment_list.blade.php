@@ -65,7 +65,7 @@
                                 <td>{!! $v->nickname !!}</td>
                                 <td>{{$v->created_at}}</td>
                                 <td>{{$v->exhibit_name}}</td>
-                                <td><img src="{{json_decode($v->exhibit_img,true)['exhibit_list']}}" style="width: 80px;height: 80px;" /></td>
+                                <td><img src="{{json_decode($v->exhibit_img,true)['exhibit_imgs2']}}" style="width: 80px;height: 80px;" /></td>
                                 <td>{!! $v->comment !!}</td>
                                 <td>
                                     @if(request('is_check')==1||empty(request('is_check')))

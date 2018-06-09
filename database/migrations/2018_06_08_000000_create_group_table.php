@@ -22,7 +22,7 @@ class CreateGroupTable extends Migration
 			$table->increments($this->primaryKey);
 			$table->integer('group_number')->comment('随机数字对外的群组id');
 			$table->string('group_name')->comment('群组名称');
-			$table->integer('holder')->comment('群主id');
+			$table->string('holder')->comment('群主id(uid或者导览机设备号)');
 			$table->timestamps();
 
 			if (env('DB_CONNECTION') == 'oracle') {

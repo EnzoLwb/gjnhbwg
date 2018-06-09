@@ -151,7 +151,7 @@ return [
 	//是否手动标记蓝牙定位点坐标
 	'is_set_autonum_x_y' => false,
 	//是否显示展厅评论审核
-	'is_show_exhibition_comment'=>true,
+	'is_show_exhibition_comment'=>false,
 	//是否显示展品评论审核
 	'is_show_exhibit_comment'=>true,
 ];
