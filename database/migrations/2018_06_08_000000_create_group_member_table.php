@@ -5,10 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateVisitRoadTable extends Migration
+class CreateGroupMemberTable extends Migration
 {
-	private $tableName = 'visit_road';
-	private $tableComment = '路线列表';
+	private $tableName = 'group_member';
+	private $tableComment = '群成员表';
 	private $primaryKey = 'id';
 
 	/**
@@ -20,11 +20,10 @@ class CreateVisitRoadTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments($this->primaryKey);
-			$table->unsignedInteger('type')->comment('路线类别1后台设定2自定义路线');
-			$table->text('road_list')->comment('展品列表');
-			$table->text('road_info')->comment('路线详情');
-			$table->text('weight_exhibit_ids')->comment('展品排序集合');
-			$table->integer('uid', false, true)->comment('用户id')->default(0);
+			$table->string('member_id')->comment('app传uid   导览机传唯一设备号');
+			$table->integer('group_id')->comment('组的id');
+			$table->integer('add_time')->comment('添加时间');
+			$table->tinyInteger('device_type')->comment('1为手机 2为导览机')->default(1);
 			$table->timestamps();
 
 			if (env('DB_CONNECTION') == 'oracle') {
@@ -51,4 +50,3 @@ class CreateVisitRoadTable extends Migration
 		}
 	}
 }
-

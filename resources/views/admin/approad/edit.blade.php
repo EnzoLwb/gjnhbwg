@@ -13,7 +13,6 @@
             clear: both;
         }
         .exhibit_list .exhibit_box{
-            color: #959595;
             float: left;
             width: 150px;
             height: 90px;
@@ -21,17 +20,11 @@
             padding: 10px;
             margin-right: 15px;
             margin-bottom: 15px;
-            border: 2px dashed #e5e6e7;
+            border: 1px dashed #959595;
             overflow: hidden;
-            cursor: pointer;
         }
-        .exhibit_list .exhibit_box input{
-            display: none;
-        }
-        .exhibit_list .checked{
-            color: #676a6c;
-            border: 2px dashed #44b6eb;
-        }
+        input.quanzhi{ display:inline-block; width:30px; border: none; border-bottom: 1px solid #999;}
+        input.quanzhi:hover{ border: 1px solid #999;}
     </style>
 @endsection
 
@@ -58,7 +51,18 @@
                                 @foreach($exhibit_list as $k=>$g)
                                     <h1>{{$g['exhibition_name']}}</h1>
                                     @foreach($g['exhibit_list'] as $kk=>$gg)
-                                        <div class="exhibit_box"><input type="checkbox" name="road_exhibit_id[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}</div>
+                                        <div class="exhibit_box">
+                                            <input type="checkbox" name="road_exhibit_id[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}<br/>
+
+                                            <!--排序权值-->
+                                            @if(isset($road_raw_info[$gg['exhibit_id']]))
+                                                权值：<input class="quanzhi" type="number" name="{{'weight_'.$gg['exhibit_id']}}" value="{{$road_raw_info[$gg['exhibit_id']]}}"/>
+                                            @else
+                                                权值：<input class="quanzhi" type="number" name="{{'weight_'.$gg['exhibit_id']}}" value="0"/>
+                                            @endif
+
+                                        </div>
+
                                     @endforeach
                                 @endforeach
                             </div>
@@ -105,14 +109,11 @@
             var $ = layui.jquery
                     , element = layui.element(); //Tab的切换功能，切换事件监听等，需要依赖element模块
         });
-        $(".exhibit_box").each(function(){
-            if($(this).find("input").prop('checked')){
-                $(this).addClass("checked");
-            }
-        }).click(function(){
-            var check =$(this).find("input");
-            check.prop('checked', !check.prop('checked'));
-            $(this).toggleClass("checked");
-        });
+//        $(".exhibit_box input[type='checkbox']").click(function(){
+        //          var check = $(this).find("input");
+        var check = $(this);
+        console.log(check.prop('checked'))
+        check.prop('checked', check.prop('checked'));
+        })
     </script>
 @endsection

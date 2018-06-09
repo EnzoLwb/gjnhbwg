@@ -5,11 +5,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateVisitRoadTable extends Migration
+class CreateChatMessageTable extends Migration
 {
-	private $tableName = 'visit_road';
-	private $tableComment = '路线列表';
-	private $primaryKey = 'id';
+	private $tableName = 'chat_message';
+	private $tableComment = '聊天记录';
+	private $primaryKey = 'message_id';
 
 	/**
 	 * Run the migrations.
@@ -20,11 +20,12 @@ class CreateVisitRoadTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments($this->primaryKey);
-			$table->unsignedInteger('type')->comment('路线类别1后台设定2自定义路线');
-			$table->text('road_list')->comment('展品列表');
-			$table->text('road_info')->comment('路线详情');
-			$table->text('weight_exhibit_ids')->comment('展品排序集合');
-			$table->integer('uid', false, true)->comment('用户id')->default(0);
+			$table->text('send_msg')->comment('发送内容')->nullable();
+			$table->string('from_user_number')->comment('发送者id')->nullable();
+			$table->string('to_user_number')->comment('接收者id')->nullable();
+			$table->string('to_client_id')->comment('接收者client_id')->nullable();
+			$table->tinyInteger('send_type')->comment('发送类型 1为文本 2为语音')->default(1);
+			$table->tinyInteger('device_type')->comment(' 1为手机 2为导览机')->default(1);
 			$table->timestamps();
 
 			if (env('DB_CONNECTION') == 'oracle') {
@@ -51,4 +52,3 @@ class CreateVisitRoadTable extends Migration
 		}
 	}
 }
-
