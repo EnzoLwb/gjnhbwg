@@ -98,7 +98,9 @@ class ExhibitDao extends Exhibit
 		} else {
 			$comment_list = $comment_list->where('exhibit_comment.exhibit_id', $ex_id);
 		}
+		$comment_list_count=$comment_list->count();
 		$comment_list = $comment_list->select('exhibit_comment.comment', 'exhibit_comment.created_at', 'exhibit_comment.like_num', 'users.nickname', 'users.avatar', 'exhibit_comment.id')->skip($skip)->take($take)->orderBy('exhibit_comment.created_at', 'desc')->get();
+
 		$list = [];
 		if (!empty($comment_list)) {
 			foreach ($comment_list->toArray() as $k => $g) {
@@ -115,7 +117,9 @@ class ExhibitDao extends Exhibit
 				}
 			}
 		}
-		return $list;
+		$data['list']=$list;
+		$data['total']= $comment_list_count;
+		return $data;
 	}
 
 	/**

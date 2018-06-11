@@ -116,6 +116,7 @@ class MapExhibitController extends Controller
 	 *
 	 * @api {GET} /map_near_exhibition 02.获取附近展厅
 	 * @apiGroup MapExhibit
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
@@ -176,7 +177,7 @@ class MapExhibitController extends Controller
 	public function map_near_exhibit(){
 		$this->validate([
 			'language' => 'required|min:0|integer',
-			'autonum_str' => 'required|man:50|string',
+			'autonum_str' => 'required|string',
 		]);
 		$language = request('language', 1);
 		$autonum_str=request('autonum_str', 0);
@@ -302,6 +303,8 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {int} exhibition_id 展厅编号
 	 * @apiSuccess {string} exhibition_name 展厅名称
 	 * @apiSuccess {string} exhibition_address 展厅地址
+	 * @apiSuccess {string} exhibition_subtitle 展厅副标题
+	 * @apiSuccess {string} exhibition_content 展厅简介
 	 * @apiSuccess {int} is_lb 是否轮播1轮播，2不轮播
 	 * @apiSuccess {int} type 展厅类别1常设展厅2临时展厅
 	 * @apiSuccess {int} is_show_list 是否显示1显示2不显示
@@ -331,15 +334,16 @@ class MapExhibitController extends Controller
 		//获取语种数据
 		foreach (config('language') as $k => $g) {
 			//展厅数据
-			$info['exhibition_'.$g['dir']]=Exhibition::join('exhibition_language','exhibition.id','=','exhibition_language.exhibition_id')->where('exhibition_language.language','=',$k)->select('exhibition_language.exhibition_id','exhibition_language.exhibition_name','exhibition_language.exhibition_address','exhibition.is_lb','exhibition.type','exhibition.is_show_list','exhibition.order_id','exhibition.floor_id')->get()->toArray();
+			$info['exhibition_'.$g['dir']]=Exhibition::join('exhibition_language','exhibition.id','=','exhibition_language.exhibition_id')->where('exhibition_language.language','=',$k)->select('exhibition_language.exhibition_id','exhibition_language.exhibition_name','exhibition_language.exhibition_address','exhibition_language.exhibition_subtitle','exhibition_language.content as exhibition_content','exhibition.is_lb','exhibition.type','exhibition.is_show_list','exhibition.order_id','exhibition.floor_id')->get()->toArray();
 		}
 		//获取蓝牙关联详情
-		$auto_info=Autonum::select('exhibit_list','autonum','mx_and','mx_ios');
+		$auto_info=Autonum::select('exhibit_list','autonum','mx_and','mx_ios','mx_dlj');
 		$auto_info=$auto_info->get()->toArray();
 		foreach ($auto_info as $k=>$g){
 			$auto_info[$k]['exhibit_list']=json_decode($g['exhibit_list']);
 			foreach ($auto_info[$k]['exhibit_list'] as $kk=>$gg){
 				$auto_string_list[$gg][]=$g['autonum'];
+				$mxdlj_string_list[$gg][]=$g['mx_dlj'];
 			}
 		}
 		foreach (config('language') as $k => $g) {
@@ -348,9 +352,11 @@ class MapExhibitController extends Controller
 			foreach ($info['exhibit_'.$g['dir']] as $kk=>$gg){
 				if(isset($auto_string_list[$gg['exhibit_id']])){
 					$info['exhibit_'.$g['dir']][$kk]['autonum_list']=implode('#',$auto_string_list[$gg['exhibit_id']]);
+					$info['exhibit_'.$g['dir']][$kk]['mx_dlj_list']=implode('#',$mxdlj_string_list[$gg['exhibit_id']]);
 				}
 				else{
 					$info['exhibit_'.$g['dir']][$kk]['autonum_list']='';
+					$info['exhibit_'.$g['dir']][$kk]['mx_dlj_list']='';
 				}
 			}
 		}

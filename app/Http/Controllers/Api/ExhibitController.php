@@ -9,6 +9,7 @@ use App\Models\Exhibit;
 use App\Models\ExhibitLanguage;
 use App\Models\ExhibitLike;
 use App\Models\ExUserVisit;
+use App\Models\ExUserVisitfoot;
 use App\Models\ExhibitCommentLikelist;
 use App\Models\VisitRoad;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_img 展厅图片
 	 * @apiSuccess {int} exhibition_id 展览id
 	 * @apiSuccess {string} remark 摘要
+	 * @apiSuccess {string} learn_url 学习单链接
 	 */
 	public function exhibition_list()
 	{
@@ -68,6 +70,8 @@ class ExhibitController extends Controller
 			$data['theme'][$k]['exhibition_img'] = $img_arr['list_img'];
 			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
+
+			$data['theme'][$k]['learn_url']="/api/learn_content_info/".request('p')."/".$g['exhibition_id'];
 		}
 		return response_json(1, $data);
 	}
@@ -277,7 +281,7 @@ class ExhibitController extends Controller
 			$data['y'] = $exhibit_info->y;
 			$data['content_url'] = '/api/exhibit_content_info/' . $language . '/' . $exhibit_id . '?p=' . $p . '&language=' . $language;
 			//$data['knowledge_url'] = '/api/exhibit_knowledge_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
-			$data['share_url'] = '/api/exhibit_share_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
+			$data['share_url'] = '/api/exhibit_share_info/' . $language . '/' . $exhibit_id . '?p=' . $p . '&language=' . $language;
 			$data['exhibition_name'] = $exhibit_info->exhibition_name;
 			$data['floor'] = config('floor')[$exhibit_info->floor_id];
 			$user = Auth::user();
@@ -315,7 +319,7 @@ class ExhibitController extends Controller
 
 			}
 
-			$data['is_have_wenda']=0;
+			$data['is_have_wenda'] = 0;
 			return response_json(1, $data);
 		} else {
 			return response_json(0, '', 'error exhibit_id');
@@ -386,7 +390,9 @@ class ExhibitController extends Controller
 	 * @apiParam {int} exhibit_id 展品编号
 	 * @apiParam {int} type 类别1点赞2收藏
 	 * @apiParam {string} api_token token
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {array} data 数组
+	 * @apiSuccess {int} data.result 操作结果1成功0失败
+	 * @apiSuccess {int} data.is_like 操作完后，状态 1已点赞（收藏） 0未点赞（收藏）
 	 */
 	public function do_like()
 	{
@@ -409,6 +415,7 @@ class ExhibitController extends Controller
 			} elseif ($type == 2) {
 				Exhibit::where('id', $exhibit_id)->increment('collection_num');
 			}
+			$data['is_like']=1;
 		} else {
 			$r = ExhibitLike::where('uid', $uid)->where('exhibit_id', $exhibit_id)->where('type', $type)->delete();
 			if ($type == 1) {
@@ -416,11 +423,14 @@ class ExhibitController extends Controller
 			} elseif ($type == 2) {
 				Exhibit::where('id', $exhibit_id)->decrement('collection_num');
 			}
+			$data['is_like']=0;
 		}
 		if ($r) {
-			return response_json(1, 1);
+			$data['result']=1;
+			return response_json(1, $data);
 		} else {
-			return response_json(1, 0);
+			$data['result']=0;
+			return response_json(1, $data);
 		}
 	}
 
@@ -488,13 +498,14 @@ class ExhibitController extends Controller
 	 * @apiParam {int} skip 数据偏移量默认0
 	 * @apiParam {int} take 查询数量默认10
 	 * @apiParam {string} [api_token] token
-	 * @apiSuccess {array} data 列表信息
-	 * @apiSuccess {int} comment_id 评论id
-	 * @apiSuccess {int} like_num 点赞数量
-	 * @apiSuccess {string} datetime 评论时间
-	 * @apiSuccess {string} nickname 昵称
-	 * @apiSuccess {string} avatar 头像
-	 * @apiSuccess {string} is_like 是否点赞
+	 * @apiSuccess {array} data.list 列表信息
+	 * @apiSuccess {int} data.list.comment_id 评论id
+	 * @apiSuccess {int} data.list.like_num点赞数量
+	 * @apiSuccess {string} data.list.datetime 评论时间
+	 * @apiSuccess {string} data.list.nickname 昵称
+	 * @apiSuccess {string} data.list.avatar 头像
+	 * @apiSuccess {string} data.list.is_like 是否点赞
+	 * @apiSuccess {int} data.total 评论总数
 	 */
 	public function comment_list()
 	{
@@ -529,7 +540,9 @@ class ExhibitController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} comment_id 评论编号
 	 * @apiParam {string} api_token token
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {array} data 数组
+	 * @apiSuccess {int} data.result 操作结果1成功0失败
+	 * @apiSuccess {int} data.is_like 操作完后，状态 1已点赞（收藏） 0未点赞（收藏）
 	 */
 	public function comment_do_like()
 	{
@@ -545,14 +558,18 @@ class ExhibitController extends Controller
 				'comment_id' => $comment_id
 			]);
 			ExhibitComment::where('id', $comment_id)->increment('like_num');
+			$data['is_like']=1;
 		} else {
 			$r = ExhibitCommentLikelist::where('uid', $uid)->where('comment_id', $comment_id)->delete();
 			ExhibitComment::where('id', $comment_id)->decrement('like_num');
+			$data['is_like']=0;
 		}
 		if ($r) {
-			return response_json(1, 1);
+			$data['result']=1;
+			return response_json(1, $data);
 		} else {
-			return response_json(1, 0);
+			$data['result']=0;
+			return response_json(1, $data);
 		}
 	}
 
@@ -603,6 +620,19 @@ class ExhibitController extends Controller
 			} else {
 				ExUserVisit::where('uid', $uid)->increment('listen_num');
 			}
+
+			//foot start
+			$u_ex_finfo = ExUserVisitfoot::where('uid', $uid)->where('exhibit_id', $exhibit_id)->first();
+			$n_time =date('Y-m-d H:i:s', time());
+			if (empty($u_ex_finfo)) {
+				ExUserVisitfoot::create([
+					'uid' => $uid,
+					'exhibit_id' => $exhibit_id
+				]);
+			} else {
+				ExUserVisitfoot::where('uid', $uid)->where('exhibit_id', $exhibit_id)->update(['updated_at' => $n_time]);
+			}
+			//foot end
 		}
 		if ($r) {
 			return response_json(1, 1);

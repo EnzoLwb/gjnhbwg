@@ -499,6 +499,6 @@ class UsersController extends Controller
 		$user->api_token = null;
 		$user->save();
 
-		return response_json(1);
+		return response_json(1,1);
 	}
 }

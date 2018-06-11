@@ -27,7 +27,7 @@ class GatewayController extends Controller
 	 *
 	 * @author lwb 20180608
 	 *
-	 * @api {GET} tcp://192.168.10.158:9501 01.监听地址
+	 * @api {GET} tcp://192.168.10.158:9501 00.监听地址
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiSuccess {string} type 信息类型
@@ -40,42 +40,13 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} send_content 信息内容
 	 * @apiSuccess {string} group_id 群组ID
 	 */
-	/**
-	 * 返回到主页面(断开连接)/退还导览机
-	 * 设备退出租赁时告诉我 将他断开tcp。
-	 * @author lwb 20180608
-	 *
-	 * @api {Get} /gateway/close_client 02.返回到主页面(断开连接)/退还导览机
-	 * @apiGroup GateWay
-	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
-	 * @apiParam {string} user_number app传uid 导览机传唯一设备号
-	 * @apiSuccess {int} data 操作结果1成功0失败
-	 */
-	public function close_client(){
-		$this->validate([
-			'user_number' => 'required|max:20',
-		]);
-		$user_number=request('user_number');
-		if (!GatewayLib::isUidOnline($user_number)) {
-			//判断当前机器号是否绑定过client_id
-			$is_bind_arr = GatewayLib::getClientIdByUid($user_number);
-			if (!empty($is_bind_arr)) {
-				foreach ($is_bind_arr as $g) {
-					//断开之前绑定的client_id
-					GatewayLib::closeClient($g);
-				}
-			}
-		}
-		return response_json(1, [], '已经断开连接');
 
-	}
 	/**
 	 * uid/设备绑定接口
 	 *
 	 * @author lwb 20180608
 	 *
-	 * @api {Get} /gateway/bind 03.uid或设备号绑定接口(绑定时自然会断开之前的链接)
+	 * @api {Get} /gateway/bind 01.uid或设备号绑定接口(搭建tcp连接后，需先请求此接口进行绑定)
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
@@ -108,15 +79,70 @@ class GatewayController extends Controller
 		}
 		return response_json(1, [], '绑定成功');
 	}
+
+	/**
+	 * 返回到主页面(断开连接)/退还导览机
+	 * 设备退出租赁时告诉我 将他断开tcp。
+	 * @author lwb 20180608
+	 *
+	 * @api {Get} /gateway/close_client 02.返回到主页面(断开连接)/退还导览机
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number app传uid 导览机传唯一设备号
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function close_client(){
+		$this->validate([
+			'user_number' => 'required|max:20',
+		]);
+		$user_number=request('user_number');
+		if (!GatewayLib::isUidOnline($user_number)) {
+			//判断当前机器号是否绑定过client_id
+			$is_bind_arr = GatewayLib::getClientIdByUid($user_number);
+			if (!empty($is_bind_arr)) {
+				foreach ($is_bind_arr as $g) {
+					//断开之前绑定的client_id
+					GatewayLib::closeClient($g);
+				}
+			}
+		}
+		return response_json(1, [], '已经断开连接');
+
+	}
+	/**
+	 * 获得群组列表
+	 *
+	 * @author lwb 201806011
+	 *
+	 * @api {GET} /gateway/getGroupList 03.是否之前加入群组
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
+	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
+	 * @apiSuccess {object} data 操作结果1代表有群组 直接通过返回的group_number号请求接口即可  0代表当前没有入群
+	 * @apiSuccess {int} group_number 群组对外的ID号
+	 */
+	public function getGroupList(){
+		$this->validate([
+			'user_number' => 'required',
+		]);
+		$group_id=GroupMember::where('member_id',request('user_number'))->value('group_id');
+
+		if ($group_id){
+			$group_number=Group::where('id',$group_id)->value('group_number');
+			return response_json(1, ['group_number'=>$group_number]);
+		}else{
+			return response_json(0, []);
+		}
+	}
 	/**
 	 * 创建群组
 	 *
 	 * @author lwb 20180607
-	 * @return \Illuminate\Http\JsonResponse
-	 * @throws ApiErrorException
+	 *
 	 * @api {GET} /gateway/create_group 04.创建群组
 	 * @apiGroup GateWay
-	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
@@ -133,6 +159,9 @@ class GatewayController extends Controller
 		]);
 		$uid=request('user_number');
 		$plat=request('p')!='d' ? '1':'2';
+		//判断是否有重名的
+		$if_repeat=Group::where('group_name',request('group_name'))->first();
+		if (!is_null($if_repeat)) return response_json(0,[],'已经存在的群组名');
 		//显示我的信息(我的头像 我的昵称 )
 		if ($plat==1){
 			//app
@@ -166,11 +195,9 @@ class GatewayController extends Controller
 	 * 加入群组
 	 *
 	 * @author lwb 20180609
-	 * @return \Illuminate\Http\JsonResponse
-	 * @throws ApiErrorException
+	 *
 	 * @api {GET} /gateway/join_group 05.加入群组
 	 * @apiGroup GateWay
-	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号

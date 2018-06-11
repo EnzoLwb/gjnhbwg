@@ -32,6 +32,7 @@ class SvgMapController extends Controller
 	 * @apiSuccess {int} width 地图宽度
 	 * @apiSuccess {int} height 地图高度
 	 * @apiSuccess {string} map_name 地图名称
+	 * @apiSuccess {string} map_path 地图地址
 	 */
 	public function map_list()
 	{
@@ -43,9 +44,9 @@ class SvgMapController extends Controller
 		$floor_id = request('floor_id', 10);
 		// 取得当前楼层地图数据
 		if ($floor_id == 0) {
-			$map_list = SvgMapTable::select('id as map_id', 'floor_id', 'width', 'height', 'map_name_json')->get()->toArray();
+			$map_list = SvgMapTable::select('id as map_id', 'floor_id', 'width', 'height', 'map_name_json','map_path')->get()->toArray();
 		} else {
-			$map_list = SvgMapTable::where('floor_id', $floor_id)->select('id as map_id', 'floor_id', 'width', 'height', 'map_name_json')->get()->toArray();
+			$map_list = SvgMapTable::where('floor_id', $floor_id)->select('id as map_id', 'floor_id', 'width', 'height', 'map_name_json','map_path')->get()->toArray();
 		}
 		foreach ($map_list as $k => $g) {
 			$map_list[$k]['map_name'] = json_decode($g['map_name_json'], true)[$language];
