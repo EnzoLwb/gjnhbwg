@@ -165,7 +165,7 @@ class GatewayController extends Controller
 	/**
 	 * 加入群组
 	 *
-	 * @author lwb 20180607
+	 * @author lwb 20180609
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
 	 * @api {GET} /gateway/join_group 05.加入群组
@@ -176,6 +176,9 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiParam {int} group_number 对外显示的群组id号
 	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
+	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
+	 * @apiSuccess {object} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
 	 */
 	public function join_group(){
 		$this->validate([
@@ -236,7 +239,6 @@ class GatewayController extends Controller
 	 * @apiParam {string} to_user_number 发送给的对象的user_number    之前列表返回了user_number
 	 * @apiParam {string} from_user_number 我的user_number    之前返回了user_number
 	 * @apiParam {string} content 发送内容
-	 * @apiParam {int} type 内容类型 1为文本 2为语音
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
 	public function send_msg()
@@ -245,7 +247,7 @@ class GatewayController extends Controller
 			'to_user_number' => 'required',
 			'content' => 'required'
 		]);
-		$type=request('type',1);
+		$type=1;
 		$to_user_number=request('to_user_number');
 		$from_user_number=request('from_user_number');
 		$content=request('content');
@@ -277,7 +279,7 @@ class GatewayController extends Controller
 	/**
 	 * 退出群组
 	 *
-	 * @author lwb 20180608
+	 * @author lwb 20180609
 	 *
 	 * @api {Get} /gateway/exit_group 07.退出群组
 	 * @apiGroup GateWay
@@ -296,24 +298,24 @@ class GatewayController extends Controller
 		$user_number=request('user_number');
 		$group_number=request('group_number');
 		$group_id=Group::where('group_number',$group_number)->value('id');
-		GroupMember::where(['member_id','=',$user_number],['group_id','=',$group_id])->delete();
-		Gateway::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
-		$group_list=GatewayLib::getAllGroupIdList($group_id);
-		dump($group_list);
+		$arr=['member_id'=>$user_number,'group_id'=>$group_id];
+		GroupMember::where($arr)->delete();
+		GatewayLib::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
 		return response_json(1, [], '退出成功');
 	}
 	/**
-	 * 上传语音文件
+	 * 聊天发送语音文件
 	 *
-	 * @author lwb 20180608
+	 * @author lwb 20180609
 	 *
-	 * @api {Get} /gateway/upload_audio 08.上传语音文件
+	 * @api {Post} /gateway/upload_audio 08.聊天发送语音文件
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
 	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
 	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
 	 * @apiParam {file} audio 语音文件 最大不超过20m MP3格式
+	 * @apiParam {string} length 语音时间长度 单位秒
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
 	public function upload_audio()
@@ -321,8 +323,11 @@ class GatewayController extends Controller
 		$this->validate([
 			'from_user_number' => 'required',
 			'to_user_number' => 'required',
-			'audio' => 'required|file'
+			'chat_audio' => 'required|file',
+			'length' => 'required'
 		]);
+		$scheme = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
+		$url = $scheme.$_SERVER['HTTP_HOST'];
 		$from_user_number = request('from_user_number');
 		$to_user_number = request('to_user_number');
 		// 保存图片
@@ -330,7 +335,7 @@ class GatewayController extends Controller
 		if (!$file['status']) {
 			throw new ApiErrorException($file['data']);
 		}
-		$path=$file['data']->file_path . '/' . $file['data']->file_name;
+		$path=$url.$file['data']->file_path . '/' . $file['data']->file_name;
 		$device_type= request('p') !='d' ? 1:2;
 		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
 		if (empty($to_client_id)) {
@@ -348,12 +353,53 @@ class GatewayController extends Controller
 				'to_client_id'=>$to_client_id,
 				'send_type'=>2,
 				'device_type'=>$device_type,
+				'audio_duration'=>request('length'),
 			]);
 			$arr['type'] = 'sent_msg';
 			$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
 			$arr['send_content'] = $path;
+			$arr['audio_duration'] = request('length');
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1, $arr,'发送成功');
+	}
+	/**
+	 * 获取聊天记录
+	 *
+	 * @author lwb 20180609
+	 *
+	 * @api {get} /gateway/chat_message 09.获取聊天记录
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
+	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
+	 * @apiParam {string} skip  页码 默认为0
+	 * @apiParam {string} take  每页聊天记录数量 默认为10
+	 * @apiSuccess {string} is_self  1为自己发送的 2为别人发给我的
+	 * @apiSuccess {string} send_type  1为文本 2为语音
+	 * @apiSuccess {string} send_msg  聊天内容
+	 * @apiSuccess {string} audio_duration  语音长度
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function chat_list()
+	{
+		$this->validate([
+			'from_user_number' => 'required',
+			'to_user_number' => 'required'
+		]);
+		$skip=request('skip',0);
+		$take=request('take',10);
+		$from_user_number=request('from_user_number');
+		$to_user_number=request('to_user_number');
+		$list=ChatMessage::whereIn('from_user_number',[$from_user_number,$to_user_number])
+			->whereIn('to_user_number',[$from_user_number,$to_user_number])
+			->select('from_user_number','send_type','audio_duration','send_msg')
+			->orderBy('created_at', 'desc')->skip($skip)->take($take)->get()->toArray();
+		foreach ($list as &$v){
+			$v['is_self']=$v['from_user_number']==$from_user_number ? '1':'2';//1为自己发送的 2为别人发给我的
+			unset($v['from_user_number']);
+		}
+		return response_json(1, $list);
 	}
 }
