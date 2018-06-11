@@ -123,13 +123,14 @@ class GatewayController extends Controller
 	 * @apiSuccess {object} data 操作结果1代表有群组 直接通过返回的group_number号请求接口即可  0代表当前没有入群
 	 * @apiSuccess {int} group_number 群组对外的ID号
 	 */
-	public  function getGroupList(){
+	public function getGroupList(){
 		$this->validate([
 			'user_number' => 'required',
 		]);
 		$group_id=GroupMember::where('member_id',request('user_number'))->value('group_id');
+
 		if ($group_id){
-			$group_number=Group::find($group_id)->value('group_number');
+			$group_number=Group::where('id',$group_id)->value('group_number');
 			return response_json(1, ['group_number'=>$group_number]);
 		}else{
 			return response_json(0, []);
