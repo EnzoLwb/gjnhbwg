@@ -65,14 +65,16 @@ class IntroController extends Controller
 	 * @apiSuccess {array} data 数据
 	 * @apiSuccess {int} data.title 标题
 	 * @apiSuccess {array} data.imgs 图片
+	 * @apiSuccess {string} data.intro_html 场馆简介html地址
 	 * @apiSuccessExample {json} 返回值
-	 * {"status":1,"msg":"","data":{"title":"\u4e2d\u56fd\uff08\u6d77\u5357\uff09\u5357\u6d77\u535a\u7269\u9986","imgs":["\/uploadfiles\/intro\/20180609\/201806091041493571.png","\/uploadfiles\/intro\/20180609\/201806091042382457.png"]}}
+	 * {"status":1,"msg":"","data":{"imgs":["\/uploadfiles\/intro\/20180609\/201806091317375003.png","\/uploadfiles\/intro\/20180609\/201806091317411483.png"],"title":"\u4e2d\u56fd\uff08\u6d77\u5357\uff09\u5357\u6d77\u535a\u7269\u9986","intro_html":"api\/intro_html?p=i&language=1"}}
 	 */
 	public function intro(){
 		$data = Intro::leftJoin('intro_language','intro.id','intro_language.intro_id')
 			->where('language_id',request('language',1))
 			->where('intro.id',1)->select('intro.imgs','intro_language.title')->first();
 		$data['imgs'] = explode(',',$data['imgs']);
+		$data['intro_html'] = 'api/intro_html?p='.request('p').'&language='.request('language',1);
 		return response_json(1, $data);
 	}
 }

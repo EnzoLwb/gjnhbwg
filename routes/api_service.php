@@ -13,6 +13,7 @@ Route::get('intro', 'IntroController@intro');
 Route::get('intro_html', 'IntroController@intro_html');
 //参观指南
 Route::get('cgzn_html', 'CgznController@cgzn_html');
+Route::get('cgzn', 'CgznController@cgzn');
 
 //文创系列
 Route::get('xl_list', 'WenChuangController@xl_list');

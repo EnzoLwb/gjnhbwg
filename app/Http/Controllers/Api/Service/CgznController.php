@@ -28,6 +28,26 @@ class CgznController extends Controller
 	 * @author ljy 20180609
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 *
+	 * @api {GET} /cgzn 3.服务信息-参观指南（lijinyu）
+	 * @apiGroup Service
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
+	 * @apiParam {int} language 1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiSuccess {array} data 数据
+	 * @apiSuccess {string} data.intro_html html地址
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"msg":"","data":{"intro_html":"api\/cgzn_html?p=i&language=1"}}
+	 */
+	public function cgzn(){
+		$data['intro_html'] = 'api/cgzn_html?p='.request('p').'&language='.request('language',1);
+		return response_json(1, $data);
+	}
+	/**
+	 * 服务信息-参观指南
+	 *
+	 * @author ljy 20180609
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 *
 	 * @api {GET} /cgzn_html 3.服务信息-参观指南网页（lijinyu）
 	 * @apiGroup Service
 	 * @apiVersion 1.0.0
