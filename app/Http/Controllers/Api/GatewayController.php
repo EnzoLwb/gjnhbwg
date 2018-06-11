@@ -130,9 +130,9 @@ class GatewayController extends Controller
 		$group_id=GroupMember::where('member_id',request('user_number'))->value('group_id');
 		if ($group_id){
 			$group_number=Group::find($group_id)->value('group_number');
-			return response_json(1, ['group_number'=>$group_number], '绑定成功');
+			return response_json(1, ['group_number'=>$group_number]);
 		}else{
-			return response_json(0, [], '未入群');
+			return response_json(0, []);
 		}
 	}
 	/**
