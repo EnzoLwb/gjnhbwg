@@ -112,8 +112,7 @@ class GatewayController extends Controller
 	 * 创建群组
 	 *
 	 * @author lwb 20180607
-	 * @return \Illuminate\Http\JsonResponse
-	 * @throws ApiErrorException
+	 *
 	 * @api {GET} /gateway/create_group 04.创建群组
 	 * @apiGroup GateWay
 	 * @apiIgnore
@@ -166,8 +165,7 @@ class GatewayController extends Controller
 	 * 加入群组
 	 *
 	 * @author lwb 20180609
-	 * @return \Illuminate\Http\JsonResponse
-	 * @throws ApiErrorException
+	 *
 	 * @api {GET} /gateway/join_group 05.加入群组
 	 * @apiGroup GateWay
 	 * @apiIgnore
