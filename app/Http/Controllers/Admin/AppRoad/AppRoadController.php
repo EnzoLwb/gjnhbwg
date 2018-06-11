@@ -47,19 +47,36 @@ class AppRoadController extends BaseAdminController
 	{
 		if (request()->isMethod('post')) {
 			$this->validate(request(), [
-				'road_exhibit_id' => [
+				/*'road_exhibit_id' => [
 					'required'
-				],
+				],*/
 				'road_name_1' => 'required'
 			]);
+
+			$road_raw_list1 = is_array(request('road_exhibit_id1'))?request('road_exhibit_id1'):array();
+			$road_raw_list2 = is_array(request('road_exhibit_id2'))?request('road_exhibit_id2'):array();
+			$road_raw_list3 = is_array(request('road_exhibit_id3'))?request('road_exhibit_id3'):array();
+
+			$road_raw_list = array_merge($road_raw_list1,$road_raw_list2,$road_raw_list3);
+
+
+			if(empty($road_raw_list)){
+				return response()->json([
+					'status' => 'false',
+					'msg' => '请选择线路上展品'
+				]);
+			}
+
+
 			$data = [
 				'uid' => 0,
 				'type' => 1,
-				'road_list' => json_encode(request('road_exhibit_id')),
+				'road_list' => json_encode($road_raw_list),
 				'road_info' => json_encode([]),
+				'road_img' => request('road_img')
 			];
 
-			$road_raw_list = request('road_exhibit_id');
+
 			$road_info = array();
 			$weight_exhibit_ids = array();
 			foreach ($road_raw_list as $key => $exhibit_id) {
@@ -116,6 +133,7 @@ class AppRoadController extends BaseAdminController
 				}
 			}
 			$exhibit_list = ExhibitDao::road_list(1, $road_list, 0);
+			//var_dump($exhibit_list);
 			return view('admin.approad.edit', array(
 				'info' => $info,
 				'id' => $id,

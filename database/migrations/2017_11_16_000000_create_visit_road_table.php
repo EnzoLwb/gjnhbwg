@@ -24,6 +24,23 @@ class CreateVisitRoadTable extends Migration
 			$table->text('road_list')->comment('展品列表');
 			$table->text('road_info')->comment('路线详情');
 			$table->text('weight_exhibit_ids')->comment('展品排序集合');
+			$table->string('road_img', 255)->comment('线路图存储路径')->nullable();
+
+			$table->text('road_list1')->comment('1F展品列表')->nullable();
+			$table->text('road_info1')->comment('1F路线详情')->nullable();
+			$table->text('weight_exhibit_ids1')->comment('1F展品排序集合')->nullable();
+			$table->text('road_info1_cache')->comment('生成路线计算结果')->nullable();
+
+			$table->text('road_list2')->comment('2F展品列表')->nullable();
+			$table->text('road_info2')->comment('2F路线详情')->nullable();
+			$table->text('weight_exhibit_ids2')->comment('2F展品排序集合')->nullable();
+			$table->text('road_info2_cache')->comment('生成路线计算结果')->nullable();
+
+			$table->text('road_list3')->comment('3F展品列表')->nullable();
+			$table->text('road_info3')->comment('3F路线详情')->nullable();
+			$table->text('weight_exhibit_ids3')->comment('3F展品排序集合')->nullable();
+			$table->text('road_info3_cache')->comment('生成路线计算结果')->nullable();
+
 			$table->integer('uid', false, true)->comment('用户id')->default(0);
 			$table->timestamps();
 

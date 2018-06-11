@@ -149,8 +149,7 @@ class GatewayController extends Controller
 	 * @apiParam {string} group_name 群组名称
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 * @apiSuccess {object} my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
-	 * @apiSuccess {int} group_id 群组ID号
-	 * @apiSuccess {int} group_name 群组名称
+	 * @apiSuccess {object} group_info  group_id 群组ID号  group_number 群组对外ID号  group_name 群组名称
 	 */
 	public function create_group(){
 		$this->validate([
@@ -186,8 +185,9 @@ class GatewayController extends Controller
 		$group_member->save();
 
 		$data['my_info']=$my_info;
-		$group_info['group_id']=$group->group_number;
-		$group_info['group_name']=request('group_name');
+		$group_info['group_id']=$group->id;
+		$group_info['group_number']=$group->group_number;
+		$group_info['name']=request('group_name');
 		$data['group_info']=$group_info;
 		GatewayLib::joinGroup($client_id, $group_id);
 		return response_json(1,$data,'你已成功创建并加入群组');
