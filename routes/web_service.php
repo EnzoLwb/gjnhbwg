@@ -21,6 +21,10 @@ Route::group([
 	], function () {
 		Route::get('/', 'CgznController@index')->name('admin.service.cgzn');
 		Route::post('/save', 'CgznController@save')->name('admin.service.cgzn.save');
+		Route::get('/cgxz', 'CgznController@cgxz')->name('admin.service.cgzn.cgxz');
+		Route::post('/cgxz_save', 'CgznController@cgxz_save')->name('admin.service.cgzn.cgxz_save');
+		Route::get('/sbzl', 'CgznController@sbzl')->name('admin.service.cgzn.sbzl');
+		Route::post('/sbzl_save', 'CgznController@sbzl_save')->name('admin.service.cgzn.sbzl_save');
 	});
 
 	//文创相关处理

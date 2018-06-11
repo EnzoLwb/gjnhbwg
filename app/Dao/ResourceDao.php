@@ -412,4 +412,33 @@ class ResourceDao extends Controller
 			}
 		}
 	}
+
+
+	/**
+	 * 场馆简介资源打包
+	 *
+	 * @author yyj 20180306
+	 * @param array $new_info 新资源
+	 * @param array $old_info 旧资源
+	 * @param string $path 资源路径
+	 * @return int
+	 */
+	public static function update_service_resource($new_info,$old_info,$path){
+		$exhibit_path = base_path() . '/public/resource_zip/service/'.$path.'/';
+		$version_id = self::get_version_id();
+		$version_exhibit_path = base_path() . '/public/resource_zip/version_' . $version_id . '/service/' . $path . '/';
+		if (!file_exists($exhibit_path)) {
+			mkdir($exhibit_path, 0777, true);
+		} else {
+			//清空历史资源
+			LoadDao::deldir($exhibit_path, 0);
+		}
+		if (!file_exists($version_exhibit_path)) {
+			mkdir($version_exhibit_path, 0777, true);
+		}
+		//图片资源更新
+//		self::update_images($new_info, $old_info, $exhibit_path, $version_exhibit_path, 'exhibit_img', 'exhibit');
+//		//语种资源更新
+//		self::update_exhibit_html($new_info, $old_info, $exhibit_path, $version_exhibit_path);
+	}
 }
