@@ -48,6 +48,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_img 展厅图片
 	 * @apiSuccess {int} exhibition_id 展览id
 	 * @apiSuccess {string} remark 摘要
+	 * @apiSuccess {string} learn_url 学习单链接
 	 */
 	public function exhibition_list()
 	{
@@ -69,6 +70,8 @@ class ExhibitController extends Controller
 			$data['theme'][$k]['exhibition_img'] = $img_arr['list_img'];
 			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
+
+			$data['theme'][$k]['learn_url']="/api/learn_content_info/".request('p')."/".$g['exhibition_id'];
 		}
 		return response_json(1, $data);
 	}
