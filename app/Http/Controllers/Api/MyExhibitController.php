@@ -205,6 +205,54 @@ class MyExhibitController extends Controller
 
 
 	/**
+	 * 我的收藏
+	 *
+	 * @author yyj 20180321
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /my_liked 02.我的点赞
+	 * @apiGroup MyExhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {string} api_token token
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiParam {int} skip 数据偏移量默认0
+	 * @apiParam {int} take 查询数量默认10
+	 * @apiSuccess {string} date 日期
+	 * @apiSuccess {array} list 展品列表
+	 * @apiSuccess {string} exhibit_name 展品名称
+	 * @apiSuccess {string} exhibit_img 图片url
+	 * @apiSuccess {string} exhibit_id 展品id
+	 * @apiSuccess {string} datetime 收藏时间
+	 */
+	public function my_liked()
+	{
+		$this->validate([
+			'language' => 'required|min:0|integer',
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
+		]);
+		$uid = Auth::user()->uid;
+		$language = request('language', 1);
+		$skip = request('skip', 0);
+		$take = request('take', 10);
+		$infolist = ExhibitLike::where('exhibit_like.uid', $uid)->join('exhibit', 'exhibit.id', '=', 'exhibit_like.exhibit_id')->join('exhibit_language', function ($join) use ($language) {
+			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
+		})->where('exhibit_like.type', 1)->skip($skip)->take($take)->select('exhibit_like.created_at as datetime', 'exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id')->orderBy('exhibit_like.id','desc')->get();
+		$data=[];
+		foreach ($infolist as $k=>$g){
+			$imgs=json_decode($g->exhibit_img, true);
+			$imgs=isset($imgs['exhibit_list'])?$imgs['exhibit_list']:'';
+			$data[$k]['exhibit_name']=$g->exhibit_name;
+			$data[$k]['exhibit_id']=$g->exhibit_id;
+			$data[$k]['exhibit_img']=$imgs;
+			$data[$k]['datetime']=date('Y.m.d H:i',strtotime($g->datetime));
+		}
+		return response_json(1, $data);
+	}
+
+
+	/**
 	 * 我的评论
 	 *
 	 * @author yyj 20180321
