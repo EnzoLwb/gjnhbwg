@@ -28,6 +28,24 @@ Route::group([
 	});
 
 	//文创相关处理
+	//文创系列
+	Route::group([
+		'prefix' => 'wenchuangxl',
+	], function () {
+		// 文创列表
+		Route::get('/', 'WenchuangxlController@index')->name('admin.service.wenchuangxl');
+		// 添加文创
+		Route::get('/add', 'WenchuangxlController@add')->name('admin.service.wenchuangxl.add');
+		// 编辑文创
+		Route::get('/edit/{id}', 'WenchuangxlController@edit')->name('admin.service.wenchuangxl.edit');
+		// 保存文创
+		Route::post('/save', 'WenchuangxlController@save')->name('admin.service.wenchuangxl.save');
+		// 删除文创
+		Route::get('/delete/{id}', 'WenchuangxlController@delete')->name('admin.service.wenchuangxl.delete');
+		Route::get('/unset_show/{id}', 'WenchuangxlController@unset_show')->name('admin.service.wenchuangxl.unset_show');
+		Route::get('/set_show/{id}', 'WenchuangxlController@set_show')->name('admin.service.wenchuangxl.set_show');
+	});
+	//文创产品
 	Route::group([
 		'prefix' => 'wenchuang',
 	], function () {
@@ -41,6 +59,8 @@ Route::group([
 		Route::post('/save', 'WenchuangController@save')->name('admin.service.wenchuang.save');
 		// 删除文创
 		Route::get('/delete/{id}', 'WenchuangController@delete')->name('admin.service.wenchuang.delete');
+		Route::get('/unset_show/{id}', 'WenchuangController@unset_show')->name('admin.service.wenchuang.unset_show');
+		Route::get('/set_show/{id}', 'WenchuangController@set_show')->name('admin.service.wenchuang.set_show');
 	});
 	//宣教活动处理
 	Route::group([
@@ -53,8 +73,10 @@ Route::group([
 		// 编辑文创
 		Route::get('/edit/{id}', 'XjhdController@edit')->name('admin.service.xjhd.edit');
 		// 保存文创
-		Route::post('/save', 'XjhdController@save')->name('admin.service.wenchuang.save');
+		Route::post('/save', 'XjhdController@save')->name('admin.service.xjhd.save');
 		// 删除文创
 		Route::get('/delete/{id}', 'XjhdController@delete')->name('admin.service.xjhd.delete');
+		Route::get('/unset_show/{id}', 'XjhdController@unset_show')->name('admin.service.xjhd.unset_show');
+		Route::get('/set_show/{id}', 'XjhdController@set_show')->name('admin.service.xjhd.set_show');
 	});
 });

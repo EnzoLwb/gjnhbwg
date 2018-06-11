@@ -125,7 +125,13 @@ class MenuDao extends BaseMdl
 						'order_num' => 10,
 					],
 					[
-						'text' => '文创管理',
+						'text' => '文创系列',
+						'url' => route('admin.service.wenchuangxl'),
+						'priv' => 'admin-setting-admingroup',
+						'order_num' => 10,
+					],
+					[
+						'text' => '文创产品',
 						'url' => route('admin.service.wenchuang'),
 						'priv' => 'admin-setting-admingroup',
 						'order_num' => 10,
