@@ -115,7 +115,6 @@ class GatewayController extends Controller
 	 *
 	 * @api {GET} /gateway/create_group 04.创建群组
 	 * @apiGroup GateWay
-	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
@@ -168,7 +167,6 @@ class GatewayController extends Controller
 	 *
 	 * @api {GET} /gateway/join_group 05.加入群组
 	 * @apiGroup GateWay
-	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
