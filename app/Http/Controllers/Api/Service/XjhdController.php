@@ -80,18 +80,7 @@ class XjhdController extends Controller
 		$data->active_content_html = '/api/xjhd_content?p='.request('p').'&id='.$id;
 		return response_json(1,$data,'');
 	}
-	/**
-	 * 宣教活动简介页面
-	 *
-	 * @author ljy 20180609
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 *
-	 * @api {GET} /xjhd_content 10.服务信息-宣教活动简介页面（lijinyu）
-	 * @apiGroup Service
-	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
-	 * @apiParam {int} id 活动id
-	 */
+
 
 	public function xjhd_content(){
 		$id = request('id');

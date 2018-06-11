@@ -21,18 +21,6 @@ class IntroController extends Controller
 		parent::_init();
 	}
 
-	/**
-	 * 服务信息-场馆简介
-	 *
-	 * @author ljy 20180609
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 *
-	 * @api {GET} /intro_html 1.服务信息-场馆简介网页（lijinyu）
-	 * @apiGroup Service
-	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
-	 * @apiParam {int} language 1中文，2英语，3韩语，4日语，5法语，6俄语
-	 */
 	public function intro_html(){
 		$p = request('p');
 		$data = Intro::leftJoin('intro_language','intro.id','intro_language.intro_id')

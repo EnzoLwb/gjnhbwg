@@ -127,18 +127,7 @@ class WenchuangController extends Controller
 		$data['product'] = $product;
 		return response_json(1,$data,'');
 	}
-	/**
-	 * 文创系列简介
-	 *
-	 * @author ljy 20180609
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 *
-	 * @api {GET} /xl_content 6.服务信息-文创系列简介页面（lijinyu）
-	 * @apiGroup Service
-	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
-	 * @apiParam {int} xl_id 系列id
-	 */
+
 	public function xl_content(){
 		$xl_id = request('xl_id');
 		$p = request('p');
@@ -154,18 +143,7 @@ class WenchuangController extends Controller
 		}
 	}
 
-	/**
-	 * 文创产品简介
-	 *
-	 * @author ljy 20180609
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 *
-	 * @api {GET} /product_content 7.服务信息-文创产品简介页面（lijinyu）
-	 * @apiGroup Service
-	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
-	 * @apiParam {int} product_id 产品id
-	 */
+
 
 	public function product_content(){
 		$product_id = request('product_id');
