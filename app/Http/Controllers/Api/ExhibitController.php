@@ -489,13 +489,14 @@ class ExhibitController extends Controller
 	 * @apiParam {int} skip 数据偏移量默认0
 	 * @apiParam {int} take 查询数量默认10
 	 * @apiParam {string} [api_token] token
-	 * @apiSuccess {array} data 列表信息
-	 * @apiSuccess {int} comment_id 评论id
-	 * @apiSuccess {int} like_num 点赞数量
-	 * @apiSuccess {string} datetime 评论时间
-	 * @apiSuccess {string} nickname 昵称
-	 * @apiSuccess {string} avatar 头像
-	 * @apiSuccess {string} is_like 是否点赞
+	 * @apiSuccess {array} data.list 列表信息
+	 * @apiSuccess {int} data.list.comment_id 评论id
+	 * @apiSuccess {int} data.list.like_num点赞数量
+	 * @apiSuccess {string} data.list.datetime 评论时间
+	 * @apiSuccess {string} data.list.nickname 昵称
+	 * @apiSuccess {string} data.list.avatar 头像
+	 * @apiSuccess {string} data.list.is_like 是否点赞
+	 * @apiSuccess {int} data.total 评论总数
 	 */
 	public function comment_list()
 	{
