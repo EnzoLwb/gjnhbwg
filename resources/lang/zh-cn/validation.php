@@ -159,6 +159,7 @@ return [
 		'exhibit_num'=>'展品编号',
 		'autonum'=>'多模蓝牙编号',
 		'exhibit_name_1'=>'展品中文名称',
+		'order_no'=>'排序必须为数字'
 	],
 
 ];

@@ -14,3 +14,10 @@ Route::get('intro_html', 'IntroController@intro_html');
 //参观指南
 Route::get('cgzn_html', 'CgznController@cgzn_html');
 
+//文创系列
+Route::get('xl_list', 'WenChuangController@xl_list');
+Route::get('xl_detail', 'WenChuangController@xl_detail');
+Route::get('product_detail', 'WenChuangController@product_detail');
+Route::get('product_content', 'WenChuangController@product_content');
+Route::get('xl_content', 'WenChuangController@xl_content');
+
