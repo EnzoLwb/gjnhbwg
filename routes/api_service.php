@@ -11,4 +11,6 @@
 Route::get('intro', 'IntroController@intro');
 // 场馆简介页面
 Route::get('intro_html', 'IntroController@intro_html');
+//参观指南
+Route::get('cgzn_html', 'CgznController@cgzn_html');
 
