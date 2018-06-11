@@ -131,6 +131,9 @@ class GatewayController extends Controller
 		]);
 		$uid=request('user_number');
 		$plat=request('p')!='d' ? '1':'2';
+		//判断是否有重名的
+		$if_repeat=Group::where('group_name',request('group_name'))->first();
+		if (!is_null($if_repeat)) return response_json(0,[],'已经存在的群组名');
 		//显示我的信息(我的头像 我的昵称 )
 		if ($plat==1){
 			//app
