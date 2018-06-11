@@ -75,9 +75,9 @@ class GatewayController extends Controller
 			//绑定机器号
 			GatewayLib::bindUid($client_id, $user_number);
 		} else {
-			return response_json(0, [], 'client_id无效');
+			return response_json(0, '', 'client_id无效');
 		}
-		return response_json(1, [], '绑定成功');
+		return response_json(1, '', '绑定成功');
 	}
 
 	/**
@@ -107,7 +107,7 @@ class GatewayController extends Controller
 				}
 			}
 		}
-		return response_json(1, [], '已经断开连接');
+		return response_json(1, '', '已经断开连接');
 
 	}
 	/**
@@ -133,7 +133,7 @@ class GatewayController extends Controller
 			$group_number=Group::where('id',$group_id)->value('group_number');
 			return response_json(1, ['group_number'=>$group_number]);
 		}else{
-			return response_json(0, []);
+			return response_json(0, '');
 		}
 	}
 	/**
@@ -174,7 +174,7 @@ class GatewayController extends Controller
 		$group=Group::create([
 			'holder' => $uid,
 			'group_name' => request('group_name'),
-			'group_number' => rand(10000,99999),
+			'group_number' => rand(1000,9999).substr(time(),8),
 		]);
 		$group_id=$group->id;
 		//将群主加入该群 并且绑定client_id
@@ -186,8 +186,9 @@ class GatewayController extends Controller
 		$group_member->save();
 
 		$data['my_info']=$my_info;
-		$data['group_id']=$group->group_number;
-		$data['group_name']=request('group_name');
+		$group_info['group_id']=$group->group_number;
+		$group_info['group_name']=request('group_name');
+		$data['group_info']=$group_info;
 		GatewayLib::joinGroup($client_id, $group_id);
 		return response_json(1,$data,'你已成功创建并加入群组');
 	}
@@ -205,7 +206,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
 	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
-	 * @apiSuccess {object} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 * @apiSuccess {array} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
 	 */
 	public function join_group(){
 		$this->validate([
@@ -243,6 +244,7 @@ class GatewayController extends Controller
 			$v['user_number']=$v['member_id'];
 			unset($v['member_id'],$v['uid']);
 		}
+
 		//加入群组
 		GroupMember::create([
 			'member_id' => $user_number,
@@ -301,7 +303,7 @@ class GatewayController extends Controller
 			$arr['send_content'] = $content;
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
-		return response_json(1,[],'发送成功');
+		return response_json(1,'','发送成功');
 	}
 	/**
 	 * 退出群组
@@ -328,7 +330,7 @@ class GatewayController extends Controller
 		$arr=['member_id'=>$user_number,'group_id'=>$group_id];
 		GroupMember::where($arr)->delete();
 		GatewayLib::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
-		return response_json(1, [], '退出成功');
+		return response_json(1, '', '退出成功');
 	}
 	/**
 	 * 聊天发送语音文件
@@ -428,5 +430,61 @@ class GatewayController extends Controller
 			unset($v['from_user_number']);
 		}
 		return response_json(1, $list);
+	}
+	/**
+	 * 获取群组用户列表
+	 *
+	 * @author lwb 20180611
+	 *
+	 * @api {get} /gateway/users_list 10.获取群组用户列表
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
+	 * @apiParam {string} group_number 对外的群组ID
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
+	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
+	 * @apiSuccess {array} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 */
+	public function users_list()
+	{
+		$this->validate([
+			'user_number' => 'required',
+			'group_number' => 'required'
+		]);
+		$user_number=request('user_number');
+		$group_number=request('group_number');
+		$plat=request('p')!='d'?'1':'2';
+		$group_info=Group::where('group_number',$group_number)->first();
+		if (is_null($group_info)){
+			return response_json(0,[],'不存在的群组号');
+		}
+		$group=GatewayLib::getAllGroupIdList($group_info['id']);
+		if (!in_array($group_info['id'],$group)) return response_json(0,[],'不存在的群组ID');
+		//显示我的信息(我的头像 我的昵称 )
+		if ($plat==1){
+			//app
+			$my_info=Users::where('uid',$user_number)->select('avatar','nickname')->first();
+		}else{
+			//dlj
+			$my_info=[];
+		}
+		$data['group_info']=['group_id'=>$group_info['id'],'group_number'=>$group_number,'name'=>$group_info['group_name']];
+		$data['my_info']=$my_info;
+
+		$group_id=Group::where('group_number',$group_number)->value('id');
+		$where=array('group_id'=>$group_id);
+		$data['user_list']=GroupMember::leftjoin('users','users.uid','=','group_member.member_id')
+			->where($where)->where('member_id','!=',$user_number)->select('users.avatar','users.nickname','users.uid','member_id')->get()->toArray();
+		foreach ($data['user_list'] as &$v){
+			if (!$v['uid']){
+				$v['avatar']='';
+				$v['nickname']=$v['member_id'];
+			}
+			$v['user_number']=$v['member_id'];
+			unset($v['member_id'],$v['uid']);
+		}
+		return response_json(1, $data);
 	}
 }
