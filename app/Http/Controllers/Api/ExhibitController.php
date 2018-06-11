@@ -390,7 +390,9 @@ class ExhibitController extends Controller
 	 * @apiParam {int} exhibit_id 展品编号
 	 * @apiParam {int} type 类别1点赞2收藏
 	 * @apiParam {string} api_token token
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {array} data 数组
+	 * @apiSuccess {int} data.result 操作结果1成功0失败
+	 * @apiSuccess {int} data.is_like 操作完后，状态 1已点赞（收藏） 0未点赞（收藏）
 	 */
 	public function do_like()
 	{
@@ -413,6 +415,7 @@ class ExhibitController extends Controller
 			} elseif ($type == 2) {
 				Exhibit::where('id', $exhibit_id)->increment('collection_num');
 			}
+			$data['is_like']=1;
 		} else {
 			$r = ExhibitLike::where('uid', $uid)->where('exhibit_id', $exhibit_id)->where('type', $type)->delete();
 			if ($type == 1) {
@@ -420,11 +423,14 @@ class ExhibitController extends Controller
 			} elseif ($type == 2) {
 				Exhibit::where('id', $exhibit_id)->decrement('collection_num');
 			}
+			$data['is_like']=0;
 		}
 		if ($r) {
-			return response_json(1, 1);
+			$data['result']=1;
+			return response_json(1, $data);
 		} else {
-			return response_json(1, 0);
+			$data['result']=0;
+			return response_json(1, $data);
 		}
 	}
 
@@ -534,7 +540,9 @@ class ExhibitController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} comment_id 评论编号
 	 * @apiParam {string} api_token token
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {array} data 数组
+	 * @apiSuccess {int} data.result 操作结果1成功0失败
+	 * @apiSuccess {int} data.is_like 操作完后，状态 1已点赞（收藏） 0未点赞（收藏）
 	 */
 	public function comment_do_like()
 	{
@@ -550,14 +558,18 @@ class ExhibitController extends Controller
 				'comment_id' => $comment_id
 			]);
 			ExhibitComment::where('id', $comment_id)->increment('like_num');
+			$data['is_like']=1;
 		} else {
 			$r = ExhibitCommentLikelist::where('uid', $uid)->where('comment_id', $comment_id)->delete();
 			ExhibitComment::where('id', $comment_id)->decrement('like_num');
+			$data['is_like']=0;
 		}
 		if ($r) {
-			return response_json(1, 1);
+			$data['result']=1;
+			return response_json(1, $data);
 		} else {
-			return response_json(1, 0);
+			$data['result']=0;
+			return response_json(1, $data);
 		}
 	}
 
