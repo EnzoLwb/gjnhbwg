@@ -57,6 +57,10 @@ Route::group([
 	Route::get('my_looked', 'MyExhibitController@my_looked');
 	//我的收藏
 	Route::get('my_collection', 'MyExhibitController@my_collection');
+	//我的足迹
+	Route::get('my_footed', 'MyExhibitController@my_footed');
+	//我的点赞
+	Route::get('my_liked', 'MyExhibitController@my_liked');
 	//我的评论
 	Route::get('my_comment', 'MyExhibitController@my_comment');
 	//删除我的评论

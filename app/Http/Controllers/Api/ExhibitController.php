@@ -9,6 +9,7 @@ use App\Models\Exhibit;
 use App\Models\ExhibitLanguage;
 use App\Models\ExhibitLike;
 use App\Models\ExUserVisit;
+use App\Models\ExUserVisitfoot;
 use App\Models\ExhibitCommentLikelist;
 use App\Models\VisitRoad;
 use Illuminate\Support\Facades\Auth;
@@ -277,7 +278,7 @@ class ExhibitController extends Controller
 			$data['y'] = $exhibit_info->y;
 			$data['content_url'] = '/api/exhibit_content_info/' . $language . '/' . $exhibit_id . '?p=' . $p . '&language=' . $language;
 			//$data['knowledge_url'] = '/api/exhibit_knowledge_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
-			$data['share_url'] = '/api/exhibit_share_info/' . $language . '/' . $exhibit_id . '?p=' . $p.'&language='.$language;
+			$data['share_url'] = '/api/exhibit_share_info/' . $language . '/' . $exhibit_id . '?p=' . $p . '&language=' . $language;
 			$data['exhibition_name'] = $exhibit_info->exhibition_name;
 			$data['floor'] = config('floor')[$exhibit_info->floor_id];
 			$user = Auth::user();
@@ -315,7 +316,7 @@ class ExhibitController extends Controller
 
 			}
 
-			$data['is_have_wenda']=0;
+			$data['is_have_wenda'] = 0;
 			return response_json(1, $data);
 		} else {
 			return response_json(0, '', 'error exhibit_id');
@@ -603,6 +604,19 @@ class ExhibitController extends Controller
 			} else {
 				ExUserVisit::where('uid', $uid)->increment('listen_num');
 			}
+
+			//foot start
+			$u_ex_finfo = ExUserVisitfoot::where('uid', $uid)->where('exhibit_id', $exhibit_id)->first();
+			$n_time =date('Y-m-d H:i:s', time());
+			if (empty($u_ex_finfo)) {
+				ExUserVisitfoot::create([
+					'uid' => $uid,
+					'exhibit_id' => $exhibit_id
+				]);
+			} else {
+				ExUserVisitfoot::where('uid', $uid)->where('exhibit_id', $exhibit_id)->update(['updated_at' => $n_time]);
+			}
+			//foot end
 		}
 		if ($r) {
 			return response_json(1, 1);
