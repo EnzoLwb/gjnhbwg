@@ -52,7 +52,7 @@
                                     <h1>{{$g['exhibition_name']}}</h1>
                                     @foreach($g['exhibit_list'] as $kk=>$gg)
                                         <div class="exhibit_box">
-                                            <input type="checkbox" name="road_exhibit_id[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}<br/>
+                                            <input type="checkbox" name="road_exhibit_id{{$g['exhibition_id']}}[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}<br/>
 
                                             <!--排序权值-->
                                             @if(isset($road_raw_info[$gg['exhibit_id']]))
@@ -67,6 +67,31 @@
                                 @endforeach
                             </div>
                         </div>
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">展品选择</label>
+                            <div class="col-sm-4">
+                            <button type="button" onclick="upload_resource('路线图上传','FT_ONE_RESOURCE','road_img',1);" class="btn btn-white">路线图上传</button>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">&nbsp;</label>
+                            <div class="col-sm-4">
+                                <div id="road_img">
+                                    @if(!empty($info['road_img'])&&isset($info['road_img']))
+                                        <div class="img-div">
+                                            <img src="{{$info['road_img']}}">
+                                            <span onclick="del_img($(this))">×</span>
+                                            <input type="hidden" name="road_img" value="{{$info['road_img']}}">
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
 
 
                         <div class="layui-tab">
