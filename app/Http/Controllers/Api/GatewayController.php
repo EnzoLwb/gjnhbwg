@@ -115,7 +115,7 @@ class GatewayController extends Controller
 	 *
 	 * @author lwb 201806011
 	 *
-	 * @api {GET} /gateway/create_group 03.获得群组列表
+	 * @api {GET} /gateway/getGroupList 03.是否之前加入群组
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信

@@ -7,6 +7,8 @@ Route::group([
 	Route::get('gateway/bind', 'GatewayController@bind');
 	//返回到主页面(断开连接)/退还导览机
 	Route::get('gateway/close_client', 'GatewayController@close_client');
+	//是否加入群组
+	Route::get('gateway/getGroupList', 'GatewayController@getGroupList');
 	//创建群组
 	Route::get('gateway/create_group', 'GatewayController@create_group');
 	//加入群组
