@@ -413,7 +413,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} audio_duration  语音长度
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
-	public function chat_list()
+	public function chat_message()
 	{
 		$this->validate([
 			'from_user_number' => 'required',

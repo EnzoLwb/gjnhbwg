@@ -19,7 +19,7 @@ Route::group([
 	//退出群聊
 	Route::get('gateway/exit_group', 'GatewayController@exit_group');
 	//获取聊天记录
-	Route::get('gateway/chat_list', 'GatewayController@chat_list');
+	Route::get('gateway/chat_message', 'GatewayController@chat_message');
 	//私聊
 	Route::post('gateway/send_msg', 'GatewayController@send_msg');
 	//发送语音信息
