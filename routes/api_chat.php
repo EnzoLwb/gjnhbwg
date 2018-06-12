@@ -5,6 +5,7 @@ Route::group([
 ], function () {
 	//绑定用户
 	Route::get('gateway/bind', 'GatewayController@bind');
+	Route::get('gateway/getAllUid', 'GatewayController@getAllUid');//获得所有uid  测试用
 	//返回到主页面(断开连接)/退还导览机
 	Route::get('gateway/close_client', 'GatewayController@close_client');
 	//获取群组用户列表

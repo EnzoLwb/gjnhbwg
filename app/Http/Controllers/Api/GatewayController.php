@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class GatewayController extends Controller
 {
-	//导览机前缀
-	const BIND_APP='app_';
-	const BIND_DLJ='dlj_';
+
 	public function __construct()
 	{
 		parent::_init();
@@ -303,6 +301,11 @@ class GatewayController extends Controller
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1,'','发送成功');
+	}
+	//获得所有uid  测试用
+	public function getAllUid(){
+		$list=GatewayLib::getAllUidList();
+		dd($list);
 	}
 	/**
 	 * 退出群组
