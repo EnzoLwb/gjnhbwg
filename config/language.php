@@ -8,7 +8,7 @@
 return [
 	1 => [
 		'name' => '汉语',
-		'dir' => 'zh-cn'
+		'dir' => 'cn'
 	],
 	2 => [
 		'name' => '英语',

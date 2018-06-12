@@ -441,4 +441,44 @@ class ResourceDao extends Controller
 //		//语种资源更新
 //		self::update_exhibit_html($new_info, $old_info, $exhibit_path, $version_exhibit_path);
 	}
+
+
+
+	/**
+	 * 线路资源打包
+	 *
+	 * @author lvshuo 20180612
+	 * @param array $new_info 新资源
+	 * @param array $old_info 旧资源
+	 * @param string $path 资源路径
+	 * @return int
+	 */
+	public static function update_road_resource($new_info,$old_info,$path){
+		$resource_path = base_path() . '/public/resource_zip/road/'.$path.'/';
+		$version_id = self::get_version_id();
+		$version_resource_path = base_path() . '/public/resource_zip/version_' . $version_id . '/road/' . $path . '/';
+		if (!file_exists($resource_path)) {
+			mkdir($resource_path, 0777, true);
+		} else {
+			//清空历史资源
+			LoadDao::deldir($resource_path, 0);
+		}
+		if (!file_exists($version_resource_path)) {
+			mkdir($version_resource_path, 0777, true);
+		}
+
+		$new_img =$new_info['road_img'];
+		$old_img =$old_info['road_img'];
+
+		$temp = explode(".", $new_img);
+		$extension = end($temp);
+		copy(base_path() . '/public' . $new_img, $resource_path  . 'road_img.' . $extension);
+		if ($old_img !== $new_img) {
+			copy(base_path() . '/public' . $new_img, $version_resource_path  . 'road_img.' . $extension);
+		}
+
+
+
+	}
+
 }

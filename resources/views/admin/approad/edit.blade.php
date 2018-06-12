@@ -69,9 +69,15 @@
                         </div>
 
 
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">游览时长</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" name="road_long" value="{{$info['road_long'] or ''}}" required/>
+                            </div>
+                        </div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">展品选择</label>
+                            <label class="col-sm-2 control-label">路线图上传</label>
                             <div class="col-sm-4">
                             <button type="button" onclick="upload_resource('路线图上传','FT_ONE_RESOURCE','road_img',1);" class="btn btn-white">路线图上传</button>
 
@@ -80,6 +86,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">&nbsp;</label>
                             <div class="col-sm-4">
+                                <input type="hidden" name="road_img_old" value="{{$info['road_img'] or ''}}">
                                 <div id="road_img">
                                     @if(!empty($info['road_img'])&&isset($info['road_img']))
                                         <div class="img-div">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\AppRoad;
 
 use App\Dao\ExhibitDao;
+use App\Dao\ResourceDao;
 use App\Models\VisitRoad;
 use App\Models\VisitRoadLanguage;
 use Illuminate\Http\Request;
@@ -50,43 +51,63 @@ class AppRoadController extends BaseAdminController
 				/*'road_exhibit_id' => [
 					'required'
 				],*/
+				'road_long' => 'required',
+				'road_img' => 'required',
 				'road_name_1' => 'required'
 			]);
 
-			$road_raw_list1 = is_array(request('road_exhibit_id1'))?request('road_exhibit_id1'):array();
-			$road_raw_list2 = is_array(request('road_exhibit_id2'))?request('road_exhibit_id2'):array();
-			$road_raw_list3 = is_array(request('road_exhibit_id3'))?request('road_exhibit_id3'):array();
+			$road_raw_list1 = is_array(request('road_exhibit_id1')) ? request('road_exhibit_id1') : array();
+			$road_raw_list2 = is_array(request('road_exhibit_id2')) ? request('road_exhibit_id2') : array();
+			$road_raw_list3 = is_array(request('road_exhibit_id3')) ? request('road_exhibit_id3') : array();
 
-			$road_raw_list = array_merge($road_raw_list1,$road_raw_list2,$road_raw_list3);
+			$road_raw_list = array_merge($road_raw_list1, $road_raw_list2, $road_raw_list3);
 
-
-			if(empty($road_raw_list)){
+			if (empty($road_raw_list)) {
 				return response()->json([
 					'status' => 'false',
 					'msg' => '请选择线路上展品'
 				]);
 			}
 
-
 			$data = [
 				'uid' => 0,
 				'type' => 1,
 				'road_list' => json_encode($road_raw_list),
 				'road_info' => json_encode([]),
+				'road_long' => request('road_long'),
 				'road_img' => request('road_img')
 			];
 
-
+			//all start
 			$road_info = array();
 			$weight_exhibit_ids = array();
+			$weight_ex_quanzhong = array();
 			foreach ($road_raw_list as $key => $exhibit_id) {
 				$road_info[] = $exhibit_id . '_' . request('weight_' . $exhibit_id);
 				$weight_exhibit_ids[$exhibit_id] = request('weight_' . $exhibit_id);
+				$weight_ex_quanzhong[$exhibit_id] = request('weight_' . $exhibit_id);
 			}
 			$data['road_info'] = json_encode($road_info);
 
 			arsort($weight_exhibit_ids);
 			$data['weight_exhibit_ids'] = json_encode(array_keys($weight_exhibit_ids));
+			//all end
+
+			$road1_data = $this->road_handle($road_raw_list1, $weight_ex_quanzhong);
+			$road2_data = $this->road_handle($road_raw_list2, $weight_ex_quanzhong);
+			$road3_data = $this->road_handle($road_raw_list3, $weight_ex_quanzhong);
+
+			$data['road_list1'] = json_encode(request('road_exhibit_id1'));
+			$data['road_list2'] = json_encode(request('road_exhibit_id2'));
+			$data['road_list3'] = json_encode(request('road_exhibit_id3'));
+
+			$data['road_info1'] = $road1_data['road_info'];
+			$data['road_info2'] = $road2_data['road_info'];
+			$data['road_info3'] = $road3_data['road_info'];
+
+			$data['weight_exhibit_ids1'] = $road1_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids2'] = $road2_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids3'] = $road3_data['weight_exhibit_ids'];
 
 			//基本信息入库
 			if ($id == 'add') {
@@ -109,6 +130,17 @@ class AppRoadController extends BaseAdminController
 					VisitRoadLanguage::create($data2);
 				}
 			}
+
+			//resource start
+			if (config('exhibit_config.is_version_zip')) {
+				$old_info['road_img'] = request('road_img_old');
+				$new_info['road_img'] = request('road_img');
+				if (request('road_img_old') !== request('road_img')) {
+					ResourceDao::update_road_resource($new_info, $old_info, $road_id);
+				}
+			}
+			//resource end
+
 			return $this->success(get_session_url('road_list'));
 		} else {
 			$info = [];
@@ -140,6 +172,29 @@ class AppRoadController extends BaseAdminController
 				'exhibit_list' => $exhibit_list,
 				'road_raw_info' => $road_raw_info
 			));
+		}
+	}
+
+	public function road_handle($road_raw_list, $weight_ex_quanzhong)
+	{
+		if (empty($road_raw_list)) {
+			$data['road_info'] = '';
+			$data['weight_exhibit_ids'] = '';
+			return $data;
+		} else {
+			//node start
+			$road_info = array();
+			$weight_exhibit_ids = array();
+			foreach ($road_raw_list as $key => $exhibit_id) {
+				$road_info[] = $exhibit_id . '_' . $weight_ex_quanzhong[$exhibit_id];
+				$weight_exhibit_ids[$exhibit_id] = $weight_ex_quanzhong[$exhibit_id];
+			}
+			$data['road_info'] = json_encode($road_info);
+
+			arsort($weight_exhibit_ids);
+			$data['weight_exhibit_ids'] = json_encode(array_keys($weight_exhibit_ids));
+			//node end
+			return $data;
 		}
 	}
 
