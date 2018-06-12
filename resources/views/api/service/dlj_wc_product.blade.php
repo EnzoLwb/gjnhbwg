@@ -10,7 +10,8 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
 </head>
 <body>
-{!! $data !!}
+<img src="{{get_file_url($data->pro_img)}}">
+{!! $data->pro_content !!}
 </body>
 
 

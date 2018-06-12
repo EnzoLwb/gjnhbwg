@@ -114,6 +114,7 @@ class WenchuangController extends Controller
 	 * @apiSuccess {int} data.product.xl_id 系列id
 	 * @apiSuccess {string} data.product.pro_title 产品名称
 	 * @apiSuccess {string} data.product.pro_img 产品图片
+	 * @apiSuccess {string} data.product.product_html 产品html
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"msg":"","data":[{"id":4,"title":"\u559c\u4e0a\u7709\u68a2\u7cfb\u5217","img":"\/uploadfiles\/intro\/20180612\/201806121528059817.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528076739.png","content":"<p>\u559c\u4e0a\u7709\u68a2\u7cfb\u5217\u559c\u4e0a\u7709\u68a2\u7cfb\u5217<\/p>","content_html":"\/api\/xl_content?p=a&xl_id=4","product":[]},{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180612\/201806121528189393.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528204717.png","content":"<p>\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f<br\/><\/p>","content_html":"\/api\/xl_content?p=a&xl_id=3","product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}]},{"id":2,"title":"\u6e14\u5bb6\u7cfb\u5217","img":"\/uploadfiles\/intro\/20180612\/201806121528266885.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528298268.png","content":"<p>\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217<\/p>","content_html":"\/api\/xl_content?p=a&xl_id=2","product":[]}]}
 	 */
@@ -122,8 +123,10 @@ class WenchuangController extends Controller
 		foreach($xl_list as $k=>$v){
 			$xl_list[$k]['content_html'] = '/api/xl_content?p='.request('p').'&xl_id='.$v['id'];
 			$xl_list[$k]['product'] = WcProduct::where('is_show',1)->where('xl_id',$v['id'])->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
+			foreach ($xl_list[$k]['product'] as $kk=>$vv){
+				$xl_list[$k]['product'][$kk]['product_html'] = '/api/product_content?p='.request('p').'&product_id='.$vv['id'];
+			}
 		}
-//		$data['list'] = $xl_list;
 		return response_json(1,$xl_list,'');
 
 	}
@@ -196,14 +199,14 @@ class WenchuangController extends Controller
 	public function product_content(){
 		$product_id = request('product_id');
 		$p = request('p');
-		$content = WcProduct::where('id',$product_id)->value('pro_content');
+		$data = WcProduct::where('id',$product_id)->select('pro_content','pro_img')->first();
 		if($p=='d'){
 			return view('api.service.dlj_wc_product',[
-				'data'=>$content
+				'data'=>$data
 			]);
 		}else{
 			return view('api.service.app_wc_product',[
-				'data'=>$content
+				'data'=>$data
 			]);
 		}
 	}
