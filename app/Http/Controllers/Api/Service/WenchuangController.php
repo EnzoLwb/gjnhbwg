@@ -60,31 +60,34 @@ class WenchuangController extends Controller
 	 * @apiParam {int} xl_id 系列id
 	 * @apiSuccess {array} data
 	 * @apiSuccess {int} id 系列id
-	 * @apiSuccess {array} data.xl 系列数组
-	 * @apiSuccess {int} data.xl.id 系列id
-	 * @apiSuccess {string} data.xl.title 系列标题
-	 * @apiSuccess {string} data.xl.img 系列背景图
-	 * @apiSuccess {string} data.xl.img_1 系列小图标
-	 * @apiSuccess {string} data.xl.content 系列简介
-	 * @apiSuccess {string} data.xl.content_html 系列简介html地址
-	 * @apiSuccess {array} data.product 产品数组
-	 * @apiSuccess {int} data.product.id 产品id
-	 * @apiSuccess {int} data.product.xl_id 系列id
-	 * @apiSuccess {string} data.product.pro_title 产品名称
-	 * @apiSuccess {string} data.product.pro_img 产品图片
+	 * @apiSuccess {array} data.list 系列数组
+	 * @apiSuccess {int} data.list.id 当前系列id
+	 * @apiSuccess {string} data.list.title 当前系列标题
+	 * @apiSuccess {string} data.list.img 当前系列背景图
+	 * @apiSuccess {string} data.list.img_1 当前系列小图标
+	 * @apiSuccess {string} data.list.content 当前系列简介
+	 * @apiSuccess {string} data.list.content_html 当前系列简介html地址
+	 * @apiSuccess {array} data.list.product 当前系列产品数组
+	 * @apiSuccess {int} data.list.product.id 当前系列产品id
+	 * @apiSuccess {int} data.list.product.xl_id 当前系列系列id
+	 * @apiSuccess {string} data.list.product.pro_title 当前系列产品名称
+	 * @apiSuccess {string} data.list.product.pro_img 当前系列产品图片
+	 * @apiSuccess {array} data.list.xl_list 除当前的系列数组
+	 * @apiSuccess {int} data.list.xl_list.id 除当前的系列id
 	 * @apiSuccessExample {json} 返回值
-	 * {"status":1,"msg":"","data":{"xl":{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180611\/201806111150574905.png","img_1":"\/uploadfiles\/intro\/20180611\/201806111151001982.png"},"product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}]}}
+	 * {"status":1,"msg":"","data":{"list":{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180612\/201806121528189393.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528204717.png","content":"<p>\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f<br\/><\/p>","content_html":"\/api\/xl_content?p=i&xl_id=3","product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}],"xl_list":[{"id":4},{"id":2}]}}}
 	 */
 	public function xl_detail(){
 		$xl_id = request('xl_id');
 		$xl = WcXl::where('id',$xl_id)->select('id','title','img','img_1','content')->first();
 		if($xl){
 			$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+			$xl->product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
+			$xl_list = WcXl::where('id','<>',$xl_id)->select('id')->orderBy('order_no','desc')->get();
+			$xl->xl_list = $xl_list;
 		}
+		$data['list'] = $xl;
 
-		$product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
-		$data['xl'] = $xl;
-		$data['product'] = $product;
 		return response_json(1,$data,'');
 
 	}
