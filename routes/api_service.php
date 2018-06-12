@@ -18,6 +18,7 @@ Route::get('cgzn', 'CgznController@cgzn');
 //文创系列
 Route::get('xl_list', 'WenchuangController@xl_list');
 Route::get('xl_detail', 'WenchuangController@xl_detail');
+Route::get('xl_detail_a', 'WenchuangController@xl_detail_a');
 Route::get('product_detail', 'WenchuangController@product_detail');
 Route::get('product_content', 'WenchuangController@product_content');
 Route::get('xl_content', 'WenchuangController@xl_content');
