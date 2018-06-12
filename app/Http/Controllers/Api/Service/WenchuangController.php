@@ -103,20 +103,19 @@ class WenchuangController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i:IOS a:安卓
 	 * @apiSuccess {array} data
-	 * @apiSuccess {array} data.list 系列数组
-	 * @apiSuccess {int} data.list.id 系列id
-	 * @apiSuccess {string} data.list.title 系列标题
-	 * @apiSuccess {string} data.list.img 系列背景图
-	 * @apiSuccess {string} data.list.img_1 系列小图标
-	 * @apiSuccess {string} data.list.content 系列简介
-	 * @apiSuccess {string} data.list.content_html 系列简介html地址
-	 * @apiSuccess {array} data.list.product 产品数组
-	 * @apiSuccess {int} data.list.product.id 产品id
-	 * @apiSuccess {int} data.list.product.xl_id 系列id
-	 * @apiSuccess {string} data.list.product.pro_title 产品名称
-	 * @apiSuccess {string} data.list.product.pro_img 产品图片
+	 * @apiSuccess {int} data.id 系列id
+	 * @apiSuccess {string} data.title 系列标题
+	 * @apiSuccess {string} data.img 系列背景图
+	 * @apiSuccess {string} data.img_1 系列小图标
+	 * @apiSuccess {string} data.content 系列简介
+	 * @apiSuccess {string} data.content_html 系列简介html地址
+	 * @apiSuccess {array} data.product 产品数组
+	 * @apiSuccess {int} data.product.id 产品id
+	 * @apiSuccess {int} data.product.xl_id 系列id
+	 * @apiSuccess {string} data.product.pro_title 产品名称
+	 * @apiSuccess {string} data.product.pro_img 产品图片
 	 * @apiSuccessExample {json} 返回值
-	 * {"status":1,"msg":"","data":{"list":[{"id":4,"title":"\u559c\u4e0a\u7709\u68a2\u7cfb\u5217","img":"\/uploadfiles\/intro\/20180612\/201806121528059817.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528076739.png","content":"<p>\u559c\u4e0a\u7709\u68a2\u7cfb\u5217\u559c\u4e0a\u7709\u68a2\u7cfb\u5217<\/p>","content_html":"\/api\/xl_content?p=a&xl_id=4","product":[]},{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180612\/201806121528189393.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528204717.png","content":"<p>\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f<br\/><\/p>","content_html":"\/api\/xl_content?p=a&xl_id=3","product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}]},{"id":2,"title":"\u6e14\u5bb6\u7cfb\u5217","img":"\/uploadfiles\/intro\/20180612\/201806121528266885.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528298268.png","content":"<p>\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217<\/p>","content_html":"\/api\/xl_content?p=a&xl_id=2","product":[]}]}}
+	 * {"status":1,"msg":"","data":[{"id":4,"title":"\u559c\u4e0a\u7709\u68a2\u7cfb\u5217","img":"\/uploadfiles\/intro\/20180612\/201806121528059817.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528076739.png","content":"<p>\u559c\u4e0a\u7709\u68a2\u7cfb\u5217\u559c\u4e0a\u7709\u68a2\u7cfb\u5217<\/p>","content_html":"\/api\/xl_content?p=a&xl_id=4","product":[]},{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180612\/201806121528189393.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528204717.png","content":"<p>\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f\u5370\u8c61\u4e03\u8fde\u5c7f<br\/><\/p>","content_html":"\/api\/xl_content?p=a&xl_id=3","product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}]},{"id":2,"title":"\u6e14\u5bb6\u7cfb\u5217","img":"\/uploadfiles\/intro\/20180612\/201806121528266885.png","img_1":"\/uploadfiles\/intro\/20180612\/201806121528298268.png","content":"<p>\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217\u6e14\u5bb6\u7cfb\u5217<\/p>","content_html":"\/api\/xl_content?p=a&xl_id=2","product":[]}]}
 	 */
 	public function xl_detail_a(){
 		$xl_list = WcXl::select('id','title','img','img_1','content')->orderBy('order_no','desc')->get();
@@ -124,8 +123,8 @@ class WenchuangController extends Controller
 			$xl_list[$k]['content_html'] = '/api/xl_content?p='.request('p').'&xl_id='.$v['id'];
 			$xl_list[$k]['product'] = WcProduct::where('is_show',1)->where('xl_id',$v['id'])->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
 		}
-		$data['list'] = $xl_list;
-		return response_json(1,$data,'');
+//		$data['list'] = $xl_list;
+		return response_json(1,$xl_list,'');
 
 	}
 	/**
