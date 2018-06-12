@@ -51,7 +51,6 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid 导览机传唯一设备号
 	 * @apiParam {string} client_id 链接上tcp后获得的client_id
 	 * @apiSuccess {int} data 操作结果1成功0失败
-	 * @apiSuccess {string} uid 私聊等地方用到的uid
 	 */
 	public function bind()
 	{
@@ -145,8 +144,8 @@ class GatewayController extends Controller
 	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
 	 * @apiParam {string} group_name 群组名称
 	 * @apiSuccess {object} data 操作结果1成功0失败
-	 * @apiSuccess {object} my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
-	 * @apiSuccess {object} group_info  group_id 群组ID号  group_number 群组对外ID号  name 群组名称
+	 * @apiSuccess {object} data.my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
+	 * @apiSuccess {object} data.group_info  group_id 群组ID号  group_number 群组对外ID号  name 群组名称
 	 */
 	public function create_group(){
 		$this->validate([
@@ -201,9 +200,9 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiParam {int} group_number 对外显示的群组id号
 	 * @apiSuccess {object} data 操作结果1成功0失败
-	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
-	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
-	 * @apiSuccess {array} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 * @apiSuccess {object} data.group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
+	 * @apiSuccess {object} data.my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
+	 * @apiSuccess {array} data.user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
 	 */
 	public function join_group(){
 		$this->validate([
@@ -460,9 +459,9 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiParam {string} group_number 对外的群组ID
 	 * @apiSuccess {object} data 操作结果1成功0失败
-	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
-	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
-	 * @apiSuccess {array} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 * @apiSuccess {object} data.group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
+	 * @apiSuccess {object} data.my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
+	 * @apiSuccess {array} data.user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
 	 */
 	public function users_list()
 	{
