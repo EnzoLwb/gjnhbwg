@@ -78,7 +78,10 @@ class WenchuangController extends Controller
 	public function xl_detail(){
 		$xl_id = request('xl_id');
 		$xl = WcXl::where('id',$xl_id)->select('id','title','img','img_1','content')->first();
-		$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+		if($xl){
+			$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+		}
+
 		$product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
 		$data['xl'] = $xl;
 		$data['product'] = $product;
@@ -120,9 +123,15 @@ class WenchuangController extends Controller
 		$xl_id = request('xl_id');
 		$product_id = request('product_id');
 		$xl = WcXl::where('id',$xl_id)->select('id','title','img','img_1','content')->first();
-		$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+		if($xl){
+			$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+		}
+
 		$product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->where('id',$product_id)->first();
-		$product->pro_content_html = '/api/product_content?p='.request('p').'&product_id='.$product_id;
+		if($product){
+			$product->pro_content_html = '/api/product_content?p='.request('p').'&product_id='.$product_id;
+		}
+
 		$data['xl'] = $xl;
 		$data['product'] = $product;
 		return response_json(1,$data,'');
