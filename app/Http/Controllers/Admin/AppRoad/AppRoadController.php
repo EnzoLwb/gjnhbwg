@@ -99,6 +99,14 @@ class AppRoadController extends BaseAdminController
 			$data['road_list2']=json_encode(request('road_exhibit_id2'));
 			$data['road_list3']=json_encode(request('road_exhibit_id3'));
 
+			$data['road_info1']=$road1_data['road_info'];
+			$data['road_info2']=$road2_data['road_info'];
+			$data['road_info3']=$road3_data['road_info'];
+
+			$data['weight_exhibit_ids1']=$road1_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids2']=$road2_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids3']=$road3_data['weight_exhibit_ids'];
+
 			//基本信息入库
 			if ($id == 'add') {
 				$new_info = VisitRoad::create($data);
