@@ -9,6 +9,7 @@ use App\Models\Exhibition;
 use App\Models\Exhibit;
 use App\Models\SvgMapTable;
 use App\Models\VersionList;
+use App\Models\VisitRoad;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -360,6 +361,13 @@ class MapExhibitController extends Controller
 				}
 			}
 		}
+
+		foreach (config('language') as $k => $g) {
+			//线路数据
+			$info['road_'.$g['dir']]=VisitRoad::join('visit_road_language','visit_road.id','=','visit_road_language.road_id')->where('visit_road_language.language','=',$k)->select('visit_road_language.road_id','visit_road_language.road_name')->get()->toArray();
+		}
+
+
 		return response_json(1, $info,'查询成功');
 	}
 }

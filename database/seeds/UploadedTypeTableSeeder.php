@@ -90,7 +90,7 @@ class UploadedTypeTableSeeder extends Seeder
 				'path' => 'resource',
 				'desc' => '单图片上传测试',
 				'allow_type' => 'gif|jpg|jpeg|png',
-				'allow_size' => 1024 * 1024 * 2,
+				'allow_size' => 1024 * 1024 * 5,
 				'allow_num' => 1
 			],
 			[
@@ -98,7 +98,7 @@ class UploadedTypeTableSeeder extends Seeder
 				'path' => 'resource',
 				'desc' => '多图片上传测试',
 				'allow_type' => 'gif|jpg|jpeg|png',
-				'allow_size' => 1024 * 1024 * 2,
+				'allow_size' => 1024 * 1024 * 5,
 				'allow_num' => 5
 			],
 			[
@@ -130,7 +130,7 @@ class UploadedTypeTableSeeder extends Seeder
 				'path' => 'resource',
 				'desc' => '展品图',
 				'allow_type' => 'gif|jpg|jpeg|png',
-				'allow_size' => 1024 * 1024 * 2,
+				'allow_size' => 1024 * 1024 * 5,
 				'allow_num' => 1
 			],
 			[
@@ -138,7 +138,7 @@ class UploadedTypeTableSeeder extends Seeder
 				'path' => 'resource',
 				'desc' => '展品图',
 				'allow_type' => 'gif|jpg|jpeg|png',
-				'allow_size' => 1024 * 1024 * 2,
+				'allow_size' => 1024 * 1024 * 5,
 				'allow_num' => 5
 			],
 			[
@@ -172,6 +172,14 @@ class UploadedTypeTableSeeder extends Seeder
 				'allow_type' => 'gif|jpg|jpeg|png',
 				'allow_size' => 1024 * 1024 * 2,
 				'allow_num' => 5
+			],
+			[
+				'type_key' => 'FT_SERVICE_POINT',
+				'path' => 'resource',
+				'desc' => '服务实施图',
+				'allow_type' => 'gif|jpg|jpeg|png',
+				'allow_size' => 1024 * 1024 * 5,
+				'allow_num' => 1
 			],
 		]);
 	}

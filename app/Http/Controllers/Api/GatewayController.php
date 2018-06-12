@@ -74,6 +74,9 @@ class GatewayController extends Controller
 			}
 			//绑定机器号
 			GatewayLib::bindUid($client_id, $user_number);
+			//加入之前加入的群组
+			$group_id=GroupMember::where('member_id',request('user_number'))->value('group_id');
+			if ($group_id) GatewayLib::joinGroup($client_id, $group_id);
 		} else {
 			return response_json(0, '', 'client_id无效');
 		}
@@ -111,7 +114,7 @@ class GatewayController extends Controller
 
 	}
 	/**
-	 * 获得群组列表
+	 * 是否之前加入群组
 	 *
 	 * @author lwb 201806011
 	 *
@@ -120,8 +123,8 @@ class GatewayController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
-	 * @apiSuccess {object} data 操作结果1代表有群组 直接通过返回的group_number号请求接口即可  0代表当前没有入群
-	 * @apiSuccess {int} group_number 群组对外的ID号
+	 * @apiSuccess {object} data
+	 * @apiSuccess {int} group_number 群组对外的ID号 空字符串表示当前未加入到群组中
 	 */
 	public function getGroupList(){
 		$this->validate([
@@ -129,12 +132,8 @@ class GatewayController extends Controller
 		]);
 		$group_id=GroupMember::where('member_id',request('user_number'))->value('group_id');
 
-		if ($group_id){
-			$group_number=Group::where('id',$group_id)->value('group_number');
-			return response_json(1, ['group_number'=>$group_number]);
-		}else{
-			return response_json(0, '');
-		}
+		$group_number=Group::where('id',$group_id)->value('group_number');
+		return response_json(1, ['group_number'=>$group_number]);
 	}
 	/**
 	 * 创建群组
@@ -149,7 +148,7 @@ class GatewayController extends Controller
 	 * @apiParam {string} group_name 群组名称
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 * @apiSuccess {object} my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
-	 * @apiSuccess {object} group_info  group_id 群组ID号  group_number 群组对外ID号  group_name 群组名称
+	 * @apiSuccess {object} group_info  group_id 群组ID号  group_number 群组对外ID号  name 群组名称
 	 */
 	public function create_group(){
 		$this->validate([
