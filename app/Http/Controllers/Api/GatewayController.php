@@ -249,7 +249,11 @@ class GatewayController extends Controller
 			'device_type' =>$plat,
 		]);
 		GatewayLib::joinGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_info['id']);
-
+		//通知群组里的人
+		$arr['type'] = 'sent_msg';
+		$arr['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
+		$arr['send_content'] = '加入群组';
+		GatewayLib::sendToGroup($group_info['id'],json_encode($arr));
 		return response_json(1, $data, '加入成功');
 	}
 	/**
@@ -331,6 +335,11 @@ class GatewayController extends Controller
 		$arr=['member_id'=>$user_number,'group_id'=>$group_id];
 		GroupMember::where($arr)->delete();
 		GatewayLib::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
+		//通知群组里的人
+		$arr['type'] = 'sent_msg';
+		$arr['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
+		$arr['send_content'] = '退出群组';
+		GatewayLib::sendToGroup($group_id,json_encode($arr));
 		return response_json(1, '', '退出成功');
 	}
 	/**
