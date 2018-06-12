@@ -59,7 +59,6 @@ class WenchuangController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
 	 * @apiParam {int} xl_id 系列id
 	 * @apiSuccess {array} data
-	 * @apiSuccess {int} id 系列id
 	 * @apiSuccess {array} data.list 系列数组
 	 * @apiSuccess {int} data.list.id 当前系列id
 	 * @apiSuccess {string} data.list.title 当前系列标题
