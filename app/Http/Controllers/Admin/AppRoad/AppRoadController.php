@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\AppRoad;
 
 use App\Dao\ExhibitDao;
+use App\Dao\ResourceDao;
 use App\Models\VisitRoad;
 use App\Models\VisitRoadLanguage;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ class AppRoadController extends BaseAdminController
 					'required'
 				],*/
 				'road_long' => 'required',
+				'road_img' => 'required',
 				'road_name_1' => 'required'
 			]);
 
@@ -95,17 +97,17 @@ class AppRoadController extends BaseAdminController
 			$road2_data = $this->road_handle($road_raw_list2, $weight_ex_quanzhong);
 			$road3_data = $this->road_handle($road_raw_list3, $weight_ex_quanzhong);
 
-			$data['road_list1']=json_encode(request('road_exhibit_id1'));
-			$data['road_list2']=json_encode(request('road_exhibit_id2'));
-			$data['road_list3']=json_encode(request('road_exhibit_id3'));
+			$data['road_list1'] = json_encode(request('road_exhibit_id1'));
+			$data['road_list2'] = json_encode(request('road_exhibit_id2'));
+			$data['road_list3'] = json_encode(request('road_exhibit_id3'));
 
-			$data['road_info1']=$road1_data['road_info'];
-			$data['road_info2']=$road2_data['road_info'];
-			$data['road_info3']=$road3_data['road_info'];
+			$data['road_info1'] = $road1_data['road_info'];
+			$data['road_info2'] = $road2_data['road_info'];
+			$data['road_info3'] = $road3_data['road_info'];
 
-			$data['weight_exhibit_ids1']=$road1_data['weight_exhibit_ids'];
-			$data['weight_exhibit_ids2']=$road2_data['weight_exhibit_ids'];
-			$data['weight_exhibit_ids3']=$road3_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids1'] = $road1_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids2'] = $road2_data['weight_exhibit_ids'];
+			$data['weight_exhibit_ids3'] = $road3_data['weight_exhibit_ids'];
 
 			//基本信息入库
 			if ($id == 'add') {
@@ -128,6 +130,17 @@ class AppRoadController extends BaseAdminController
 					VisitRoadLanguage::create($data2);
 				}
 			}
+
+			//resource start
+			if (config('exhibit_config.is_version_zip')) {
+				$old_info['road_img'] = request('road_img_old');
+				$new_info['road_img'] = request('road_img');
+				if (request('road_img_old') !== request('road_img')) {
+					ResourceDao::update_road_resource($new_info, $old_info, $road_id);
+				}
+			}
+			//resource end
+
 			return $this->success(get_session_url('road_list'));
 		} else {
 			$info = [];
