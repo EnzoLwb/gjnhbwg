@@ -53,10 +53,10 @@ class WenchuangController extends Controller
 	 * @author ljy 20180609
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 *
-	 * @api {GET} /xl_detail 4.服务信息-文创系列详情（lijinyu）
+	 * @api {GET} /xl_detail 4.服务信息-文创系列详情（导览机）（lijinyu）
 	 * @apiGroup Service
 	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
+	 * @apiParam {string} p 平台，d:导览机
 	 * @apiParam {int} xl_id 系列id
 	 * @apiSuccess {array} data
 	 * @apiSuccess {int} id 系列id
@@ -77,14 +77,64 @@ class WenchuangController extends Controller
 	 */
 	public function xl_detail(){
 		$xl_id = request('xl_id');
-		$xl = WcXl::where('id',$xl_id)->select('id','title','img','img_1','content')->first();
-		if($xl){
-			$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+		if(request('p')=='d'){
+			$xl = WcXl::where('id',$xl_id)->select('id','title','img','img_1','content')->first();
+			if($xl){
+				$xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+				$xl->product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
+			}
+			$data['list'] = $xl;
+			return response_json(1,$data,'');
+		}else{
+			return response_json(0,[],'平台参数为d');
 		}
 
-		$product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
-		$data['xl'] = $xl;
-		$data['product'] = $product;
+
+	}
+
+	/**
+	 * 文创系列详情
+	 *
+	 * @author ljy 20180609
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 *
+	 * @api {GET} /xl_detail_a 4.服务信息-文创系列详情（lijinyu）
+	 * @apiGroup Service
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i:IOS a:安卓
+	 * @apiParam {int} xl_id 系列id
+	 * @apiSuccess {array} data
+	 * @apiSuccess {int} id 系列id
+	 * @apiSuccess {array} data.xl 系列数组
+	 * @apiSuccess {int} data.xl.id 系列id
+	 * @apiSuccess {string} data.xl.title 系列标题
+	 * @apiSuccess {string} data.xl.img 系列背景图
+	 * @apiSuccess {string} data.xl.img_1 系列小图标
+	 * @apiSuccess {string} data.xl.content 系列简介
+	 * @apiSuccess {string} data.xl.content_html 系列简介html地址
+	 * @apiSuccess {array} data.product 产品数组
+	 * @apiSuccess {int} data.product.id 产品id
+	 * @apiSuccess {int} data.product.xl_id 系列id
+	 * @apiSuccess {string} data.product.pro_title 产品名称
+	 * @apiSuccess {string} data.product.pro_img 产品图片
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"msg":"","data":{"xl":{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180611\/201806111150574905.png","img_1":"\/uploadfiles\/intro\/20180611\/201806111151001982.png"},"product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}]}}
+	 */
+	public function xl_detail_a(){
+		$xl_id = request('xl_id');
+		$curr_xl = WcXl::where('id',$xl_id)->select('id','title','img','img_1','content')->first();
+		if($curr_xl){
+			$curr_xl->content_html = '/api/xl_content?p='.request('p').'&xl_id='.$xl_id;
+			$curr_xl->product = WcProduct::where('is_show',1)->where('xl_id',$xl_id)->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
+		}
+		$data['list']['curr_xl'] = $curr_xl;
+
+		$xl_list = WcXl::select('id','title','img','img_1','content')->orderBy('order_no','desc')->get();
+		foreach($xl_list as $k=>$v){
+			$xl_list[$k]['content_html'] = '/api/xl_content?p='.request('p').'&xl_id='.$v['id'];
+			$xl_list[$k]['product'] = WcProduct::where('is_show',1)->where('xl_id',$v['id'])->select('id','xl_id','pro_title','pro_img')->orderBy('order_no','desc')->get();
+		}
+		$data['list']['list'] = $xl_list;
 		return response_json(1,$data,'');
 
 	}
