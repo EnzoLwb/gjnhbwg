@@ -60,6 +60,22 @@ return [
 				//资源打包时生成的图片名称
 				'zip_name' => 'imgs'
 			],
+			[
+				//图片字段存储键名,表单提交时的名称，不能与表单现有name重复
+				'key' => 'dlist_img',
+				//数据库存储类型
+				'upload_key' => 'FT_EXHIBIT_ONE',
+				//页面提示名称
+				'name' => '导览机列表图片(方图)',
+				//是否必传
+				'required' => true,
+				//是否上传多图
+				'is_more' => false,
+				//该资源是否打包
+				'is_zip' => true,
+				//资源打包时生成的图片名称
+				'zip_name' => 'dlist'
+			],
 		]
 	],
 	//展品配置
