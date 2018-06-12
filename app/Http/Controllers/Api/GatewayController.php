@@ -405,13 +405,17 @@ class GatewayController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
 	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
 	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
-	 * @apiParam {string} skip  页码 默认为0
-	 * @apiParam {string} take  每页聊天记录数量 默认为10
-	 * @apiSuccess {string} is_self  1为自己发送的 2为别人发给我的
-	 * @apiSuccess {string} send_type  1为文本 2为语音
-	 * @apiSuccess {string} send_msg  聊天内容
-	 * @apiSuccess {string} audio_duration  语音长度
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiParam {int} skip  页码 从1开始 默认为第一页
+	 * @apiParam {int} take  每页聊天记录数量 默认为10  传0代表返回全部聊天记录
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {array} chat_record 操作结果1成功0失败
+	 * @apiSuccess {object} avatar 双方头像
+	 * @apiSuccess {string} chat_record.is_self  1为自己发送的 2为别人发给我的
+	 * @apiSuccess {int} chat_record.send_type  1为文本 2为语音
+	 * @apiSuccess {string} chat_record.send_msg  聊天内容
+	 * @apiSuccess {int} chat_record.audio_duration  语音长度
+	 * @apiSuccess {string} avatar.from_avatar  我的头像
+	 * @apiSuccess {string} avatar.to_avatar  对方的头像
 	 */
 	public function chat_message()
 	{
@@ -419,19 +423,30 @@ class GatewayController extends Controller
 			'from_user_number' => 'required',
 			'to_user_number' => 'required'
 		]);
-		$skip=request('skip',0);
 		$take=request('take',10);
+		$skip=(request('skip',1)-1) * $take;
+
 		$from_user_number=request('from_user_number');
 		$to_user_number=request('to_user_number');
-		$list=ChatMessage::whereIn('from_user_number',[$from_user_number,$to_user_number])
+		$query=ChatMessage::whereIn('from_user_number',[$from_user_number,$to_user_number])
 			->whereIn('to_user_number',[$from_user_number,$to_user_number])
 			->select('from_user_number','send_type','audio_duration','send_msg')
-			->orderBy('created_at', 'desc')->skip($skip)->take($take)->get()->toArray();
+			->orderBy('created_at', 'desc');
+		if ($take!=0){
+			$query=$query->skip($skip)->take($take);
+		}
+		$list=$query->get()->toArray();
 		foreach ($list as &$v){
 			$v['is_self']=$v['from_user_number']==$from_user_number ? '1':'2';//1为自己发送的 2为别人发给我的
 			unset($v['from_user_number']);
 		}
-		return response_json(1, $list);
+		//双方头像
+		$avatar['to_user_number']=Users::where('uid',$to_user_number)->value('avatar');
+		$avatar['from_user_number']=Users::where('uid',$from_user_number)->value('avatar');
+
+		$data['chat_record']=$list;
+		$data['avatar']=$avatar;
+		return response_json(1, $data);
 	}
 	/**
 	 * 获取群组用户列表
