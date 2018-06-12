@@ -36,7 +36,8 @@ Route::get('map_exhibit', 'MapExhibitController@map_exhibit');
 Route::get('map_near_exhibition', 'MapExhibitController@map_near_exhibition');
 //附近展品
 Route::get('map_near_exhibit', 'MapExhibitController@map_near_exhibit');
-
+//线路生成接口
+Route::get('road_info', 'MapExhibitController@road_info');
 
 //导览机版本资源更新
 Route::get('update_version_resource', 'MapExhibitController@update_version_resource');

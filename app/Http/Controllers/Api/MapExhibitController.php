@@ -10,6 +10,8 @@ use App\Models\Exhibit;
 use App\Models\SvgMapTable;
 use App\Models\VersionList;
 use App\Models\VisitRoad;
+use App\Models\NavigationRoad;
+use App\Dao\NavigationDao;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -61,28 +63,27 @@ class MapExhibitController extends Controller
 			'map_id' => 'required|min:0|integer',
 		]);
 		$language = request('language', 1);
-		$map_id= request('map_id', 0);
+		$map_id = request('map_id', 0);
 		$data = [];
 		//获取展品信息
-		$exhibit_list =Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_map', 1)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibit.map_id','exhibit.x','exhibit.y','exhibit_language.audio');
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_map', 1)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit_language.audio');
 		//获取蓝牙关联详情
-		$auto_info=Autonum::select('exhibit_list','autonum','mx_and','mx_ios');
-		if($map_id){
-			$exhibit_list=$exhibit_list->where('exhibit.map_id',$map_id);
-			$auto_info=$auto_info->where('map_id',$map_id);
+		$auto_info = Autonum::select('exhibit_list', 'autonum', 'mx_and', 'mx_ios');
+		if ($map_id) {
+			$exhibit_list = $exhibit_list->where('exhibit.map_id', $map_id);
+			$auto_info = $auto_info->where('map_id', $map_id);
 		}
-		$exhibit_list=$exhibit_list->get();
-		$auto_info=$auto_info->get()->toArray();
+		$exhibit_list = $exhibit_list->get();
+		$auto_info = $auto_info->get()->toArray();
 
-
-		foreach ($auto_info as $k=>$g){
-			$auto_info[$k]['exhibit_list']=json_decode($g['exhibit_list']);
-			foreach ($auto_info[$k]['exhibit_list'] as $kk=>$gg){
-				$auto_string_list[$gg][]=$g['autonum'];
-				$auto_list[$gg][]=[
-					'autonum'=>$g['autonum'],
-					'mx_and'=>$g['mx_and'],
-					'mx_ios'=>$g['mx_ios'],
+		foreach ($auto_info as $k => $g) {
+			$auto_info[$k]['exhibit_list'] = json_decode($g['exhibit_list']);
+			foreach ($auto_info[$k]['exhibit_list'] as $kk => $gg) {
+				$auto_string_list[$gg][] = $g['autonum'];
+				$auto_list[$gg][] = [
+					'autonum' => $g['autonum'],
+					'mx_and' => $g['mx_and'],
+					'mx_ios' => $g['mx_ios'],
 				];
 			}
 		}
@@ -94,20 +95,17 @@ class MapExhibitController extends Controller
 			$data[$k]['map_id'] = $g->map_id;
 			$data[$k]['x'] = $g->x;
 			$data[$k]['y'] = $g->y;
-			if(isset($auto_string_list[$g->exhibit_id])&&isset($auto_list[$g->exhibit_id])){
-				$data[$k]['auto_string'] = implode('#',$auto_string_list[$g->exhibit_id]);
+			if (isset($auto_string_list[$g->exhibit_id]) && isset($auto_list[$g->exhibit_id])) {
+				$data[$k]['auto_string'] = implode('#', $auto_string_list[$g->exhibit_id]);
 				$data[$k]['auto_list'] = $auto_list[$g->exhibit_id];
-			}
-			else{
-				$data[$k]['auto_string']='';
+			} else {
+				$data[$k]['auto_string'] = '';
 				$data[$k]['auto_list'] = [];
 			}
 		}
 
 		return response_json(1, $data);
 	}
-
-
 
 	/**
 	 * 获取附近展厅
@@ -128,33 +126,31 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_img 展厅图片
 	 *
 	 */
-	public function map_near_exhibition(){
+	public function map_near_exhibition()
+	{
 		$this->validate([
 			'language' => 'required|min:0|integer',
 			'autonum' => 'required|min:0|integer',
 		]);
 		$language = request('language', 1);
 		$autonum = request('autonum', 1);
-		$exhibit=Autonum::where('autonum',$autonum)->value('exhibit_list');
-		$exhibit_arr=json_decode($exhibit,true);
-		if(!empty($exhibit_arr)&&is_array($exhibit_arr)){
-			$exhibition_id=Exhibit::whereIn('id',$exhibit_arr)->pluck('exhibition_id')->toArray();
-			if(!empty($exhibition_id)&&is_array($exhibition_id)){
-				$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->whereIn('exhibition.id',$exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toArray();
-				foreach ($exhibition as $k=>$g){
-					$exhibition[$k]['exhibition_img']=json_decode($g['exhibition_img'],true)['list_img'];
+		$exhibit = Autonum::where('autonum', $autonum)->value('exhibit_list');
+		$exhibit_arr = json_decode($exhibit, true);
+		if (!empty($exhibit_arr) && is_array($exhibit_arr)) {
+			$exhibition_id = Exhibit::whereIn('id', $exhibit_arr)->pluck('exhibition_id')->toArray();
+			if (!empty($exhibition_id) && is_array($exhibition_id)) {
+				$exhibition = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->whereIn('exhibition.id', $exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toArray();
+				foreach ($exhibition as $k => $g) {
+					$exhibition[$k]['exhibition_img'] = json_decode($g['exhibition_img'], true)['list_img'];
 				}
 				return response_json(1, $exhibition);
-			}
-			else{
+			} else {
 				return response_json(1, []);
 			}
-		}
-		else{
+		} else {
 			return response_json(1, []);
 		}
 	}
-
 
 	/**
 	 * 获取附近展品
@@ -175,46 +171,110 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {string} floor 所在楼层
 	 *
 	 */
-	public function map_near_exhibit(){
+	public function map_near_exhibit()
+	{
 		$this->validate([
 			'language' => 'required|min:0|integer',
 			'autonum_str' => 'required|string',
 		]);
 		$language = request('language', 1);
-		$autonum_str=request('autonum_str', 0);
+		$autonum_str = request('autonum_str', 0);
 		$arr = explode('#', $autonum_str);
-		$exhibit_id_arr=Autonum::whereIn('autonum',$arr)->pluck('exhibit_list');
-		if(empty($exhibit_id_arr)){
+		$exhibit_id_arr = Autonum::whereIn('autonum', $arr)->pluck('exhibit_list');
+		if (empty($exhibit_id_arr)) {
 			return response_json(1, []);
-		}
-		else{
-			$exhibit_arr=[];
-			foreach ($exhibit_id_arr as $k=>$g){
-				$exhibit_arr=array_merge(json_decode($g,true),$exhibit_arr);
+		} else {
+			$exhibit_arr = [];
+			foreach ($exhibit_id_arr as $k => $g) {
+				$exhibit_arr = array_merge(json_decode($g, true), $exhibit_arr);
 			}
-			$exhibit_arr=array_unique($exhibit_arr);
+			$exhibit_arr = array_unique($exhibit_arr);
 		}
 		$exhibit_list = Exhibit::join('exhibit_language', function ($join) use ($language) {
-			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')
-				->where('exhibit_language.language', '=', $language);
+			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 		})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
-			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')
-				->where('exhibition_language.language', '=', $language);
-		})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibition_language.exhibition_name','exhibition.floor_id')->get();
+			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
+		})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name', 'exhibition.floor_id')->get();
 
-		$data=[];
-		foreach ($exhibit_list as $k=>$g){
-			$imgs=json_decode($g['exhibit_img'], true);
-			$imgs=isset($imgs['exhibit_list'])?$imgs['exhibit_list']:'';
-			$data[$k]['exhibit_name']=$g['exhibit_name'];
-			$data[$k]['exhibit_id']=$g['exhibit_id'];
+		$data = [];
+		foreach ($exhibit_list as $k => $g) {
+			$imgs = json_decode($g['exhibit_img'], true);
+			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
+			$data[$k]['exhibit_name'] = $g['exhibit_name'];
+			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_list_img'] = $imgs;
-			$data[$k]['exhibition_name']=$g['exhibition_name'];
-			$data[$k]['floor']=config('floor')[$g['floor_id']];
+			$data[$k]['exhibition_name'] = $g['exhibition_name'];
+			$data[$k]['floor'] = config('floor')[$g['floor_id']];
 		}
 		return response_json(1, $data);
 	}
 
+	/**
+	 * 楼层路线生成接口
+	 *
+	 * @author yyj 20171117
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /road_info 03.楼层路线生成接口
+	 * @apiGroup MapExhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiParam {int} map_id 地图id（楼层）
+	 * @apiParam {int} road_id 路线id
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {int} x x轴坐标
+	 * @apiSuccess {int} y y轴坐标
+	 *
+	 */
+	public function road_info()
+	{
+
+		$this->validate([
+			'map_id' => 'required|in:1,2,3'
+		]);
+
+		$language = request('language', 1);
+		$map_id = request('map_id', 1);
+		$road_id = request('road_id', 1);
+		$road_info = [];
+
+		$road_exhibit = VisitRoad::where('id', $road_id)->where('type', 1)->first();
+
+		if (empty($road_exhibit)) {
+			return response_json(1, $road_info);
+		} else {
+			$weight_exhibit_ids_mapid='weight_exhibit_ids'.$map_id;
+
+			if (empty($road_exhibit[$weight_exhibit_ids_mapid])) {
+				return response_json(1, $road_info);
+			}
+
+			$exhibit_ids = json_decode($road_exhibit[$weight_exhibit_ids_mapid], true);
+
+			//获取要经过展品
+			$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->whereIn('exhibit.id', $exhibit_ids)->where('exhibit.map_id', $map_id)->where('exhibit.is_show_map', 1)->select('exhibit.auto_num', 'exhibit.x', 'exhibit.y')->orderBy('exhibit.auto_num', 'asc')->get()->toArray();
+			if (!empty($exhibit_list)) {
+				$n = count($exhibit_list);
+				$road_arr_info = [];
+				for ($i = 0; $i < $n - 1; $i++) {
+					$road_arr = NavigationDao::get_road($exhibit_list[$i]['x'], $exhibit_list[$i]['y'], $exhibit_list[$i + 1]['x'], $exhibit_list[$i + 1]['y'], $map_id);
+					if (count($road_arr_info) && count($road_arr)) {
+						unset($road_arr[0]);
+						$road_arr_info = array_merge($road_arr_info, $road_arr);
+					} else {
+						$road_arr_info = $road_arr;
+					}
+				}
+				$road_info = $road_arr_info;
+
+				return response_json(1, $road_info);
+			} else {
+				return response_json(1, []);
+			}
+
+		}
+	}
 
 	/**
 	 * 资源版本更新(导览机专用)
@@ -231,14 +291,15 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {string} version_id 版本编号
 	 * @apiSuccess {string} down_url 资源下载地址
 	 */
-	public function update_version_resource(){
+	public function update_version_resource()
+	{
 		$this->validate([
 			'version_id' => 'required|min:0|integer',
 		]);
 		$version = request('version_id');
 		//白板程序直接下载整包资源，版本更新到最高。
 		//当前最高版本
-		$the_newest=VersionList::where('type', '<>',0)->OrderBy('id','desc')->value('id');
+		$the_newest = VersionList::where('type', '<>', 0)->OrderBy('id', 'desc')->value('id');
 
 		if ($version == $the_newest) {
 			$info['is_update'] = 0;
@@ -251,16 +312,16 @@ class MapExhibitController extends Controller
 		} elseif ($version < $the_newest) {
 			$info = $this->get_zip($version, $the_newest);
 		} else {
-			return response_json(0, [],'版本号错误');
+			return response_json(0, [], '版本号错误');
 		}
-		return response_json(1, $info,'查询成功');
+		return response_json(1, $info, '查询成功');
 	}
 
 	private function get_zip($version, $the_newest)
 	{
 		//获取下一版本编号
 		$next_version = $version + 1;
-		if (file_exists(base_path() . '/public/resource_zip/version_'. $next_version . '/resource.zip')) {
+		if (file_exists(base_path() . '/public/resource_zip/version_' . $next_version . '/resource.zip')) {
 			$info['is_update'] = 1;
 			$info['version_id'] = $next_version;
 			$info['down_url'] = '/resource_zip/version_' . $next_version . '/resource.zip';
@@ -327,47 +388,46 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {string} autonum_list 相关联的蓝牙号
 	 * @apiSuccess {int} imgs_num 展品图片数量
 	 */
-	public function datas_info(){
+	public function datas_info()
+	{
 		//获取多模蓝牙数据
-		$info['autonum_list']=Autonum::orderBy('autonum','asc')->select('autonum','map_id','x','y','mx_dlj')->get()->toArray();
+		$info['autonum_list'] = Autonum::orderBy('autonum', 'asc')->select('autonum', 'map_id', 'x', 'y', 'mx_dlj')->get()->toArray();
 		//获取地图数据
-		$info['map_list']=SvgMapTable::select('id as map_id', 'floor_id', 'width', 'height')->get()->toArray();
+		$info['map_list'] = SvgMapTable::select('id as map_id', 'floor_id', 'width', 'height')->get()->toArray();
 		//获取语种数据
 		foreach (config('language') as $k => $g) {
 			//展厅数据
-			$info['exhibition_'.$g['dir']]=Exhibition::join('exhibition_language','exhibition.id','=','exhibition_language.exhibition_id')->where('exhibition_language.language','=',$k)->select('exhibition_language.exhibition_id','exhibition_language.exhibition_name','exhibition_language.exhibition_address','exhibition_language.exhibition_subtitle','exhibition_language.content as exhibition_content','exhibition.is_lb','exhibition.type','exhibition.is_show_list','exhibition.order_id','exhibition.floor_id')->get()->toArray();
+			$info['exhibition_' . $g['dir']] = Exhibition::join('exhibition_language', 'exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $k)->select('exhibition_language.exhibition_id', 'exhibition_language.exhibition_name', 'exhibition_language.exhibition_address', 'exhibition_language.exhibition_subtitle', 'exhibition_language.content as exhibition_content', 'exhibition.is_lb', 'exhibition.type', 'exhibition.is_show_list', 'exhibition.order_id', 'exhibition.floor_id')->get()->toArray();
 		}
 		//获取蓝牙关联详情
-		$auto_info=Autonum::select('exhibit_list','autonum','mx_and','mx_ios','mx_dlj');
-		$auto_info=$auto_info->get()->toArray();
-		foreach ($auto_info as $k=>$g){
-			$auto_info[$k]['exhibit_list']=json_decode($g['exhibit_list']);
-			foreach ($auto_info[$k]['exhibit_list'] as $kk=>$gg){
-				$auto_string_list[$gg][]=$g['autonum'];
-				$mxdlj_string_list[$gg][]=$g['mx_dlj'];
+		$auto_info = Autonum::select('exhibit_list', 'autonum', 'mx_and', 'mx_ios', 'mx_dlj');
+		$auto_info = $auto_info->get()->toArray();
+		foreach ($auto_info as $k => $g) {
+			$auto_info[$k]['exhibit_list'] = json_decode($g['exhibit_list']);
+			foreach ($auto_info[$k]['exhibit_list'] as $kk => $gg) {
+				$auto_string_list[$gg][] = $g['autonum'];
+				$mxdlj_string_list[$gg][] = $g['mx_dlj'];
 			}
 		}
 		foreach (config('language') as $k => $g) {
 			//展品数据
-			$info['exhibit_'.$g['dir']]=Exhibit::join('exhibit_language','exhibit.id','=','exhibit_language.exhibit_id')->where('exhibit_language.language','=',$k)->select('exhibit_language.exhibit_id','exhibit_language.exhibit_name','exhibit.is_lb','exhibit.is_show_map','exhibit.is_show_list','exhibit.map_id','exhibit.x','exhibit.y','exhibit.exhibition_id','exhibit.exhibit_num','exhibit.order_id','exhibit.type','exhibit.imgs_num')->get()->toArray();
-			foreach ($info['exhibit_'.$g['dir']] as $kk=>$gg){
-				if(isset($auto_string_list[$gg['exhibit_id']])){
-					$info['exhibit_'.$g['dir']][$kk]['autonum_list']=implode('#',$auto_string_list[$gg['exhibit_id']]);
-					$info['exhibit_'.$g['dir']][$kk]['mx_dlj_list']=implode('#',$mxdlj_string_list[$gg['exhibit_id']]);
-				}
-				else{
-					$info['exhibit_'.$g['dir']][$kk]['autonum_list']='';
-					$info['exhibit_'.$g['dir']][$kk]['mx_dlj_list']='';
+			$info['exhibit_' . $g['dir']] = Exhibit::join('exhibit_language', 'exhibit.id', '=', 'exhibit_language.exhibit_id')->where('exhibit_language.language', '=', $k)->select('exhibit_language.exhibit_id', 'exhibit_language.exhibit_name', 'exhibit.is_lb', 'exhibit.is_show_map', 'exhibit.is_show_list', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit.exhibition_id', 'exhibit.exhibit_num', 'exhibit.order_id', 'exhibit.type', 'exhibit.imgs_num')->get()->toArray();
+			foreach ($info['exhibit_' . $g['dir']] as $kk => $gg) {
+				if (isset($auto_string_list[$gg['exhibit_id']])) {
+					$info['exhibit_' . $g['dir']][$kk]['autonum_list'] = implode('#', $auto_string_list[$gg['exhibit_id']]);
+					$info['exhibit_' . $g['dir']][$kk]['mx_dlj_list'] = implode('#', $mxdlj_string_list[$gg['exhibit_id']]);
+				} else {
+					$info['exhibit_' . $g['dir']][$kk]['autonum_list'] = '';
+					$info['exhibit_' . $g['dir']][$kk]['mx_dlj_list'] = '';
 				}
 			}
 		}
 
 		foreach (config('language') as $k => $g) {
 			//线路数据
-			$info['road_'.$g['dir']]=VisitRoad::join('visit_road_language','visit_road.id','=','visit_road_language.road_id')->where('visit_road_language.language','=',$k)->select('visit_road_language.road_id','visit_road_language.road_name')->get()->toArray();
+			$info['road_' . $g['dir']] = VisitRoad::join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road_language.language', '=', $k)->select('visit_road_language.road_id', 'visit_road_language.road_name')->get()->toArray();
 		}
 
-
-		return response_json(1, $info,'查询成功');
+		return response_json(1, $info, '查询成功');
 	}
 }
