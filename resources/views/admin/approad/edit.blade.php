@@ -141,11 +141,6 @@
             var $ = layui.jquery
                     , element = layui.element(); //Tab的切换功能，切换事件监听等，需要依赖element模块
         });
-//        $(".exhibit_box input[type='checkbox']").click(function(){
-        //          var check = $(this).find("input");
-        var check = $(this);
-        console.log(check.prop('checked'))
-        check.prop('checked', check.prop('checked'));
-        })
+
     </script>
 @endsection
