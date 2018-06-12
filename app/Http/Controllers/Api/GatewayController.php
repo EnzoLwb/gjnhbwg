@@ -258,7 +258,7 @@ class GatewayController extends Controller
 	 *
 	 * @author lwb 20180608
 	 *
-	 * @api {Get} /gateway/send_msg 06.私聊发送消息
+	 * @api {Post} /gateway/send_msg 06.私聊发送消息
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
