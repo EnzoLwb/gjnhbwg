@@ -72,6 +72,7 @@ class WenchuangController extends Controller
 	 * @apiSuccess {int} data.product.xl_id 系列id
 	 * @apiSuccess {string} data.product.pro_title 产品名称
 	 * @apiSuccess {string} data.product.pro_img 产品图片
+	 * @apiSuccess {string} data.product.product_html 产品html
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"msg":"","data":{"xl":{"id":3,"title":"\u5370\u8c61\u4e03\u8fde\u5c7f","img":"\/uploadfiles\/intro\/20180611\/201806111150574905.png","img_1":"\/uploadfiles\/intro\/20180611\/201806111151001982.png"},"product":[{"id":1,"xl_id":3,"pro_title":"\u4ea7\u54c1\u4e001","pro_img":"\/uploadfiles\/intro\/20180611\/201806111515256226.png"}]}}
 	 */
