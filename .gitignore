@@ -1,9 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
-/public/resource_zip/exhibit
-/public/resource_zip/exhibition
-/public/resource_zip/version_*
+/public/resource_zip
 /storage/*.key
 /vendor
 /.idea
