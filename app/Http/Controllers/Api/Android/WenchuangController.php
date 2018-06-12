@@ -2,6 +2,6 @@
 
 namespace App\Http\Controllers\Api\Android;
 
-class WenchuangController extends \App\Http\Controllers\Api\WenchuangController
+class WenchuangController extends \App\Http\Controllers\Api\Service\WenchuangController
 {
 }
