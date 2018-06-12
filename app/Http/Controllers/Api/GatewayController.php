@@ -51,7 +51,6 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid 导览机传唯一设备号
 	 * @apiParam {string} client_id 链接上tcp后获得的client_id
 	 * @apiSuccess {int} data 操作结果1成功0失败
-	 * @apiSuccess {string} uid 私聊等地方用到的uid
 	 */
 	public function bind()
 	{
@@ -145,8 +144,8 @@ class GatewayController extends Controller
 	 * @apiParam {int} user_number  app传uid   导览机传唯一设备号
 	 * @apiParam {string} group_name 群组名称
 	 * @apiSuccess {object} data 操作结果1成功0失败
-	 * @apiSuccess {object} my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
-	 * @apiSuccess {object} group_info  group_id 群组ID号  group_number 群组对外ID号  name 群组名称
+	 * @apiSuccess {object} data.my_info 个人信息(导览机就返回空对象)(手机端返回 头像:avatar 昵称:nickname)
+	 * @apiSuccess {object} data.group_info  group_id 群组ID号  group_number 群组对外ID号  name 群组名称
 	 */
 	public function create_group(){
 		$this->validate([
@@ -201,9 +200,9 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiParam {int} group_number 对外显示的群组id号
 	 * @apiSuccess {object} data 操作结果1成功0失败
-	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
-	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
-	 * @apiSuccess {array} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 * @apiSuccess {object} data.group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
+	 * @apiSuccess {object} data.my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
+	 * @apiSuccess {array} data.user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
 	 */
 	public function join_group(){
 		$this->validate([
@@ -405,13 +404,17 @@ class GatewayController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
 	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
 	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
-	 * @apiParam {string} skip  页码 默认为0
-	 * @apiParam {string} take  每页聊天记录数量 默认为10
-	 * @apiSuccess {string} is_self  1为自己发送的 2为别人发给我的
-	 * @apiSuccess {string} send_type  1为文本 2为语音
-	 * @apiSuccess {string} send_msg  聊天内容
-	 * @apiSuccess {string} audio_duration  语音长度
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiParam {int} skip  页码 从1开始 默认为第一页
+	 * @apiParam {int} take  每页聊天记录数量 默认为10  传0代表返回全部聊天记录
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {array} chat_record 操作结果1成功0失败
+	 * @apiSuccess {object} avatar 双方头像
+	 * @apiSuccess {string} chat_record.is_self  1为自己发送的 2为别人发给我的
+	 * @apiSuccess {int} chat_record.send_type  1为文本 2为语音
+	 * @apiSuccess {string} chat_record.send_msg  聊天内容
+	 * @apiSuccess {int} chat_record.audio_duration  语音长度
+	 * @apiSuccess {string} avatar.from_avatar  我的头像
+	 * @apiSuccess {string} avatar.to_avatar  对方的头像
 	 */
 	public function chat_message()
 	{
@@ -419,19 +422,30 @@ class GatewayController extends Controller
 			'from_user_number' => 'required',
 			'to_user_number' => 'required'
 		]);
-		$skip=request('skip',0);
 		$take=request('take',10);
+		$skip=(request('skip',1)-1) * $take;
+
 		$from_user_number=request('from_user_number');
 		$to_user_number=request('to_user_number');
-		$list=ChatMessage::whereIn('from_user_number',[$from_user_number,$to_user_number])
+		$query=ChatMessage::whereIn('from_user_number',[$from_user_number,$to_user_number])
 			->whereIn('to_user_number',[$from_user_number,$to_user_number])
 			->select('from_user_number','send_type','audio_duration','send_msg')
-			->orderBy('created_at', 'desc')->skip($skip)->take($take)->get()->toArray();
+			->orderBy('created_at', 'desc');
+		if ($take!=0){
+			$query=$query->skip($skip)->take($take);
+		}
+		$list=$query->get()->toArray();
 		foreach ($list as &$v){
 			$v['is_self']=$v['from_user_number']==$from_user_number ? '1':'2';//1为自己发送的 2为别人发给我的
 			unset($v['from_user_number']);
 		}
-		return response_json(1, $list);
+		//双方头像
+		$avatar['to_user_number']=Users::where('uid',$to_user_number)->value('avatar');
+		$avatar['from_user_number']=Users::where('uid',$from_user_number)->value('avatar');
+
+		$data['chat_record']=$list;
+		$data['avatar']=$avatar;
+		return response_json(1, $data);
 	}
 	/**
 	 * 获取群组用户列表
@@ -445,9 +459,9 @@ class GatewayController extends Controller
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiParam {string} group_number 对外的群组ID
 	 * @apiSuccess {object} data 操作结果1成功0失败
-	 * @apiSuccess {object} group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
-	 * @apiSuccess {object} my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
-	 * @apiSuccess {array} user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 * @apiSuccess {object} data.group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
+	 * @apiSuccess {object} data.my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
+	 * @apiSuccess {array} data.user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
 	 */
 	public function users_list()
 	{
