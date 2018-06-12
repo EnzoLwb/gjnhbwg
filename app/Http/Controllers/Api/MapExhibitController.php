@@ -162,7 +162,7 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_near_exhibit 03.获取附近展品
+	 * @api {GET} /map_near_exhibit 02.获取附近展品
 	 * @apiGroup MapExhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
