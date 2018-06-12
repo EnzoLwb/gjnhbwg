@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class GatewayController extends Controller
 {
-	//导览机前缀
-	const BIND_APP='app_';
-	const BIND_DLJ='dlj_';
+
 	public function __construct()
 	{
 		parent::_init();
@@ -260,7 +258,7 @@ class GatewayController extends Controller
 	 *
 	 * @author lwb 20180608
 	 *
-	 * @api {Get} /gateway/send_msg 06.私聊发送消息
+	 * @api {Post} /gateway/send_msg 06.私聊发送消息
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
@@ -303,6 +301,11 @@ class GatewayController extends Controller
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1,'','发送成功');
+	}
+	//获得所有uid  测试用
+	public function getAllUid(){
+		$list=GatewayLib::getAllUidList();
+		dd($list);
 	}
 	/**
 	 * 退出群组
@@ -410,7 +413,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} audio_duration  语音长度
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
-	public function chat_list()
+	public function chat_message()
 	{
 		$this->validate([
 			'from_user_number' => 'required',
