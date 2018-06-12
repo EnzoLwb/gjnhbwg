@@ -32,7 +32,7 @@ class GatewayController extends Controller
 	 * (1.bind:机器号绑定;2.heart:心跳响应;3.chat:信息推送),
 	 * type等于bind 机器号/uid绑定,执行uid/设备绑定接口,
 	 * type等于heart 心跳响应,使用tcp链接向服务器发送string数据'pong';
-	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息 'error_msg' 表示 断开连接或者其它问题
+	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息 'error_msg' 表示 断开连接或者其它问题 3代表有人加群或者退出群组
 	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
 	 * @apiSuccess {string} send_content 信息内容
@@ -249,7 +249,11 @@ class GatewayController extends Controller
 			'device_type' =>$plat,
 		]);
 		GatewayLib::joinGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_info['id']);
-
+		//通知群组里的人
+		$arr['type'] = 'sent_msg';
+		$arr['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
+		$arr['send_content'] = '加入群组';
+		GatewayLib::sendToGroup($group_info['id'],json_encode($arr));
 		return response_json(1, $data, '加入成功');
 	}
 	/**
@@ -331,6 +335,11 @@ class GatewayController extends Controller
 		$arr=['member_id'=>$user_number,'group_id'=>$group_id];
 		GroupMember::where($arr)->delete();
 		GatewayLib::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
+		//通知群组里的人
+		$arr2['type'] = 'sent_msg';
+		$arr2['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
+		$arr2['send_content'] = '退出群组';
+		GatewayLib::sendToGroup($group_id,json_encode($arr2));
 		return response_json(1, '', '退出成功');
 	}
 	/**
