@@ -76,8 +76,11 @@ class XjhdController extends Controller
 	public function xjhd_detail(){
 		$id = request('id');
 		$data = Xjhd::where('id',$id)->first();
-		$data->active_date = date("Y.m.d",strtotime($data->active_start_date)).'-'.date("m.d",strtotime($data->active_end_date));
-		$data->active_content_html = '/api/xjhd_content?p='.request('p').'&id='.$id;
+		if($data){
+			$data->active_date = date("Y.m.d",strtotime($data->active_start_date)).'-'.date("m.d",strtotime($data->active_end_date));
+			$data->active_content_html = '/api/xjhd_content?p='.request('p').'&id='.$id;
+		}
+
 		return response_json(1,$data,'');
 	}
 
