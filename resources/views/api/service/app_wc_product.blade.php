@@ -15,7 +15,7 @@
 </head>
 <body>
 {{--<img src="{{get_file_url($data->pro_img)}}">--}}
-{!! $data->pro_content !!}
+{{--{!! $data->pro_content !!}--}}
 <div>
     <img src="{{get_file_url($data->pro_img)}}" alt=""/>
     {!! $data->pro_content !!}
