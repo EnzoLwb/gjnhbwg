@@ -25,6 +25,7 @@ class CreateServicePointTable extends Migration
 			$table->string('service_name',20)->comment('服务设施名称');
 			$table->unsignedInteger('x')->comment('x轴坐标')->default(0);
 			$table->unsignedInteger('y')->comment('y轴坐标')->default(0);
+			$table->tinyInteger('stype', false, true)->comment('类型，对应stype.php配置项')->default(1);
 			$table->timestamps();
 
 			if (env('DB_CONNECTION') == 'oracle') {
