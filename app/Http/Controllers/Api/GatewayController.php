@@ -8,6 +8,7 @@ use App\Models\ChatMessage;
 use App\Models\Dlj;
 use App\Models\Group;
 use App\Models\GroupMember;
+use App\Models\Trajectory;
 use App\Models\Users;
 use GatewayWorker\Lib\Gateway AS GatewayLib;
 use Illuminate\Support\Facades\Auth;
@@ -516,5 +517,30 @@ class GatewayController extends Controller
 			unset($v['member_id'],$v['uid']);
 		}
 		return response_json(1, $data);
+	}
+	/**
+	 * 获取位置坐标
+	 *
+	 * @author lwb 20180613
+	 *
+	 * @api {get} /gateway/get_gps 11.获取当前位置
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {int} data.x  x坐标
+	 * @apiSuccess {int} data.y  y坐标
+	 * @apiSuccess {int} data.map_id 地图编号
+	 */
+	public function get_gps()
+	{
+		$this->validate([
+			'user_number' => 'required',
+		]);
+		$user_number=request('user_number');
+		$type=request('p')!='d' ? 'uid':'deviceno';
+		$res=Trajectory::where($type,$user_number)->orderby('updated_at','desc')->select('x','y','map_id')->first()->toArray();
+		return response_json(1,$res);
 	}
 }

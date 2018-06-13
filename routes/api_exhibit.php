@@ -29,6 +29,8 @@ Route::get('comment_list', 'ExhibitController@comment_list');
 Route::get('visit_exhibit', 'ExhibitController@visit_exhibit');
 //展品搜索接口
 Route::get('exhibit_search', 'ExhibitController@exhibit_search');
+//热门展品接口
+Route::get('exhibit_hot', 'ExhibitController@exhibit_hot');
 
 //获取地图页展品数据
 Route::get('map_exhibit', 'MapExhibitController@map_exhibit');
@@ -38,6 +40,10 @@ Route::get('map_near_exhibition', 'MapExhibitController@map_near_exhibition');
 Route::get('map_near_exhibit', 'MapExhibitController@map_near_exhibit');
 //线路生成接口
 Route::get('road_info', 'MapExhibitController@road_info');
+//线路列表接口
+Route::get('road_list', 'MapExhibitController@road_list');
+//线路详情接口
+Route::get('road_detail', 'MapExhibitController@road_detail');
 
 //导览机版本资源更新
 Route::get('update_version_resource', 'MapExhibitController@update_version_resource');

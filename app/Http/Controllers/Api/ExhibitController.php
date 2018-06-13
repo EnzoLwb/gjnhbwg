@@ -35,7 +35,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibition_list 00.获取所有展厅接口
+	 * @api {GET} /exhibition_list 100.获取所有展厅接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -82,7 +82,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20171110
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibition_info 01.展厅详情接口
+	 * @api {GET} /exhibition_info 101.展厅详情接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -176,7 +176,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibit_list 02.展品列表接口
+	 * @api {GET} /exhibit_list 102.展品列表接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -225,7 +225,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibit_info 03.展品详情接口
+	 * @api {GET} /exhibit_info 103.展品详情接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -266,11 +266,12 @@ class ExhibitController extends Controller
 			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 		})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
 			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
-		})->where('exhibit.id', $exhibit_id)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_language.audio', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibition_language.exhibition_name', 'exhibition.floor_id', 'exhibit.exhibition_id')->first();
+		})->where('exhibit.id', $exhibit_id)->select('exhibit_language.exhibit_name','exhibit_language.content as exhibit_content', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_language.audio', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibition_language.exhibition_name', 'exhibition.floor_id', 'exhibit.exhibition_id')->first();
 		$data = [];
 		if (!empty($exhibit_info)) {
 			$data['exhibit_id'] = $exhibit_info->exhibit_id;
 			$data['exhibit_name'] = $exhibit_info->exhibit_name;
+			$data['exhibit_content'] = $exhibit_info->exhibit_content;
 			$data['exhibit_imgs'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_imgs'];
 			$data['exhibit_list'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_list'];
 			$data['exhibit_icon1'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_icon1'];
@@ -383,7 +384,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /do_like 04.展品点赞收藏添加取消操作接口（系统自动判断执行添加还是取消）
+	 * @api {GET} /do_like 104.展品点赞收藏添加取消操作接口（系统自动判断执行添加还是取消）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -440,7 +441,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {POST} /exhibit_comment 05.展厅/展品评论接口
+	 * @api {POST} /exhibit_comment 105.展厅/展品评论接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -489,7 +490,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /comment_list 06.展厅/展品评论列表
+	 * @api {GET} /comment_list 106.展厅/展品评论列表
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -534,7 +535,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /comment_do_like 07.评论点赞取消接口（系统自动判断执行添加还是取消）
+	 * @api {GET} /comment_do_like 107.评论点赞取消接口（系统自动判断执行添加还是取消）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -579,7 +580,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /visit_exhibit 08.展品浏览收听接口（浏览展品和播放语音时调用）
+	 * @api {GET} /visit_exhibit 108.展品浏览收听接口（浏览展品和播放语音时调用）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -647,7 +648,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibit_search 09.展品搜索接口
+	 * @api {GET} /exhibit_search 109.展品搜索接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -688,4 +689,54 @@ class ExhibitController extends Controller
 		}
 		return response_json(1, $data);
 	}
+
+
+
+	/**
+	 * 热门展品接口
+	 *
+	 * @author yyj 20180321
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /exhibit_hot 110.热门展品接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiParam {int} skip 数据偏移量默认0
+	 * @apiParam {int} take 查询数量默认10
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {string} exhibit_name 展品名称
+	 * @apiSuccess {string} exhibit_list_img 展品图片
+	 * @apiSuccess {string} audio 音频
+	 * @apiSuccess {int} exhibit_id 展品id
+	 * @apiSuccess {int} look_num 浏览数量
+	 * @apiSuccess {int} like_num 点赞数量
+	 */
+	public function exhibit_hot()
+	{
+		$this->validate([
+			'language' => 'required|min:0|integer',
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
+		]);
+		$language = request('language', 1);
+		$skip = request('skip', 0);
+		$take = request('take', 10);
+		$exhibition_id = request('exhibition_id', 0);
+		$data = [];
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->orderBy('exhibit.look_num', 'desc')->orderBy('exhibit.like_num', 'desc')->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
+		foreach ($exhibit_list as $k => $g) {
+			$imgs = json_decode($g['exhibit_img'], true);
+			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
+			$data[$k]['exhibit_list_img'] = $imgs;
+			$data[$k]['exhibit_id'] = $g['exhibit_id'];
+			$data[$k]['exhibit_name'] = $g['exhibit_name'];
+			$data[$k]['audio'] = $g['audio'];
+			$data[$k]['look_num'] = $g['look_num'];
+			$data[$k]['like_num'] = $g['like_num'];
+		}
+		return response_json(1, $data);
+	}
+
 }

@@ -35,8 +35,8 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_exhibit 01.获取地图页展品数据
-	 * @apiGroup MapExhibit
+	 * @api {GET} /map_exhibit 301.获取地图页展品数据
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
@@ -66,7 +66,7 @@ class MapExhibitController extends Controller
 		$map_id = request('map_id', 0);
 		$data = [];
 		//获取展品信息
-		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_map', 1)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit_language.audio');
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_map', 1)->select('exhibit_language.exhibit_name','exhibit_language.content as exhibit_content', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit_language.audio');
 		//获取蓝牙关联详情
 		$auto_info = Autonum::select('exhibit_list', 'autonum', 'mx_and', 'mx_ios');
 		if ($map_id) {
@@ -90,6 +90,7 @@ class MapExhibitController extends Controller
 		foreach ($exhibit_list as $k => $g) {
 			$data[$k]['exhibit_id'] = $g->exhibit_id;
 			$data[$k]['exhibit_name'] = $g->exhibit_name;
+			$data[$k]['exhibit_content'] = $g->exhibit_content;
 			$data[$k]['exhibit_icon1'] = json_decode($g->exhibit_img, true)['exhibit_icon1'];
 			$data[$k]['exhibit_icon2'] = json_decode($g->exhibit_img, true)['exhibit_icon2'];
 			$data[$k]['map_id'] = $g->map_id;
@@ -158,8 +159,8 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_near_exhibit 02.获取附近展品
-	 * @apiGroup MapExhibit
+	 * @api {GET} /map_near_exhibit 302.获取附近展品
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
@@ -215,8 +216,8 @@ class MapExhibitController extends Controller
 	 * @author yyj 20171117
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /road_info 03.楼层路线生成接口
-	 * @apiGroup MapExhibit
+	 * @api {GET} /road_info 303.楼层路线生成接口
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
@@ -275,6 +276,74 @@ class MapExhibitController extends Controller
 
 		}
 	}
+
+
+	/**
+	 * 路线列表接口
+	 *
+	 * @author yyj 20171117
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /road_list 304.路线列表接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {int} data.road_id 线路id
+	 * @apiSuccess {string} data.road_name 线路名
+	 * @apiSuccess {string} data.road_img 线路图
+	 *
+	 */
+	public function road_list()
+	{
+		$this->validate([
+			'language' => 'required|min:0|integer',
+		]);
+		$language = request('language', 1);
+		$data = [];
+		// 处理排序
+		$query = VisitRoad::orderBy('visit_road.id', 'asc')->join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road.type', 1)->where('visit_road_language.language', $language);
+
+		// 取得列表
+		$data = $query->select('visit_road.id as road_id', 'visit_road_language.road_name', 'visit_road.road_img')->get();
+		return response_json(1, $data);
+	}
+
+
+	/**
+	 * 路线列表接口
+	 *
+	 * @author yyj 20171117
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /road_detail 305.路线详情接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {int} data.road_id 线路id
+	 * @apiSuccess {string} data.road_name 线路名
+	 * @apiSuccess {string} data.road_img 线路图
+	 *
+	 */
+	public function road_detail()
+	{
+		$this->validate([
+			'language' => 'required|min:0|integer',
+		]);
+		$language = request('language', 1);
+		$data = [];
+		// 处理排序
+		$query = VisitRoad::orderBy('visit_road.id', 'asc')->join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road.type', 1)->where('visit_road_language.language', $language);
+
+		// 取得列表
+		$data = $query->select('visit_road.id as road_id', 'visit_road_language.road_name', 'visit_road.road_img')->get();
+		return response_json(1, $data);
+	}
+
+
 
 	/**
 	 * 资源版本更新(导览机专用)

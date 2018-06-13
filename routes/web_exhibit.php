@@ -31,6 +31,9 @@ Route::group([
 		Route::get('/unpass_check/{type}/{ids}', 'ExhibitionController@unpass_check')->name('admin.data.exhibition.unpass_check');
 		// 删除
 		Route::get('/del_check/{type}/{ids}', 'ExhibitionController@del_check')->name('admin.data.exhibition.del_check');
+		//添加学习单题目
+		Route::get('/add_learn/{id}', 'ExhibitionController@add_learn')->name('admin.data.exhibition.add_learn');
+		Route::get('/save_learn/{exhibition_id}/{ids}', 'ExhibitionController@save_learn')->name('admin.data.exhibition.save_learn');
 	});
 
 	//展品管理

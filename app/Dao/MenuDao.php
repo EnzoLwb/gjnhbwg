@@ -144,6 +144,27 @@ class MenuDao extends BaseMdl
 					],
 				]
 			],
+			[
+				'text' => '互动管理',
+				'priv' => 'interaction',
+				'icon' => 'fa fa-users',
+				'order_num' => 10,
+				'nodes' => [
+					[
+						'text' => '学习单',
+						'url' => route('admin.interaction.learn.question_list'),
+						'priv' => 'admin-interaction-learn-question_list',
+						'order_num' => 10,
+					],
+//					[
+//						'text' => '问卷调查',
+//						'url' => route('admin.interaction.question'),
+//						'priv' => 'admin-interaction-question',
+//						'order_num' => 10,
+//					],
+
+				]
+			],
 
 		];
 
