@@ -137,7 +137,7 @@ class WenchuangController extends Controller
 	public function xl_content(){
 		$xl_id = request('xl_id');
 		$p = request('p');
-		$content = WcXl::where('xl_id',$xl_id)->value('content');
+		$content = WcXl::where('id',$xl_id)->value('content');
 		if($p=='d'){
 			return view('api.service.dlj_wc_xl',[
 				'data'=>$content
