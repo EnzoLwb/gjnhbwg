@@ -266,11 +266,12 @@ class ExhibitController extends Controller
 			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 		})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
 			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
-		})->where('exhibit.id', $exhibit_id)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_language.audio', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibition_language.exhibition_name', 'exhibition.floor_id', 'exhibit.exhibition_id')->first();
+		})->where('exhibit.id', $exhibit_id)->select('exhibit_language.exhibit_name','exhibit_language.content as exhibit_content', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_language.audio', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibition_language.exhibition_name', 'exhibition.floor_id', 'exhibit.exhibition_id')->first();
 		$data = [];
 		if (!empty($exhibit_info)) {
 			$data['exhibit_id'] = $exhibit_info->exhibit_id;
 			$data['exhibit_name'] = $exhibit_info->exhibit_name;
+			$data['exhibit_content'] = $exhibit_info->exhibit_content;
 			$data['exhibit_imgs'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_imgs'];
 			$data['exhibit_list'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_list'];
 			$data['exhibit_icon1'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_icon1'];
