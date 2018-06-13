@@ -501,4 +501,30 @@ class UsersController extends Controller
 
 		return response_json(1,1);
 	}
+
+	/**
+	 * 登出（清除设备号）
+	 *
+	 * @author lxp 20170905
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /users/check_token 8. 验证token登录状态
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} api_token 用户签名
+	 * @apiSuccess {int} data  1登录中   -1未登录
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":[],"msg":""}
+	 */
+	public function check_token()
+	{
+		$user = Users::where('api_token',request('api_token'))->first();
+		if($user){
+			return response_json(1,1);
+		}else{
+			return response_json(1,-1);
+		}
+	}
+
 }
