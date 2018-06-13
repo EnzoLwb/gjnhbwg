@@ -411,7 +411,7 @@ class MapExhibitController extends Controller
 		}
 		foreach (config('language') as $k => $g) {
 			//展品数据
-			$info['exhibit_' . $g['dir']] = Exhibit::join('exhibit_language', 'exhibit.id', '=', 'exhibit_language.exhibit_id')->where('exhibit_language.language', '=', $k)->select('exhibit_language.exhibit_id', 'exhibit_language.exhibit_name', 'exhibit.is_lb', 'exhibit.is_show_map', 'exhibit.is_show_list', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit.exhibition_id', 'exhibit.exhibit_num', 'exhibit.order_id', 'exhibit.type', 'exhibit.imgs_num')->get()->toArray();
+			$info['exhibit_' . $g['dir']] = Exhibit::join('exhibit_language', 'exhibit.id', '=', 'exhibit_language.exhibit_id')->where('exhibit_language.language', '=', $k)->select('exhibit_language.exhibit_id', 'exhibit_language.exhibit_name','exhibit_language.content as exhibit_content', 'exhibit.is_lb', 'exhibit.is_show_map', 'exhibit.is_show_list', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit.exhibition_id', 'exhibit.exhibit_num', 'exhibit.order_id', 'exhibit.type', 'exhibit.imgs_num')->get()->toArray();
 			foreach ($info['exhibit_' . $g['dir']] as $kk => $gg) {
 				if (isset($auto_string_list[$gg['exhibit_id']])) {
 					$info['exhibit_' . $g['dir']][$kk]['autonum_list'] = implode('#', $auto_string_list[$gg['exhibit_id']]);
