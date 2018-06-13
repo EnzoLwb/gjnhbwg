@@ -90,8 +90,10 @@ class XjhdController extends Controller
 		$p = request('p');
 		$content = Xjhd::where('id',$id)->value('content');
 		if($p=='d'){
+			$data = Xjhd::where('id',$id)->first();
+			$data['active_date'] = date("Y.m.d",strtotime($data['active_start_date'])).'-'.date("m.d",strtotime($data['active_end_date']));
 			return view('api.service.dlj_xjhd_content',[
-				'data'=>$content
+				'data'=>$data
 			]);
 		}else{
 			return view('api.service.app_xjhd_content',[

@@ -87,8 +87,7 @@ class WenchuangController extends Controller
 					$xl['product'][$k]['product_html'] ='/api/product_content?p='.request('p').'&product_id='.$v['id'];
 				}
 			}
-			$data['list'] = $xl;
-			return response_json(1,$data,'');
+			return response_json(1,$xl,'');
 		}else{
 			return response_json(0,[],'平台参数为d');
 		}
