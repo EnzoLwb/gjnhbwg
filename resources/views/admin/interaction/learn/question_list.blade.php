@@ -21,8 +21,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <table class="table table-striped table-bordered table-hover dataTables-example dataTable">
+                        <table class="table table-striped table-new table-hover infoTables-example infoTable">
                             <thead>
                             <tr role="row">
                                 <th>题目编号</th>
@@ -49,7 +48,6 @@
                                 <span>共 {{ $list->total() }} 条记录</span>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

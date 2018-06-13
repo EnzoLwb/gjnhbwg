@@ -22,8 +22,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <table class="table table-striped table-bordered table-hover dataTables-example dataTable">
+                    <table class="table table-striped table-new table-hover infoTables-example infoTable">
                             <thead>
                             <tr role="row">
                                 <th width="2%"><input type="checkbox" class="checkAll"></th>
@@ -49,7 +48,6 @@
                                 {!! $list->links() !!}
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -331,7 +331,6 @@ class ExhibitionController extends BaseAdminController
 	}
 	public function save_learn($exhibition_id,$learn_ids){
 		if (request()->ajax()) {
-
 			$idArray = explode(',', $learn_ids);
 			print_r($idArray);
 		}
