@@ -40,6 +40,10 @@ Route::get('map_near_exhibition', 'MapExhibitController@map_near_exhibition');
 Route::get('map_near_exhibit', 'MapExhibitController@map_near_exhibit');
 //线路生成接口
 Route::get('road_info', 'MapExhibitController@road_info');
+//线路列表接口
+Route::get('road_list', 'MapExhibitController@road_list');
+//线路详情接口
+Route::get('road_detail', 'MapExhibitController@road_detail');
 
 //导览机版本资源更新
 Route::get('update_version_resource', 'MapExhibitController@update_version_resource');
