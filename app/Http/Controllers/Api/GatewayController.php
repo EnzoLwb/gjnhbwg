@@ -368,7 +368,6 @@ class GatewayController extends Controller
 			'from_user_number' => 'required',
 			'to_user_number' => 'required',
 			'chat_audio' => 'required|file',
-			'length' => 'required'
 		]);
 		$scheme = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
 		$url = $scheme.$_SERVER['HTTP_HOST'];
