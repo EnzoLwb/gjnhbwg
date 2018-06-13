@@ -154,7 +154,7 @@ class WenchuangController extends Controller
 	public function product_content(){
 		$product_id = request('product_id');
 		$p = request('p');
-		$data = WcProduct::where('id',$product_id)->select('pro_content','pro_img')->first();
+		$data = WcProduct::where('id',$product_id)->select('pro_content','pro_img','pro_title')->first();
 		if($p=='d'){
 			return view('api.service.dlj_wc_product',[
 				'data'=>$data

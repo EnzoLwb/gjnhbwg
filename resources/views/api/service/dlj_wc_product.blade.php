@@ -11,6 +11,9 @@
 </head>
 <body>
 <img src="{{get_file_url($data->pro_img)}}">
+<!--标题--!>
+{{$data->pro_title}}
+<!--内容--!>
 {!! $data->pro_content !!}
 </body>
 

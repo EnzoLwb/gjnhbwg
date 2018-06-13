@@ -31,7 +31,7 @@
                             </thead>
                             @foreach($list as $k=>$v)
                                 <tr class="gradeA">
-                                    <td><input type="checkbox" class="checkItem"  value="{{$v['id']}}"></td>
+                                    <td><input type="checkbox" class="checkItem" @if(isset($v['exhibition_id']))checked @endif value="{{$v['id']}}"></td>
                                     <td>{{$v['title']}}</td>
 
                                 </tr>
@@ -39,7 +39,7 @@
                         </table>
                         <div class="row">
                             <div class="col-sm-12">
-                                <button type="button" class="btn btn-danger btn-sm checkBtn" uri="{{route('admin.data.exhibition.save_learn',[$exhibition_id,$v['id']])}}" msg="是否选择学习单题目">保存</button>
+                                <button type="button" class="btn btn-danger btn-sm checkBtn" uri="{{route('admin.data.exhibition.save_learn',[$exhibition_id,''])}}" msg="是否选择学习单题目">保存</button>
                             </div>
                         </div>
                         <div class="row">

@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-class CreateLearnTable extends Migration
+class CreateLearnRelationTable extends Migration
 {
-	private $tableName = 'learn';
-	private $tableComment = '学习单题库表';
+	private $tableName = 'learn_relation';
+	private $tableComment = '学习单关联表';
 	private $primaryKey = 'id';
 	/**
 	 * Run the migrations.
@@ -18,7 +18,9 @@ class CreateLearnTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments('id');
-			$table->text('title')->comment('问题题目')->nullable();
+			$table->integer('learn_id')->comment('题目id')->default(0);
+			$table->integer('exhibit_id')->comment('展品id')->default(0);
+			$table->integer('exhibition_id')->comment('展厅id')->default(0);
 			if (env('DB_CONNECTION') == 'oracle') {
 				$table->comment = $this->tableComment;
 			}
