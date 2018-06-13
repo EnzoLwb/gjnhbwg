@@ -10,6 +10,7 @@ use App\Models\Exhibition;
 use App\Models\ExhibitionLanguage;
 use App\Models\ExhibitComment;
 use App\Models\Learn;
+use App\Models\LearnRelation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -323,8 +324,10 @@ class ExhibitionController extends BaseAdminController
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
 	 */
 	public function add_learn($id){
-		$list = Learn::OrderBy('id','desc')->paginate(30);
-		return view('admin.data.learn', [
+		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')
+			->select('learn.id','learn.title','learn_relation.exhibition_id')
+			->OrderBy('learn.id','desc')->paginate(50);
+		return view('admin.data.learn_exhibition', [
 			'list' => $list,
 			'exhibition_id'=>$id
 		]);
@@ -332,7 +335,25 @@ class ExhibitionController extends BaseAdminController
 	public function save_learn($exhibition_id,$learn_ids){
 		if (request()->ajax()) {
 			$idArray = explode(',', $learn_ids);
-			print_r($idArray);
+			$learn_list = LearnRelation::where('exhibition_id',$exhibition_id)->get();
+			$new_list=[];
+			foreach($learn_list as $k=>$v){
+				$new_list[]=$v['learn_id'];
+			}
+//			print_r($new_list);
+			$list = array_unique(array_merge($idArray,$new_list));
+
+
+			foreach($idArray as $k=>$v){
+
+
+				$data=[
+					'learn_id'=>$v,
+					'exhibition_id'=>$exhibition_id
+				];
+				LearnRelation::insert($data);
+			}
+			return $this->success(get_session_url('exhibition_list'));
 		}
 
 	}
