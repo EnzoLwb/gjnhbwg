@@ -359,6 +359,11 @@ class GatewayController extends Controller
 	 */
 	public function upload_audio()
 	{
+		//总长度
+		$vtime = @exec("ffmpeg -i " . request('chat_audio') . " 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//");
+		//$ctime = date("Y-m-d H:i:s", filectime($file));//创建时间
+		$vtime = date('H:i:s', strtotime($vtime));
+
 		$this->validate([
 			'from_user_number' => 'required',
 			'to_user_number' => 'required',
@@ -384,6 +389,8 @@ class GatewayController extends Controller
 			$arr['send_type'] = 'error_msg';
 			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
 		}else{
+			//获取文件长度
+
 			//保存数据库
 			ChatMessage::create([
 				'send_msg'=>$path,
@@ -392,12 +399,12 @@ class GatewayController extends Controller
 				'to_client_id'=>$to_client_id,
 				'send_type'=>2,
 				'device_type'=>$device_type,
-				'audio_duration'=>request('length'),
+				'audio_duration'=>$vtime,
 			]);
 			$arr['type'] = 'sent_msg';
 			$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
 			$arr['send_content'] = $path;
-			$arr['audio_duration'] = request('length');
+			$arr['audio_duration'] = $vtime;
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1, $arr,'发送成功');
