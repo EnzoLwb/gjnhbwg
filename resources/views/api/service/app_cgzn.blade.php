@@ -14,45 +14,6 @@
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-<p>交通路线</p>
-{!! $jt->jiaotong !!}
-<p>联系方式</p>
-{!! $jt->contact !!}
-<br><br><br>
-<br>
-<p>参观须知</p>
-{!! $xz->shuoming !!}
-<br>
-{!! $xz->zysx !!}
-<br>--}}
-{{--
-<p>设备租赁</p>
---}}
-{{--步骤一--}}{{--
-
-{!! $zl->step1 !!}
-<br>
---}}
-{{--步骤二--}}{{--
-
-{!! $zl->step2 !!}
-<br>
---}}
-{{--步骤三--}}{{--
-
-{!! $zl->step3 !!}
-<br>
---}}
-{{--步骤四--}}{{--
-
-{!! $zl->step4 !!}
-<br>
---}}
-{{--步骤五--}}{{--
-
-{!! $zl->step5 !!}
---}}
-
 <div class="wrap">
     <div class="header">
         <div class="active">
@@ -67,7 +28,10 @@
     </div>
     <!--交通周边-->
     <div class="content content1">
+        <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
         {!! $jt->jiaotong !!}
+        <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
+        {!! $jt->contact !!}
     </div>
     <!--参观须知-->
     <div class="content content2">
