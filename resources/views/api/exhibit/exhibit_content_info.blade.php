@@ -9,6 +9,9 @@
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>{{$info->exhibit_name or ''}}</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/common_html.css')}}">
+    <link rel="stylesheet" href="{{cdn('fonts/mengyu_font/app_mengyu_font.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
 <h1>展品名称</h1>
