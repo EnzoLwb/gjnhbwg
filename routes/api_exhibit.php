@@ -29,6 +29,8 @@ Route::get('comment_list', 'ExhibitController@comment_list');
 Route::get('visit_exhibit', 'ExhibitController@visit_exhibit');
 //展品搜索接口
 Route::get('exhibit_search', 'ExhibitController@exhibit_search');
+//热门展品接口
+Route::get('exhibit_hot', 'ExhibitController@exhibit_hot');
 
 //获取地图页展品数据
 Route::get('map_exhibit', 'MapExhibitController@map_exhibit');

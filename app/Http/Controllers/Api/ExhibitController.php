@@ -688,4 +688,54 @@ class ExhibitController extends Controller
 		}
 		return response_json(1, $data);
 	}
+
+
+
+	/**
+	 * 热门展品接口
+	 *
+	 * @author yyj 20180321
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /exhibit_hot 110.热门展品接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiParam {int} skip 数据偏移量默认0
+	 * @apiParam {int} take 查询数量默认10
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {string} exhibit_name 展品名称
+	 * @apiSuccess {string} exhibit_list_img 展品图片
+	 * @apiSuccess {string} audio 音频
+	 * @apiSuccess {int} exhibit_id 展品id
+	 * @apiSuccess {int} look_num 浏览数量
+	 * @apiSuccess {int} like_num 点赞数量
+	 */
+	public function exhibit_hot()
+	{
+		$this->validate([
+			'language' => 'required|min:0|integer',
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
+		]);
+		$language = request('language', 1);
+		$skip = request('skip', 0);
+		$take = request('take', 10);
+		$exhibition_id = request('exhibition_id', 0);
+		$data = [];
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->orderBy('exhibit.look_num', 'desc')->orderBy('exhibit.like_num', 'desc')->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
+		foreach ($exhibit_list as $k => $g) {
+			$imgs = json_decode($g['exhibit_img'], true);
+			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
+			$data[$k]['exhibit_list_img'] = $imgs;
+			$data[$k]['exhibit_id'] = $g['exhibit_id'];
+			$data[$k]['exhibit_name'] = $g['exhibit_name'];
+			$data[$k]['audio'] = $g['audio'];
+			$data[$k]['look_num'] = $g['look_num'];
+			$data[$k]['like_num'] = $g['like_num'];
+		}
+		return response_json(1, $data);
+	}
+
 }
