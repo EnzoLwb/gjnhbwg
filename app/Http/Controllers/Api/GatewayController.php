@@ -35,9 +35,7 @@ class GatewayController extends Controller
 	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息 'error_msg' 表示 断开连接或者其它问题 3代表有人加群或者退出群组
 	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
-	 * @apiSuccess {string} send_content 信息内容
-	 * @apiSuccess {string} group_id 群组ID
-	 * @apiSuccess {string} audio_duration 语音长度 例如 "00:44"
+	 * @apiSuccess {string} send_content 信息内容  如果是语音  会用#拼接上语音时长  例如 http://192.168.10.158:8309/uploadfiles/mp3/20180613/201806131033452100.mp3#00:44
 	 */
 
 	/**
@@ -361,16 +359,15 @@ class GatewayController extends Controller
 	 */
 	public function upload_audio()
 	{
-		//总长度
-		$vtime = @exec("ffmpeg -i " . request('chat_audio') . " 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//");
-		//$ctime = date("Y-m-d H:i:s", filectime($file));//创建时间
-		$vtime = date('i:s', strtotime($vtime));
-
 		$this->validate([
 			'from_user_number' => 'required',
 			'to_user_number' => 'required',
 			'chat_audio' => 'required|file',
 		]);
+		////获取语音文件长度
+		$vtime = @exec("ffmpeg -i " . request('chat_audio') . " 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//");
+		//$ctime = date("Y-m-d H:i:s", filectime($file));//创建时间
+		$vtime = date('i:s', strtotime($vtime));
 		$scheme = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
 		$url = $scheme.$_SERVER['HTTP_HOST'];
 		$from_user_number = request('from_user_number');
@@ -390,8 +387,6 @@ class GatewayController extends Controller
 			$arr['send_type'] = 'error_msg';
 			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
 		}else{
-			//获取文件长度
-
 			//保存数据库
 			ChatMessage::create([
 				'send_msg'=>$path,
@@ -404,10 +399,11 @@ class GatewayController extends Controller
 			]);
 			$arr['type'] = 'sent_msg';
 			$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
-			$arr['send_content'] = $path;
-			$arr['audio_duration'] = $vtime;
+			$arr['send_content'] = $path.'#'.$vtime;
+//			$arr['audio_duration'] = $vtime;
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		$arr['audio_duration'] = $vtime;
 		return response_json(1, $arr,'发送成功');
 	}
 	/**
