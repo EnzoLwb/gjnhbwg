@@ -37,6 +37,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
 	 * @apiSuccess {string} send_content 信息内容
 	 * @apiSuccess {string} group_id 群组ID
+	 * @apiSuccess {string} audio_duration 语音长度 例如 "00:00:44"
 	 */
 
 	/**
@@ -354,8 +355,9 @@ class GatewayController extends Controller
 	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
 	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
 	 * @apiParam {file} chat_audio 语音文件 最大不超过20m MP3格式
-	 * @apiParam {string} length 语音时间长度 单位秒
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {string} data.send_content 语音文件地址
+	 * @apiSuccess {string} data.audio_duration 语音文件时长
 	 */
 	public function upload_audio()
 	{
