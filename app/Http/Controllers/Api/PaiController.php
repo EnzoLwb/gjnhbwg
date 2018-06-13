@@ -426,7 +426,7 @@ class PaiController extends Controller
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /my_pai_list 07.我的随手怕列表
+	 * @api {GET} /my_pai_list 07.我的随手拍列表
 	 * @apiGroup Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
@@ -479,7 +479,7 @@ class PaiController extends Controller
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
-	 * @api {GET} /del_my_pai_list 08.我的随手怕删除接口
+	 * @api {GET} /del_my_pai_list 08.我的随手拍删除接口
 	 * @apiGroup Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
