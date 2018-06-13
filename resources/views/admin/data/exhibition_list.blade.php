@@ -66,6 +66,8 @@
                                 @endif
                             </div>
                             <div class="list-tit">{{$g['exhibition_name']}}</div>
+                            <a href="{{route('admin.data.exhibition.add_learn', $g['id'])}}"><div class="list-tit">添加学习单题目</div></a>
+
                         </li>
                         @endforeach
                     </ul>
@@ -87,6 +89,8 @@
 <script>
     $('#select_calss1,#select_calss2').change(function(){
         $('#form_submit').submit();
-    })
+    });
+
 </script>
+
 @endsection

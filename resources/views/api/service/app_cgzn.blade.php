@@ -10,8 +10,10 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
 </head>
 <body>
-<p>交通信息</p>
+<p>交通路线</p>
 {!! $jt->jiaotong !!}
+<p>联系方式</p>
+{!! $jt->contact !!}
 <br><br><br>
 <p>参观须知</p>
 {!! $xz->shuoming !!}

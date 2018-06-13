@@ -9,6 +9,7 @@ use App\Models\Exhibit;
 use App\Models\Exhibition;
 use App\Models\ExhibitionLanguage;
 use App\Models\ExhibitComment;
+use App\Models\Learn;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -312,5 +313,28 @@ class ExhibitionController extends BaseAdminController
 			ExhibitDao::del_check($type,$ids);
 			return $this->success(get_session_url('exhibition_comment_list'));
 		}
+	}
+
+	/**
+	 * 添加学习单
+	 *
+	 * @author ljy 20180613
+	 * @param int $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+	 */
+	public function add_learn($id){
+		$list = Learn::OrderBy('id','desc')->paginate(30);
+		return view('admin.data.learn', [
+			'list' => $list,
+			'exhibition_id'=>$id
+		]);
+	}
+	public function save_learn($exhibition_id,$learn_ids){
+		if (request()->ajax()) {
+
+			$idArray = explode(',', $learn_ids);
+			print_r($idArray);
+		}
+
 	}
 }

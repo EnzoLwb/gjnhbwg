@@ -36,6 +36,7 @@ class CgznController extends BaseAdminController
 			if (!empty(request('jiaotong_' . $k))) {
 				$data2 = [
 					'jiaotong' => request('jiaotong_' . $k),
+					'contact' => request('contact_' . $k),
 					'language_id' => $k
 				];
 				CgznJt::insert($data2);

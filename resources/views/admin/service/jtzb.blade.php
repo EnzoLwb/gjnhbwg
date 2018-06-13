@@ -38,9 +38,15 @@
 
                                             @foreach(config('exhibit_config.exhibit.content_arr') as $kkk=>$ggg)
                                                 <div class="form-group">
-                                                    <label class="col-sm-2 control-label">交通周边({{$g['name']}})</label>
+                                                    <label class="col-sm-2 control-label">交通路线({{$g['name']}})</label>
                                                     <div class="col-sm-4">
                                                         <script type="text/plain" id="{{$k}}_jiaotong" name="jiaotong_{{$k}}">{!! $data['language'][$k]['jiaotong'] or '' !!}</script>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">联系方式({{$g['name']}})</label>
+                                                    <div class="col-sm-4">
+                                                        <script type="text/plain" id="{{$k}}_contact" name="contact_{{$k}}">{!! $data['language'][$k]['contact'] or '' !!}</script>
                                                     </div>
                                                 </div>
 
@@ -101,6 +107,25 @@
         editorjiaotong_{{$k}}.render('{{$k}}_jiaotong');
         editorjiaotong_{{$k}}.ready(function () {
             editorjiaotong_{{$k}}.execCommand('serverparam', {
+                '_token': '{{csrf_token()}}',
+                'filetype': 'FT_EXHIBIT_ONE',
+                'itemid': '{{$article->article_id or 0}}'
+            });
+        });
+        editorcontact_{{$k}}= new baidu.editor.ui.Editor({pasteplain:true,initialFrameWidth:950,initialFrameHeight:300,wordCount:false,elementPathEnabled:false,autoHeightEnabled:false,initialStyle:'img{width:20%;}',@if($k==10)iframeCssUrl:'{{cdn('js/plugins/ueditor/themes/vertical_mengyu.css')}}', @endif toolbars: [[
+            'fullscreen', 'source', '|','undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+            'simpleupload','emotion', '|',
+            'horizontal', 'date', 'time', 'spechars', 'wordimage', '|',
+            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts'
+        ]]});
+        editorcontact_{{$k}}.render('{{$k}}_contact');
+        editorcontact_{{$k}}.ready(function () {
+            editorcontact_{{$k}}.execCommand('serverparam', {
                 '_token': '{{csrf_token()}}',
                 'filetype': 'FT_EXHIBIT_ONE',
                 'itemid': '{{$article->article_id or 0}}'

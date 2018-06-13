@@ -19,7 +19,8 @@ class CreateCgznJtTable extends Migration
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('language_id', false, true)->comment('多语种id');
-			$table->text('jiaotong')->comment('交通周边')->nullable();
+			$table->text('jiaotong')->comment('交通路线')->nullable();
+			$table->text('contact')->comment('联系方式')->nullable();
 			if (env('DB_CONNECTION') == 'oracle') {
 				$table->comment = $this->tableComment;
 			}
