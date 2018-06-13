@@ -403,6 +403,7 @@ class GatewayController extends Controller
 //			$arr['audio_duration'] = $vtime;
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		$arr['send_content'] = $path;
 		$arr['audio_duration'] = $vtime;
 		return response_json(1, $arr,'发送成功');
 	}
