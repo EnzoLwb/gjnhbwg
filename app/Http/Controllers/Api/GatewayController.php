@@ -353,7 +353,7 @@ class GatewayController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
 	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
 	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
-	 * @apiParam {file} audio 语音文件 最大不超过20m MP3格式
+	 * @apiParam {file} chat_audio 语音文件 最大不超过20m MP3格式
 	 * @apiParam {string} length 语音时间长度 单位秒
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 */
