@@ -37,7 +37,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
 	 * @apiSuccess {string} send_content 信息内容
 	 * @apiSuccess {string} group_id 群组ID
-	 * @apiSuccess {string} audio_duration 语音长度 例如 "00:00:44"
+	 * @apiSuccess {string} audio_duration 语音长度 例如 "00:44"
 	 */
 
 	/**
@@ -357,14 +357,14 @@ class GatewayController extends Controller
 	 * @apiParam {file} chat_audio 语音文件 最大不超过20m MP3格式
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 * @apiSuccess {string} data.send_content 语音文件地址
-	 * @apiSuccess {string} data.audio_duration 语音文件时长
+	 * @apiSuccess {string} data.audio_duration 语音文件时长 例如 "00:44"
 	 */
 	public function upload_audio()
 	{
 		//总长度
 		$vtime = @exec("ffmpeg -i " . request('chat_audio') . " 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//");
 		//$ctime = date("Y-m-d H:i:s", filectime($file));//创建时间
-		$vtime = date('H:i:s', strtotime($vtime));
+		$vtime = date('i:s', strtotime($vtime));
 
 		$this->validate([
 			'from_user_number' => 'required',
