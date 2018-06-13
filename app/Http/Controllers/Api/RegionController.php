@@ -13,10 +13,17 @@ class RegionController extends Controller
 	}
 
 	/**
-	 * 省
+	 * 获取省份
 	 *
-	 * @author lxp 20170904
+	 * @author lxp 20170905
 	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /province 4. 省份数据
+	 * @apiGroup Base
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":[],"msg":""}
 	 */
 	public function province()
 	{

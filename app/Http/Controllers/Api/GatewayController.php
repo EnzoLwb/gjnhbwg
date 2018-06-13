@@ -8,6 +8,7 @@ use App\Models\ChatMessage;
 use App\Models\Dlj;
 use App\Models\Group;
 use App\Models\GroupMember;
+use App\Models\Trajectory;
 use App\Models\Users;
 use GatewayWorker\Lib\Gateway AS GatewayLib;
 use Illuminate\Support\Facades\Auth;
@@ -35,8 +36,7 @@ class GatewayController extends Controller
 	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息 'error_msg' 表示 断开连接或者其它问题 3代表有人加群或者退出群组
 	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误
-	 * @apiSuccess {string} send_content 信息内容
-	 * @apiSuccess {string} group_id 群组ID
+	 * @apiSuccess {string} send_content 信息内容  如果是语音  会用#拼接上语音时长  例如 http://192.168.10.158:8309/uploadfiles/mp3/20180613/201806131033452100.mp3#00:44
 	 */
 
 	/**
@@ -353,9 +353,10 @@ class GatewayController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
 	 * @apiParam {string} from_user_number  我的id   之前列表返回了user_number
 	 * @apiParam {string} to_user_number  对方的id   之前列表返回了user_number
-	 * @apiParam {file} audio 语音文件 最大不超过20m MP3格式
-	 * @apiParam {string} length 语音时间长度 单位秒
-	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiParam {file} chat_audio 语音文件 最大不超过20m MP3格式
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {string} data.send_content 语音文件地址
+	 * @apiSuccess {string} data.audio_duration 语音文件时长 例如 "00:44"
 	 */
 	public function upload_audio()
 	{
@@ -363,8 +364,11 @@ class GatewayController extends Controller
 			'from_user_number' => 'required',
 			'to_user_number' => 'required',
 			'chat_audio' => 'required|file',
-			'length' => 'required'
 		]);
+		////获取语音文件长度
+		$vtime = @exec("ffmpeg -i " . request('chat_audio') . " 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//");
+		//$ctime = date("Y-m-d H:i:s", filectime($file));//创建时间
+		$vtime = date('i:s', strtotime($vtime));
 		$scheme = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
 		$url = $scheme.$_SERVER['HTTP_HOST'];
 		$from_user_number = request('from_user_number');
@@ -392,14 +396,16 @@ class GatewayController extends Controller
 				'to_client_id'=>$to_client_id,
 				'send_type'=>2,
 				'device_type'=>$device_type,
-				'audio_duration'=>request('length'),
+				'audio_duration'=>$vtime,
 			]);
 			$arr['type'] = 'sent_msg';
 			$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
-			$arr['send_content'] = $path;
-			$arr['audio_duration'] = request('length');
+			$arr['send_content'] = $path.'#'.$vtime;
+//			$arr['audio_duration'] = $vtime;
 		}
 		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		$arr['send_content'] = $path;
+		$arr['audio_duration'] = $vtime;
 		return response_json(1, $arr,'发送成功');
 	}
 	/**
@@ -511,5 +517,30 @@ class GatewayController extends Controller
 			unset($v['member_id'],$v['uid']);
 		}
 		return response_json(1, $data);
+	}
+	/**
+	 * 获取位置坐标
+	 *
+	 * @author lwb 20180613
+	 *
+	 * @api {get} /gateway/get_gps 11.获取当前位置
+	 * @apiGroup GateWay
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
+	 * @apiSuccess {object} data 操作结果1成功0失败
+	 * @apiSuccess {int} data.x  x坐标
+	 * @apiSuccess {int} data.y  y坐标
+	 * @apiSuccess {int} data.map_id 地图编号
+	 */
+	public function get_gps()
+	{
+		$this->validate([
+			'user_number' => 'required',
+		]);
+		$user_number=request('user_number');
+		$type=request('p')!='d' ? 'uid':'deviceno';
+		$res=Trajectory::where($type,$user_number)->orderby('updated_at','desc')->select('x','y','map_id')->first()->toArray();
+		return response_json(1,$res);
 	}
 }

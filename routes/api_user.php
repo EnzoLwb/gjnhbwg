@@ -16,6 +16,9 @@ Route::post('users/password', 'UsersController@password');
 Route::post('users/login_bind', 'UsersController@login_bind');
 // 第三方用户注册
 Route::post('users/register_bind', 'UsersController@register_bind');
+// 验证登录状态
+Route::get('users/check_token', 'UsersController@check_token');
+
 
 Route::group([
 	'middleware' => 'auth:api'

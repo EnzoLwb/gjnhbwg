@@ -20,8 +20,8 @@ class SvgMapController extends Controller
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_list 地图列表
-	 * @apiGroup SvgMap
+	 * @api {GET} /map_list 300.地图列表
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语

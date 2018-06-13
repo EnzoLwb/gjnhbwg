@@ -43,6 +43,9 @@ Route::group($route_group, function () {
 	closedir($dh);
 
 	Route::get('/', 'HomeController@index');
+	//地区数据
+	Route::get('allregion', 'RegionController@alldata');
+	Route::get('province', 'RegionController@province');
 
 	// 需要登录验证的路由
 	Route::group([

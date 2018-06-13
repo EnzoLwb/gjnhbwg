@@ -20,6 +20,8 @@ Route::group([
 	Route::get('gateway/exit_group', 'GatewayController@exit_group');
 	//获取聊天记录
 	Route::get('gateway/chat_message', 'GatewayController@chat_message');
+	//获取当前位置
+	Route::get('gateway/get_gps', 'GatewayController@get_gps');
 	//私聊
 	Route::post('gateway/send_msg', 'GatewayController@send_msg');
 	//发送语音信息

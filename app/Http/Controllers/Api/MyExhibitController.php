@@ -149,8 +149,8 @@ class MyExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /my_footed 01.我的足迹
-	 * @apiGroup MyExhibit
+	 * @api {GET} /my_footed 201.我的足迹
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} api_token token
@@ -210,8 +210,8 @@ class MyExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /my_liked 02.我的点赞
-	 * @apiGroup MyExhibit
+	 * @api {GET} /my_liked 202.我的点赞
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} api_token token
@@ -258,8 +258,8 @@ class MyExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /my_comment 03.我的评论
-	 * @apiGroup MyExhibit
+	 * @api {GET} /my_comment 203.我的评论
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {string} api_token token
@@ -309,8 +309,8 @@ class MyExhibitController extends Controller
 	 * @author yyj 20171111
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /del_my_comment 04.我的评论删除接口
-	 * @apiGroup MyExhibit
+	 * @api {GET} /del_my_comment 204.我的评论删除接口
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} comment_id 评论编号

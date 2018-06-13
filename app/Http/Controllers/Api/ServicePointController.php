@@ -25,8 +25,8 @@ class ServicePointController extends Controller
 	 * @author yyj 20171112
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_service_point 获取地图页服务设施点位
-	 * @apiGroup Service_point
+	 * @api {GET} /map_service_point 400.获取地图页服务设施点位
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} map_id 地图编号传
