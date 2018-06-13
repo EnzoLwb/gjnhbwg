@@ -35,8 +35,8 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_exhibit 01.获取地图页展品数据
-	 * @apiGroup MapExhibit
+	 * @api {GET} /map_exhibit 301.获取地图页展品数据
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
@@ -158,8 +158,8 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_near_exhibit 02.获取附近展品
-	 * @apiGroup MapExhibit
+	 * @api {GET} /map_near_exhibit 302.获取附近展品
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
@@ -215,8 +215,8 @@ class MapExhibitController extends Controller
 	 * @author yyj 20171117
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /road_info 03.楼层路线生成接口
-	 * @apiGroup MapExhibit
+	 * @api {GET} /road_info 303.楼层路线生成接口
+	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语

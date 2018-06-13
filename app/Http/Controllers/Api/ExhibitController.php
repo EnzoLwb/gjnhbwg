@@ -35,7 +35,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibition_list 00.获取所有展厅接口
+	 * @api {GET} /exhibition_list 100.获取所有展厅接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -82,7 +82,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20171110
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibition_info 01.展厅详情接口
+	 * @api {GET} /exhibition_info 101.展厅详情接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -176,7 +176,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibit_list 02.展品列表接口
+	 * @api {GET} /exhibit_list 102.展品列表接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -225,7 +225,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibit_info 03.展品详情接口
+	 * @api {GET} /exhibit_info 103.展品详情接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -383,7 +383,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /do_like 04.展品点赞收藏添加取消操作接口（系统自动判断执行添加还是取消）
+	 * @api {GET} /do_like 104.展品点赞收藏添加取消操作接口（系统自动判断执行添加还是取消）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -440,7 +440,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {POST} /exhibit_comment 05.展厅/展品评论接口
+	 * @api {POST} /exhibit_comment 105.展厅/展品评论接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -489,7 +489,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /comment_list 06.展厅/展品评论列表
+	 * @api {GET} /comment_list 106.展厅/展品评论列表
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -534,7 +534,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /comment_do_like 07.评论点赞取消接口（系统自动判断执行添加还是取消）
+	 * @api {GET} /comment_do_like 107.评论点赞取消接口（系统自动判断执行添加还是取消）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -579,7 +579,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /visit_exhibit 08.展品浏览收听接口（浏览展品和播放语音时调用）
+	 * @api {GET} /visit_exhibit 108.展品浏览收听接口（浏览展品和播放语音时调用）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -647,7 +647,7 @@ class ExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /exhibit_search 09.展品搜索接口
+	 * @api {GET} /exhibit_search 109.展品搜索接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
