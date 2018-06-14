@@ -145,7 +145,7 @@ class DevicenoController extends Controller
 			Positions::where('id', $is_set2->id)->update($data);
 		}
 		$add = false;
-		if ($app_kind == 'd') {
+		/*if ($app_kind == 'd') {
 			//判断是否租赁
 			$deviceno_info = DB::table(DB::raw('table_rent'))->where('RENT_DEVICENO', $deviceno)->first();
 			if (!empty($deviceno_info)) {
@@ -194,9 +194,36 @@ class DevicenoController extends Controller
 					$add = true;
 				}
 			}
+		}*/
+
+		$data['look_date'] = date('Y-m-d', time());
+		$data['uid'] = $uid;
+		//隔一复收判断
+		$last_positions = Trajectory::where([
+			[
+				'look_date',
+				date('Y-m-d', time())
+			],
+			[
+				'deviceno',
+				$deviceno
+			],
+		])->orderBy('updated_at', 'desc')->first();
+		if (!empty($last_positions)) {
+			if ($last_positions->auto_num != $auto_num) {
+				$add = true;
+			}
+		} else {
+			$add = true;
 		}
+
+
 		if ($add) {
 			Trajectory::create($data);
+		}else{
+			Trajectory::where('id', $last_positions['id'])->update([
+				'updated_at' => date('Y-m-d H:i:s')
+			]);
 		}
 
 		$language=request('language',1);

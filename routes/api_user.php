@@ -10,7 +10,9 @@ Route::get('cpt/show', 'CptController@show');
 Route::get('cpt/check', 'CptController@check');
 // 发送短信(邮箱)验证码
 Route::post('send_vcode', 'CptController@send_vcode');
-// 忘记（修改）密码
+// 验证验证码
+Route::post('users/check_vcode', 'UsersController@check_vcode');
+// 修改密码
 Route::post('users/password', 'UsersController@password');
 // 第三方用户登录
 Route::post('users/login_bind', 'UsersController@login_bind');
@@ -29,6 +31,16 @@ Route::group([
 	Route::post('users/avatar', 'UsersController@avatar');
 	// 修改用户昵称
 	Route::post('users/nickname', 'UsersController@nickname');
+	// 修改用户性别
+	Route::post('users/sex', 'UsersController@sex');
+	// 修改用户省份
+	Route::post('users/province', 'UsersController@province');
+	// 修改用户出生年月
+	Route::post('users/birthday', 'UsersController@birthday');
+	// 修改用户联系手机
+	Route::post('users/phone', 'UsersController@phone');
+	// 修改用户联系邮箱
+	Route::post('users/email', 'UsersController@email');
 	// 用户登出
 	Route::get('users/logout', 'UsersController@logout');
 });

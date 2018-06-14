@@ -282,27 +282,28 @@ class GatewayController extends Controller
 		$content=request('content');
 		$device_type= request('p') !='d' ? 1:2;
 		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
-		if (empty($to_client_id)) {
+		/*if (empty($to_client_id)) {
 			//断开连接或者uid输入错误
 			//					$arr['client_id'] = $client_id;
 			$arr['type'] = 'sent_msg';
 			$arr['send_type'] = 'error_msg';
 			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
-		}else{
-			//保存数据库
-			ChatMessage::create([
-				'send_msg'=>$content,
-				'from_user_number'=>$from_user_number,
-				'to_user_number'=>$to_user_number,
-				'to_client_id'=>$to_client_id,
-				'send_type'=>$type,
-				'device_type'=>$device_type,
-			]);
-			$arr['type'] = 'sent_msg';
-			$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
-			$arr['send_content'] = $content;
+		}*/
+		//保存数据库
+		ChatMessage::create([
+			'send_msg'=>$content,
+			'from_user_number'=>$from_user_number,
+			'to_user_number'=>$to_user_number,
+			'to_client_id'=>$to_client_id,
+			'send_type'=>$type,
+			'device_type'=>$device_type,
+		]);
+		$arr['type'] = 'sent_msg';
+		$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
+		$arr['send_content'] = $content;
+		if (!empty($to_client_id)){
+			GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		}
-		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		return response_json(1,'','发送成功');
 	}
 	//获得所有uid  测试用
