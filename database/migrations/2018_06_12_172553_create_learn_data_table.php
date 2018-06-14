@@ -18,7 +18,8 @@ class CreateLearnDataTable extends Migration
 	{
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('exhibition_id',false, true)->comment('展厅id')->default(0);
+			$table->integer('rela_id',false, true)->comment('展厅id 或展品id')->default(0);
+			$table->integer('type_id',false, true)->comment('1展厅 2展品')->default(0);
 			$table->integer('uid',false, true)->comment('用户id')->default(0);
 			$table->integer('score',false, true)->comment('分数')->default(0);
 			$table->text('datalog')->comment('答题记录')->nullable();

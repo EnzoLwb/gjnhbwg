@@ -41,10 +41,12 @@ class LearnController extends Controller
 	 */
 	public function learn_content_info()
 	{
-		$exhibition_id = request('exhibition_id');
+		$rela_id = request('rela_id');
+		$type_id = request('type_id');
 		//随机抽选10题
-		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')->where('learn_relation.exhibition_id',$exhibition_id)
-			->select('learn.id','learn.title','learn_relation.exhibition_id')->orderBy(DB::raw('RAND()'))->limit(10)->get();
+		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')->where('learn_relation.rela_id',$rela_id)
+			->where('type_id',$type_id)
+			->select('learn.id','learn.title','learn_relation.rela_id')->orderBy(DB::raw('RAND()'))->limit(10)->get();
 
 		foreach($list as $k=>$v){
 			$list[$k]['option'] = LearnOption::where('learn_id',$v['id'])->get()->toArray();
@@ -54,7 +56,8 @@ class LearnController extends Controller
 			return view('api.learn.dlj_learn_content_info',[
 				'list'=>$list,
 				'p'=>request('p'),
-				'exhibition_id'=>$exhibition_id,
+				'rela_id'=>$rela_id,
+				'type_id'=>$type_id,
 				'uid'=>$uid,
 				'option_title'=> ['A','B','C','D','E','F','G','H','I','J']
 			]);
@@ -66,7 +69,8 @@ class LearnController extends Controller
 			return view('api.learn.learn_content_info',[
 				'list'=>$list,
 				'p'=>request('p'),
-				'exhibition_id'=>$exhibition_id,
+				'rela_id'=>$rela_id,
+				'type_id'=>$type_id,
 				'uid'=>$uid,
 				'option_title'=> ['A','B','C','D','E','F','G','H','I','J']
 			]);
@@ -78,7 +82,9 @@ class LearnController extends Controller
 		$uid = 0;
 		$answer = request('answer');
 		$timecost = request('timecost');
-		$exhibition_id = request('exhibition_id');
+		$rela_id = request('rela_id');
+		$type_id = request('type_id');
+
 		// 处理答题数据，得到分数
 		$score = 0;
 		foreach ($answer as $v) {
@@ -89,7 +95,8 @@ class LearnController extends Controller
 		}
 
 		$newid = LearnData::insertGetId([
-			'exhibition_id'=>$exhibition_id,
+			'rela_id'=>$rela_id,
+			'type_id'=>$type_id,
 			'uid'=>$uid,
 			'score'=>$score,
 			'datalog'=>json_encode($answer),
@@ -106,9 +113,10 @@ class LearnController extends Controller
 	 * @author lxp
 	 */
 	public function answer_list() {
-		$exhibition_id = request('exhibition_id');
+		$rela_id = request('rela_id');
+		$type_id = request('type_id');
 		$newid = request('newid');
-		$list = LearnData::where('exhibition_id',$exhibition_id)->orderBy('score','desc')->orderBy('timecost','asc')->limit(10)->get();
+		$list = LearnData::where('rela_id',$rela_id)->where('type_id',$type_id)->orderBy('score','desc')->orderBy('timecost','asc')->limit(10)->get();
 		foreach($list as $k=>$v){
 			$ids[]=$v['id'];
 		}

@@ -35,7 +35,7 @@
                             </thead>
                             @foreach($list as $k=>$v)
                                 <tr class="gradeA">
-                                    <td><input type="checkbox" name="items[]" class="checkItem" @if(isset($v['exhibition_id']))checked @endif value="{{$v['id']}}"></td>
+                                    <td><input type="checkbox" name="items[]" class="checkItem" @if(isset($v['learn_id']))checked @endif value="{{$v['id']}}"></td>
                                     <td>{{$v['title']}}</td>
 
                                 </tr>

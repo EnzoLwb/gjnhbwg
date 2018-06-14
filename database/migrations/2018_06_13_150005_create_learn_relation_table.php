@@ -19,8 +19,8 @@ class CreateLearnRelationTable extends Migration
 		Schema::create($this->tableName, function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('learn_id')->comment('题目id')->default(0);
-			$table->integer('exhibit_id')->comment('展品id')->default(0);
-			$table->integer('exhibition_id')->comment('展厅id')->default(0);
+			$table->integer('rela_id')->comment('展品id、展厅id')->default(0);
+			$table->integer('type_id')->comment('1展厅,2展品')->default(0);
 			if (env('DB_CONNECTION') == 'oracle') {
 				$table->comment = $this->tableComment;
 			}
