@@ -82,8 +82,12 @@ class UsersController extends Controller
 	 * @apiSuccess {int} data.uid 用户ID
 	 * @apiSuccess {int} data.user_type_id 会员类型id
 	 * @apiSuccess {string} data.phone 手机号
+	 * @apiSuccess {string} data.email 邮箱
 	 * @apiSuccess {string} data.nickname 昵称
 	 * @apiSuccess {string} data.avatar 头像
+	 * @apiSuccess {string} data.sex 性别  1男  2女
+	 * @apiSuccess {string} data.province 省份
+	 * @apiSuccess {string} data.birthday 出生年月
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":{"uid":1,"phone":13812341234,"nickname":"U13812341234","avatar":"\/uploadfiles\/avatar\/20170905\/201709051344549521.jpg"},"msg":""}
 	 */
@@ -95,8 +99,12 @@ class UsersController extends Controller
 		return response_json(1, [
 			'uid' => $uinfo->uid,
 			'phone' => $uinfo->phone,
+			'email' => $uinfo->email,
 			'nickname' => $uinfo->nickname,
 			'avatar' => $uinfo->avatar,
+			'sex' => $uinfo->sex,
+			'province' => $uinfo->province,
+			'birthday' => $uinfo->birthday,
 		]);
 	}
 
@@ -167,6 +175,167 @@ class UsersController extends Controller
 
 		return response_json(1, $users->nickname);
 	}
+
+
+
+	/**
+	 * 修改性别
+	 *
+	 * @author lxp 20170905
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {POST} /users/sex 修改性别
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} api_token 用户签名
+	 * @apiParam {int} sex 性别  1男 2女
+	 * @apiSuccess {string} data 新性别
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":"1","msg":""}
+	 */
+	public function sex()
+	{
+		$uid = Auth::user()->uid;
+		$this->validate([
+			'sex' => 'required|in:1,2'
+		]);
+		$users = Users::findOrFail($uid);
+		$users->timestamps = false;
+		$users->sex = request('sex');
+		$users->save();
+
+		return response_json(1, $users->sex);
+	}
+
+
+
+	/**
+	 * 修改省份
+	 *
+	 * @author lxp 20170905
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {POST} /users/province 修改省份
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} api_token 用户签名
+	 * @apiParam {string} province 性别  1男 2女
+	 * @apiSuccess {string} data 新省份
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":"1","msg":""}
+	 */
+	public function province()
+	{
+		$uid = Auth::user()->uid;
+		$this->validate([
+			'province' => 'required'
+		]);
+		$users = Users::findOrFail($uid);
+		$users->timestamps = false;
+		$users->province = request('province');
+		$users->save();
+
+		return response_json(1, $users->province);
+	}
+
+
+
+	/**
+	 * 修改出生年月
+	 *
+	 * @author lxp 20170905
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {POST} /users/birthday 修改出生年月
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} api_token 用户签名
+	 * @apiParam {string} birthday 出生年月   1990-01-01
+	 * @apiSuccess {string} data 新省份
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":"1","msg":""}
+	 */
+	public function birthday()
+	{
+		$uid = Auth::user()->uid;
+		$this->validate([
+			'birthday' => 'required'
+		]);
+		$users = Users::findOrFail($uid);
+		$users->timestamps = false;
+		$users->birthday = request('birthday');
+		$users->save();
+
+		return response_json(1, $users->birthday);
+	}
+
+
+
+	/**
+	 * 修改用户联系手机
+	 *
+	 * @author lxp 20170905
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {POST} /users/phone 修改用户联系手机
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} api_token 用户签名
+	 * @apiParam {string} phone 手机号
+	 * @apiSuccess {string} data 新省份
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":"1","msg":""}
+	 */
+	public function phone()
+	{
+		$uid = Auth::user()->uid;
+		$this->validate([
+			'phone' => 'required|mobile'
+		]);
+		$users = Users::findOrFail($uid);
+		$users->timestamps = false;
+		$users->phone = request('phone');
+		$users->save();
+
+		return response_json(1, $users->phone);
+	}
+
+
+
+	/**
+	 * 修改用户联系邮箱
+	 *
+	 * @author lxp 20170905
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {POST} /users/email 修改用户联系邮箱
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} api_token 用户签名
+	 * @apiParam {string} email 邮箱
+	 * @apiSuccess {string} data 新省份
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":"1","msg":""}
+	 */
+	public function email()
+	{
+		$uid = Auth::user()->uid;
+		$this->validate([
+			'email' => 'required|email'
+		]);
+		$users = Users::findOrFail($uid);
+		$users->timestamps = false;
+		$users->email = request('email');
+		$users->save();
+
+		return response_json(1, $users->email);
+	}
+
 
 	/**
 	 * 用户注册

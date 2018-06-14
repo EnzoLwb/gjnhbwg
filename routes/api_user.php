@@ -29,6 +29,16 @@ Route::group([
 	Route::post('users/avatar', 'UsersController@avatar');
 	// 修改用户昵称
 	Route::post('users/nickname', 'UsersController@nickname');
+	// 修改用户性别
+	Route::post('users/sex', 'UsersController@sex');
+	// 修改用户省份
+	Route::post('users/province', 'UsersController@province');
+	// 修改用户出生年月
+	Route::post('users/birthday', 'UsersController@birthday');
+	// 修改用户联系手机
+	Route::post('users/phone', 'UsersController@phone');
+	// 修改用户联系邮箱
+	Route::post('users/email', 'UsersController@email');
 	// 用户登出
 	Route::get('users/logout', 'UsersController@logout');
 });
