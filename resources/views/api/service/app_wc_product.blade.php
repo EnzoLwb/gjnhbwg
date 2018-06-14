@@ -14,20 +14,12 @@
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-<img src="{{get_file_url($data->pro_img)}}">
-<!--标题--!>
-{{$data->pro_title}}
-<!--内容--!>
-{!! $data->pro_content !!}
-{{--<img src="{{get_file_url($data->pro_img)}}">--}}
-{{--{!! $data->pro_content !!}--}}
 <div>
     <img src="{{get_file_url($data->pro_img)}}" alt=""/>
+    <h1>
+        {{$data->pro_title}}
+    </h1>
     {!! $data->pro_content !!}
-    {{--<h1>渔家娃娃笔筒</h1>
-    <p>
-        文创产品简介文创产品简介文创产品简介文创产品简介文创产品简介文创产品简介文创产品简介文创产品简...
-    </p>--}}
 </div>
 </body>
 
