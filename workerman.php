@@ -59,7 +59,7 @@ class Events
 		$arr['client_id'] = $client_id;
 		$arr['type'] = 'bind';
 		$arr['send_type'] = '';
-		$arr['send_content'] = ['msg'=>'设备绑定'];
+		$arr['send_content'] = '设备绑定';
 		GatewayLib::sendToClient($client_id, json_encode($arr));
 	}
 	/**
@@ -114,7 +114,7 @@ $gateway->registerAddress = "$registerIP:$registerPort";
 // 心跳间隔
 //$gateway->pingInterval = 10;
 // 心跳数据
-$gateway->pingData = '{"type":"heart"}';
+$gateway->pingData = '{"client_id":"","type":"heart","send_type":"","send_content":"心跳响应"}';
 
 // bussinessWorker 进程
 $worker = new BusinessWorker();
