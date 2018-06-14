@@ -526,7 +526,7 @@ class GatewayController extends Controller
 	 * @api {get} /gateway/get_gps 11.获取当前位置
 	 * @apiGroup GateWay
 	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，d：导览机(一定要正确传 不然数据会有错误)
 	 * @apiParam {string} user_number app传uid   导览机传唯一设备号
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 * @apiSuccess {int} data.x  x坐标
@@ -540,7 +540,7 @@ class GatewayController extends Controller
 		]);
 		$user_number=request('user_number');
 		$type=request('p')!='d' ? 'uid':'deviceno';
-		$res=Trajectory::where($type,$user_number)->orderby('updated_at','desc')->select('x','y','map_id')->first()->toArray();
+		$res=Trajectory::where($type,$user_number)->orderby('updated_at','desc')->select('x','y','map_id')->first();
 		return response_json(1,$res);
 	}
 }
