@@ -88,6 +88,7 @@ class UsersController extends Controller
 	 * @apiSuccess {string} data.sex 性别  1男  2女
 	 * @apiSuccess {string} data.province 省份
 	 * @apiSuccess {string} data.birthday 出生年月
+	 * @apiSuccess {int} data.r_type 1手机 2邮箱  3第三方
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":{"uid":1,"phone":13812341234,"nickname":"U13812341234","avatar":"\/uploadfiles\/avatar\/20170905\/201709051344549521.jpg"},"msg":""}
 	 */
@@ -95,6 +96,18 @@ class UsersController extends Controller
 	{
 		$uid = Auth::user()->uid;
 		$uinfo = Users::where('uid', $uid)->first();
+		$uinfo_bind = UsersBind::where('uid', $uid)->first();
+
+		if ($uinfo_bind) {
+			$r_type = 3;
+		} else {
+
+			if (strpos($uinfo['username'], '@') !== false) {
+				$r_type = 2;
+			} else {
+				$r_type = 1;
+			}
+		}
 
 		return response_json(1, [
 			'uid' => $uinfo->uid,
@@ -105,6 +118,7 @@ class UsersController extends Controller
 			'sex' => $uinfo->sex,
 			'province' => $uinfo->province,
 			'birthday' => $uinfo->birthday,
+			'r_type' => $r_type
 		]);
 	}
 
@@ -176,8 +190,6 @@ class UsersController extends Controller
 		return response_json(1, $users->nickname);
 	}
 
-
-
 	/**
 	 * 修改性别
 	 *
@@ -207,8 +219,6 @@ class UsersController extends Controller
 
 		return response_json(1, $users->sex);
 	}
-
-
 
 	/**
 	 * 修改省份
@@ -240,8 +250,6 @@ class UsersController extends Controller
 		return response_json(1, $users->province);
 	}
 
-
-
 	/**
 	 * 修改出生年月
 	 *
@@ -271,8 +279,6 @@ class UsersController extends Controller
 
 		return response_json(1, $users->birthday);
 	}
-
-
 
 	/**
 	 * 修改用户联系手机
@@ -304,8 +310,6 @@ class UsersController extends Controller
 		return response_json(1, $users->phone);
 	}
 
-
-
 	/**
 	 * 修改用户联系邮箱
 	 *
@@ -335,7 +339,6 @@ class UsersController extends Controller
 
 		return response_json(1, $users->email);
 	}
-
 
 	/**
 	 * 用户注册
@@ -376,16 +379,14 @@ class UsersController extends Controller
 			throw new ApiErrorException('请填写正确的手机号或者邮箱');
 		}
 
-
-
-		if($vtype==1){
+		if ($vtype == 1) {
 			$this->validate([
 				'username' => 'required|mobile|unique:users',
 				'smscode' => 'required',
 				'password' => 'required|min:6',
 			]);
 
-		}elseif ($vtype == 2) {
+		} elseif ($vtype == 2) {
 			$this->validate([
 				'username' => 'required|email|unique:users',
 				'smscode' => 'required',
@@ -393,7 +394,7 @@ class UsersController extends Controller
 			]);
 		}
 
-		SmsVerifyDao::code_check(request('username'), request('smscode'),$vtype);
+		SmsVerifyDao::code_check(request('username'), request('smscode'), $vtype);
 
 		$user = DB::transaction(function () {
 			// 生成密码盐
@@ -417,10 +418,10 @@ class UsersController extends Controller
 			return $user;
 		});
 
-		if($vtype==1){
+		if ($vtype == 1) {
 			$user->phone = request('username');
 			$user->save();
-		}elseif ($vtype == 2) {
+		} elseif ($vtype == 2) {
 			$user->email = request('username');
 			$user->save();
 		}
@@ -507,7 +508,7 @@ class UsersController extends Controller
 
 				return $user;
 			});
-		}else{
+		} else {
 			$user = Users::findOrFail($userbind->uid);
 			// 登录成功，生成api token
 			$user->api_token = get_api_token($user->uid);
@@ -569,7 +570,6 @@ class UsersController extends Controller
 		]);
 	}
 
-
 	/**
 	 * 验证码认证，忘记（修改）密码
 	 *
@@ -606,20 +606,15 @@ class UsersController extends Controller
 			throw new ApiErrorException('请填写正确的手机号或者邮箱');
 		}
 
-
 		$this->validate([
 			'smscode' => 'required'
 		]);
 
-
 		// 验证验证码
-		SmsVerifyDao::code_check($phoneOremail, request('smscode'),$vtype);
-
+		SmsVerifyDao::code_check($phoneOremail, request('smscode'), $vtype);
 
 		return response_json(1, 1);
 	}
-
-
 
 	/**
 	 * 修改密码
@@ -660,12 +655,10 @@ class UsersController extends Controller
 			throw new ApiErrorException('请填写正确的用户名');
 		}
 
-
 		$this->validate([
 			'password' => 'required|min:6|confirmed',
 			'password_confirmation' => 'required'
 		]);
-
 
 		$user = Users::where('username', request('username'))->first();
 
@@ -673,12 +666,11 @@ class UsersController extends Controller
 			throw new ApiErrorException('用户不存在');
 		}
 
-		if(request('password_old')){
+		if (request('password_old')) {
 			if (request('password_old') != $user->password) {
 				throw new ApiErrorException('原密码错误');
 			}
 		}
-
 
 		// 新密码不与老密码相同，允许修改密码
 		if (get_password(request('password'), $user->salt) != $user->password) {
@@ -718,7 +710,7 @@ class UsersController extends Controller
 		$user->api_token = null;
 		$user->save();
 
-		return response_json(1,1);
+		return response_json(1, 1);
 	}
 
 	/**
@@ -738,11 +730,11 @@ class UsersController extends Controller
 	 */
 	public function check_token()
 	{
-		$user = Users::where('api_token',request('api_token'))->first();
-		if($user){
-			return response_json(1,1);
-		}else{
-			return response_json(1,-1);
+		$user = Users::where('api_token', request('api_token'))->first();
+		if ($user) {
+			return response_json(1, 1);
+		} else {
+			return response_json(1, -1);
 		}
 	}
 
