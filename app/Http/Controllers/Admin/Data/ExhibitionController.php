@@ -326,35 +326,29 @@ class ExhibitionController extends BaseAdminController
 	public function add_learn($id){
 		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')
 			->select('learn.id','learn.title','learn_relation.exhibition_id')
-			->OrderBy('learn.id','desc')->paginate(50);
+			->OrderBy('learn.id','desc')->paginate(2);
+		$list_all = LearnRelation::where('exhibition_id',$id)->get();
+		foreach ($list_all as $k=>$v){
+			$arr[]=$v['learn_id'];
+		}
+		$arr_new = implode(',',$arr);
+
 		return view('admin.data.learn_exhibition', [
 			'list' => $list,
-			'exhibition_id'=>$id
+			'exhibition_id'=>$id,
+			'arr_new'=>$arr_new
 		]);
 	}
-	public function save_learn($exhibition_id,$learn_ids){
-		if (request()->ajax()) {
-			$idArray = explode(',', $learn_ids);
-			$learn_list = LearnRelation::where('exhibition_id',$exhibition_id)->get();
-			$new_list=[];
-			foreach($learn_list as $k=>$v){
-				$new_list[]=$v['learn_id'];
+
+	public function save_learn(){
+		$arr = explode(",",request('uids'));
+		$arr_new=[];
+		foreach($arr as $k=>$v){
+			if($v){
+				$arr_new[] = $v;
 			}
-//			print_r($new_list);
-			$list = array_unique(array_merge($idArray,$new_list));
-
-
-			foreach($idArray as $k=>$v){
-
-
-				$data=[
-					'learn_id'=>$v,
-					'exhibition_id'=>$exhibition_id
-				];
-				LearnRelation::insert($data);
-			}
-			return $this->success(get_session_url('exhibition_list'));
 		}
+		print_r($arr_new);
 
 	}
 }

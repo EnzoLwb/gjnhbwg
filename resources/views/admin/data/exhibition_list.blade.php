@@ -45,7 +45,8 @@
                 </div>
             </div>
         </div>
-
+        <input type="text" class="form-control" id="uids" name="uids" value=""/>
+        <input type="text" class="form-control" id="uids_old" name="uids_old" value=""/>
         <div class="row">
             <div class="col-sm-12">
                 <div class="exhibition">
@@ -66,7 +67,7 @@
                                 @endif
                             </div>
                             <div class="list-tit">{{$g['exhibition_name']}}</div>
-                            <a href="{{route('admin.data.exhibition.add_learn', $g['id'])}}"><div class="list-tit">添加学习单题目</div></a>
+                            <a onclick="choice(this)" data-id="{{$g['id']}}" href="javascript:void(0);"><div class="list-tit">添加学习单题目</div></a>
 
                         </li>
                         @endforeach
@@ -90,6 +91,19 @@
     $('#select_calss1,#select_calss2').change(function(){
         $('#form_submit').submit();
     });
+    function choice(obj){
+        var id = $(obj).attr('data-id');
+        var url='{{route("admin.data.exhibition.add_learn")}}/'+id;
+        layer.open({
+            title:"学习单题目列表",
+            type: 2,
+            area: ['300px', '850px'],
+            fix: true, //固定
+            maxmin: true,
+            move: false,
+            content:url
+        });
+    }
 
 </script>
 
