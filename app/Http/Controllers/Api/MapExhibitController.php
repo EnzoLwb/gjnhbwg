@@ -224,6 +224,7 @@ class MapExhibitController extends Controller
 	 * @apiParam {string} deviceno 机器号
 	 * @apiParam {int} map_id 地图id（楼层）
 	 * @apiParam {int} exhibit_id 终点展品id
+	 * @apiSuccess {int} status 1正常生成线路数据 ， -1未定位到您的位置信息，-2楼层位置不对，请切换楼层 ，-3输入的展品id有误
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} x x轴坐标
 	 * @apiSuccess {int} y y轴坐标
