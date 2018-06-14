@@ -114,7 +114,7 @@ $gateway->registerAddress = "$registerIP:$registerPort";
 // 心跳间隔
 //$gateway->pingInterval = 10;
 // 心跳数据
-$gateway->pingData = '{"type":"pong"}';
+$gateway->pingData = '{"type":"heart"}';
 
 // bussinessWorker 进程
 $worker = new BusinessWorker();
