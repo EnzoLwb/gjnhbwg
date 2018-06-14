@@ -8,11 +8,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>场馆简介</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/reset.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/cgjj.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-
-{!! $data->content !!}
-
+<div>
+    {!! $data->content !!}
+</div>
 </body>
 
 

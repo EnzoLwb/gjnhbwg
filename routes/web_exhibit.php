@@ -32,8 +32,9 @@ Route::group([
 		// 删除
 		Route::get('/del_check/{type}/{ids}', 'ExhibitionController@del_check')->name('admin.data.exhibition.del_check');
 		//添加学习单题目
-		Route::get('/add_learn/{id}', 'ExhibitionController@add_learn')->name('admin.data.exhibition.add_learn');
-		Route::get('/save_learn/{exhibition_id}/{ids}', 'ExhibitionController@save_learn')->name('admin.data.exhibition.save_learn');
+		Route::get('/add_learn/{id?}', 'ExhibitionController@add_learn')->name('admin.data.exhibition.add_learn');
+		Route::post('/save_learn', 'ExhibitionController@save_learn')->name('admin.data.exhibition.save_learn');
+		Route::post('/choice_confirm', 'ExhibitionController@choice_confirm')->name('admin.data.exhibition.choice_confirm');
 	});
 
 	//展品管理
