@@ -569,6 +569,7 @@ class UsersController extends Controller
 		]);
 	}
 
+
 	/**
 	 * 验证码认证，忘记（修改）密码
 	 *
@@ -576,14 +577,65 @@ class UsersController extends Controller
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
 	 *
-	 * @api {POST} /users/password 4. 忘记（修改）密码
+	 * @api {POST} /users/check_vcode 4. 验证验证码是否正确
 	 * @apiGroup Users
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 请求平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} username 手机号/邮箱
+	 * @apiParam {string} phoneOremail 手机号/邮箱
 	 * @apiParam {string} smscode 验证码
+	 * @apiSuccess {string} data data等于1表示验证通过，其他验证不通过
+	 * @apiSuccessExample {json} 返回值
+	 * {"status":1,"data":{1},"msg":""}
+	 */
+	public function check_vcode()
+	{
+
+		$phoneOremail = trim(request('phoneOremail'));
+		if (empty($phoneOremail)) {
+			throw new ApiErrorException('phoneOremail不能为空');
+		}
+
+		$preg_email = '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+		$preg_phone = '/^1[34578]\d{9}$/ims';
+
+		if (preg_match($preg_phone, $phoneOremail)) {
+			$vtype = 1;
+		} elseif (preg_match($preg_email, $phoneOremail)) {
+			$vtype = 2;
+		} else {
+			throw new ApiErrorException('请填写正确的手机号或者邮箱');
+		}
+
+
+		$this->validate([
+			'smscode' => 'required'
+		]);
+
+
+		// 验证验证码
+		SmsVerifyDao::code_check($phoneOremail, request('smscode'),$vtype);
+
+
+		return response_json(1, 1);
+	}
+
+
+
+	/**
+	 * 修改密码
+	 *
+	 * @author lxp 20170113
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws ApiErrorException
+	 *
+	 * @api {POST} /users/password 9. 修改密码
+	 * @apiGroup Users
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 请求平台，i：IOS，a：安卓，w：Web，t：触屏或手机
+	 * @apiParam {string} username 用户名（手机号/邮箱）
 	 * @apiParam {string} password 新密码
 	 * @apiParam {string} password_confirmation 确认密码
+	 * @apiParam {string} [password_old] 旧密码
 	 * @apiSuccess {string} username 用户名
 	 * @apiSuccess {string} api_token 用户签名
 	 * @apiSuccessExample {json} 返回值
@@ -605,30 +657,28 @@ class UsersController extends Controller
 		} elseif (preg_match($preg_email, $phoneOremail)) {
 			$vtype = 2;
 		} else {
-			throw new ApiErrorException('请填写正确的手机号或者邮箱');
+			throw new ApiErrorException('请填写正确的用户名');
 		}
 
 
 		$this->validate([
-			'smscode' => 'required',
 			'password' => 'required|min:6|confirmed',
 			'password_confirmation' => 'required'
 		]);
 
 
-		if($vtype==1){
-			$user = Users::where('phone', request('username'))->first();
-
-		}elseif ($vtype == 2) {
-			$user = Users::where('email', request('username'))->first();
-		}
+		$user = Users::where('username', request('username'))->first();
 
 		if (!$user) {
 			throw new ApiErrorException('用户不存在');
 		}
 
-		// 验证验证码
-		SmsVerifyDao::code_check(request('username'), request('smscode'),$vtype);
+		if(request('password_old')){
+			if (request('password_old') != $user->password) {
+				throw new ApiErrorException('原密码错误');
+			}
+		}
+
 
 		// 新密码不与老密码相同，允许修改密码
 		if (get_password(request('password'), $user->salt) != $user->password) {

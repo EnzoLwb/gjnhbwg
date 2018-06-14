@@ -10,7 +10,9 @@ Route::get('cpt/show', 'CptController@show');
 Route::get('cpt/check', 'CptController@check');
 // 发送短信(邮箱)验证码
 Route::post('send_vcode', 'CptController@send_vcode');
-// 忘记（修改）密码
+// 验证验证码
+Route::post('users/check_vcode', 'UsersController@check_vcode');
+// 修改密码
 Route::post('users/password', 'UsersController@password');
 // 第三方用户登录
 Route::post('users/login_bind', 'UsersController@login_bind');
