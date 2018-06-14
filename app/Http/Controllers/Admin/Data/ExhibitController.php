@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\BaseAdminController;
 use App\Models\Exhibit;
 use App\Models\Exhibition;
 use App\Models\ExhibitLanguage;
+use App\Models\Learn;
+use App\Models\LearnRelation;
 use App\Models\SvgMapTable;
 use App\Models\VersionList;
 use App\Models\ExhibitComment;
@@ -543,6 +545,43 @@ class ExhibitController extends BaseAdminController
 			ExhibitDao::del_check($type,$ids);
 			return $this->success(get_session_url('exhibition_comment_list'));
 		}
+	}
+
+	/**
+	 * 添加学习单
+	 *
+	 * @author ljy 20180613
+	 * @param int $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+	 */
+	public function add_learn($id){
+		$query = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')
+			->OrderBy('learn.id','desc');
+		if (request('learn_title')) {
+			$query = $query->where('learn.title', 'LIKE', '%' . request('learn_title') . '%');
+		}
+		$list = $query->select('learn.id','learn.title','learn_relation.exhibit_id')->paginate(2);
+		$list->appends(app('request')->all());
+		return view('admin.data.learn_exhibit', [
+			'list' => $list,
+			'exhibit_id'=>$id
+		]);
+	}
+
+	public function save_learn(){
+		$exhibit_id =request('exhibit_id');
+		$learn_id =request('learn_id');
+		LearnRelation::insert([
+			'exhibit_id'=>$exhibit_id,
+			'learn_id'=>$learn_id
+		]);
+
+	}
+	public function del_learn(){
+		$exhibit_id =request('exhibit_id');
+		$learn_id =request('learn_id');
+		LearnRelation::where('learn_id',$learn_id)->where('exhibit_id',$exhibit_id)->delete();
+
 	}
 
 }

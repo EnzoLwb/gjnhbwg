@@ -34,7 +34,7 @@ Route::group([
 		//添加学习单题目
 		Route::get('/add_learn/{id?}', 'ExhibitionController@add_learn')->name('admin.data.exhibition.add_learn');
 		Route::post('/save_learn', 'ExhibitionController@save_learn')->name('admin.data.exhibition.save_learn');
-		Route::post('/choice_confirm', 'ExhibitionController@choice_confirm')->name('admin.data.exhibition.choice_confirm');
+		Route::post('/del_learn', 'ExhibitionController@del_learn')->name('admin.data.exhibition.del_learn');
 	});
 
 	//展品管理
@@ -72,6 +72,10 @@ Route::group([
 		Route::post('/end_zip', 'ExhibitController@end_zip')->name('admin.data.exhibit.end_zip');
 		//资源文件下载
 		Route::get('/down_file', 'ExhibitController@down_file')->name('admin.data.exhibit.down_file');
+		//添加学习单
+		Route::get('/add_learn/{id?}', 'ExhibitController@add_learn')->name('admin.data.exhibit.add_learn');
+		Route::post('/save_learn', 'ExhibitController@save_learn')->name('admin.data.exhibit.save_learn');
+		Route::post('/del_learn', 'ExhibitController@del_learn')->name('admin.data.exhibit.del_learn');
 	});
 
 	//蓝牙关联设置

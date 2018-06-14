@@ -16,7 +16,7 @@
                             </div>
                             &nbsp;&nbsp;
                             <button type="submit" class="btn btn-primary">搜索</button>
-                            <button type="button" class="btn btn-white" onclick="location.href='{{route('admin.data.exhibition.add_learn',$exhibition_id)}}'">重置</button>
+                            <button type="button" class="btn btn-white" onclick="location.href='{{route('admin.data.exhibit.add_learn',$exhibit_id)}}'">重置</button>
                         </form>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                             </thead>
                             @foreach($list as $k=>$v)
                                 <tr class="gradeA">
-                                    <td><input type="checkbox" name="items[]" class="checkItem" @if(isset($v['exhibition_id']))checked @endif value="{{$v['id']}}"></td>
+                                    <td><input type="checkbox" name="items[]" class="checkItem" @if(isset($v['exhibit_id']))checked @endif value="{{$v['id']}}"></td>
                                     <td>{{$v['title']}}</td>
 
                                 </tr>
@@ -55,7 +55,7 @@
 @section('script')
     <script>
         $(function () {
-            var exhibition_id = {{$exhibition_id}};
+            var exhibit_id = {{$exhibit_id}};
             $('.checkItem').click(function () {
                 //判断是否选中
                 var check = $(this).is(':checked');
@@ -64,16 +64,16 @@
                     $.ajax({
                         cache: true,
                         type: "POST",
-                        url:"{{route('admin.data.exhibition.save_learn')}}",
-                        data:{learn_id:learn_id,exhibition_id:exhibition_id},
+                        url:"{{route('admin.data.exhibit.save_learn')}}",
+                        data:{learn_id:learn_id,exhibit_id:exhibit_id},
                         async: false,
                     });
                 }else{
                     $.ajax({
                         cache: true,
                         type: "POST",
-                        url:"{{route('admin.data.exhibition.del_learn')}}",
-                        data:{learn_id:learn_id,exhibition_id:exhibition_id},
+                        url:"{{route('admin.data.exhibit.del_learn')}}",
+                        data:{learn_id:learn_id,exhibit_id:exhibit_id},
                         async: false,
 
 
