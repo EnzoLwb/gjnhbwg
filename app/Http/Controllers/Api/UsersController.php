@@ -98,7 +98,7 @@ class UsersController extends Controller
 		$uinfo = Users::where('uid', $uid)->first();
 		$uinfo_bind = UsersBind::where('uid', $uid)->first();
 
-		if (empty($uinfo_bind)) {
+		if ($uinfo_bind) {
 			$r_type = 3;
 		} else {
 
