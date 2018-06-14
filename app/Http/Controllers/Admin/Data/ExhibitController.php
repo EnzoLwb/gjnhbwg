@@ -560,7 +560,7 @@ class ExhibitController extends BaseAdminController
 		if (request('learn_title')) {
 			$query = $query->where('learn.title', 'LIKE', '%' . request('learn_title') . '%');
 		}
-		$list = $query->select('learn.id','learn.title','learn_relation.exhibit_id')->paginate(2);
+		$list = $query->select('learn.id','learn.title','learn_relation.exhibit_id')->paginate(60);
 		$list->appends(app('request')->all());
 		return view('admin.data.learn_exhibit', [
 			'list' => $list,

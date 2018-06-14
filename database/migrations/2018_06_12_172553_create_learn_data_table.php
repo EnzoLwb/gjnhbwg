@@ -23,6 +23,7 @@ class CreateLearnDataTable extends Migration
 			$table->integer('score',false, true)->comment('分数')->default(0);
 			$table->text('datalog')->comment('答题记录')->nullable();
 			$table->dateTime('add_time')->comment('答题时间');
+			$table->integer('timecost',false, true)->comment('花费时间 秒')->default(0);
 			if (env('DB_CONNECTION') == 'oracle') {
 				$table->comment = $this->tableComment;
 			}

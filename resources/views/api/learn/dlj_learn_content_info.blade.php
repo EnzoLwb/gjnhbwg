@@ -388,7 +388,7 @@
         <input type="button" id="next-btn" class="btn yellow-btn" style="display:none;" value="下一题"/>
     </div>
     <div class="btn-div">
-        <input type="button" id="return-btn" class="btn yellow-btn" style="display:none;" value="返回榜单"/>
+        <input type="button" id="return-btn" class="btn yellow-btn" style="display:none;" value="返回"/>
     </div>
     <div id="right-layer-div" class="layer-div">
         <img class="layer-div-img" src="{{cdn('morder/images/right.png')}}"/>
@@ -412,21 +412,6 @@
         <div class="score-title">
             <label>恭喜，完成答题！</label>
         </div>
-    </div>
-    <div class="table-div">
-        <table class="table table-bordered table-striped">
-            <caption>总排行榜</caption>
-            <thead>
-            <tr>
-                <th>排名</th>
-                <th>姓名</th>
-                <th>得分</th>
-                <th>日期</th>
-            </tr>
-            </thead>
-            <tbody id="list">
-            </tbody>
-        </table>
     </div>
     <div class="btn-div">
         <input type="button" id="again-btn" class="btn yellow-btn" value="再来一次"/>
@@ -503,12 +488,10 @@
                         exhibition_id:{{$exhibition_id}}
                     },
                     success: function (newid) {
-                        $.get("{{route('api.learn.answer_list')}}", {exhibition_id:{{$exhibition_id}},p:"{{$p}}",newid:newid}, function (data) {
-                            $('#list').append(data);
-                            $("#option-div").hide();
-                            $("#list-div").show();
-                            $("html").css("background-color", "#f5f5f5");
-                        });
+
+                        $("#option-div").hide();
+                        $("#list-div").show();
+                        $("html").css("background-color", "#f5f5f5");
                     }
                 });
                 layer.closeAll();

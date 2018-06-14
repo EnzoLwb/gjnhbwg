@@ -1,0 +1,81 @@
+@CHARSET "UTF-8";
+
+*{ margin:0; padding:0; font-family:Arial, "微软雅黑";}
+body{max-width: 1024px;  margin: 0 auto;}
+input{ height:34px; width:65%;outline:none;padding: 0 15px;}
+input:focus{ border:2px solid #dce4ec;}
+a,button{text-decoration:none}
+.order_register{position: relative; overflow:hidden; width:100%;height: 60px;line-height: 60px; background-color:#425366;}
+.order_register img{margin: 10px;float: left;}
+.order_register p{ font-size:20px; color:#fff; margin-left:45%;}
+/*.order_register a{ float:right; width:38px; height:80px; background:url(../images/order.png) no-repeat center center; margin-right:30px; cursor:pointer;}*/
+.order_register a{position: absolute;top: 0px;right: 10px;color: rgb(255, 255, 255);}
+.order_inform{ padding:30px;margin:0 auto;}
+.order_inform h3{ font-size:18px; font-weight:normal;margin-bottom:10px;}
+.order_inform p{ font-size:16px; font-weight:normal;text-indent: 2em;line-height: 25px;}
+.order_inform div{ overflow:hidden;}
+.order_inform input,.order_inform span{ float:left;}
+.order_inform span{ font-size:14px; color:#666;padding-left:10px; margin-top:-2px;}
+.order_btn{ max-width: 500px;  margin:10px auto;}
+.order_btn a,button{ width:126px; height:40px; color:#fff;border: 0; background-color:#ffb400; line-height:40px; text-align:center; font-size:16px;border-radius:10px;}
+.order_btn_01{ float:left;}
+.order_btn_03{ margin-left:87px;}
+.order_btn_02{ float:right;}
+.order_text{margin:60px auto; list-style-type:none;padding: 0 30px;text-align: center;}
+.order_text li{ font-size:16px;color:#000; margin-bottom:20px;}
+.order_text input{  border: 1px solid #8A8A8A;border-radius: 5px;}
+.order_text select{width:68%;height:34px;outline:none;padding-left: 10px;border: 1px solid #8A8A8A;border-radius: 5px;}/*-webkit-appearance: none;*/
+.examine_box{ width:300px; margin:40px auto;}
+.examine_box .cg_pic{ width:120px; height:120px; margin:0 auto; background:url(../images/examine.png);}
+.examine_box .cg_pic2{ width:120px; height:120px; margin:0 auto; background:url(../images/failure.png);}
+.examine_box .right_pic{ width:60px; height:60px; margin:0 auto; background:url(../images/right.png);}
+.examine_box .wrong_pic{ width:60px; height:60px; margin:0 auto; background:url(../images/wrong.png);}
+.examine_box p{ text-align:center; font-size:18px; margin-top:20px;}
+.success_box{ width:300px; margin:50px auto;}
+.success_box div{ width:120px; padding-top:50px; margin:0 auto; background:url(../images/examine.png) no-repeat top center; text-align:center; font-size:18px; color:#ffb400;}
+.success_box_01{ text-align:center; font-size:18px; margin-top:60px; background-color:#ffb400;border-radius:10px; height:48px;  line-height:48px; color:#fff;}
+.success_box_02{text-align:center; font-size:18px; margin-top:30px;}
+.cancel_text{ width:474px; margin:60px auto; list-style-type:none;}
+.cancel_text li{ font-size:18px;color:#000; margin-bottom:20px;}
+.cancel_text input{ width:340px;border: 1px solid #8A8A8A;border-radius: 5px;}
+.cancel_text_01{ width:474px; margin:200px auto; font-size:24px;text-align: center;}
+.failure_box{width:300px; margin:40px auto;}
+.failure_box div{ width:120px; padding-top:50px; margin:0 auto; background:url(../images/failure.png) no-repeat top center; text-align:center; font-size:18px; color:#3d3935;}
+.failure_box_01{ font-size:28px; color:#000;text-align:center; margin-top:65px;}
+.failure_box_02{ font-size:20px; color:#000;text-align:center; margin-top:20px; line-height:35px;}
+.search_box{padding: 30px; margin:140px auto;text-align: center;}
+.search_box div{ font-size:16px;color:#000;}
+.search_box div input{ border: 1px solid #8A8A8A;box-shadow: 3px 3px 6px #CCC inset;border-radius: 10px;margin:40px 0;  width: 85%;}
+.search_box a{ display:block; margin:80px auto; width:126px; height:40px; color:#fff; background-color:#ffb400; line-height:40px; text-align:center; font-size:18px;border-radius:10px;}
+
+@media screen and (max-width: 900px) {
+    .order_text {
+        margin: 20px 0;
+        padding: 0;
+    }
+    .order_register p{ 
+    	font-size:20px; 
+    	color:#fff; 
+    	margin-left:40%;
+    }
+}
+@media screen and (max-width: 450px) {
+    .order_text select {
+        width: 73%;
+    }
+    .order_register p{ 
+    	font-size:20px; 
+    	color:#fff; 
+    	margin-left:40%;
+    }
+}
+.order_text>li{
+    position: relative;
+}
+.valid{
+    display: none;
+    position: absolute;
+    left: 25%;
+    color: red;
+    font-size: 14px;
+}
