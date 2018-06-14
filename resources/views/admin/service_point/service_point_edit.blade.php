@@ -32,6 +32,20 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">类型</label>
+                            <div class="col-sm-2">
+
+                                <select class="form-control" name="stype">
+                                    @foreach(config('stype') as $k=>$v)
+                                        <option value="{{$k}}" @if(isset($info) && !empty($info) && $info['stype'] == $k) selected @endif>{{$v}}</option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
                             <div class="col-sm-10">
                                 <label class="col-sm-2 control-label" style=" width: 20.666667%;">设施图片上传</label>
                                 <div class="webuploader-pick" onclick="upload_resource('设施图片上传','FT_SERVICE_POINT','img',1);" style=" float: left; display: inline-block; width: auto;">点击上传图片</div>

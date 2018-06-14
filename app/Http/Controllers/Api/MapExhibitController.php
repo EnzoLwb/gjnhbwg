@@ -324,7 +324,11 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} data.road_id 线路id
 	 * @apiSuccess {string} data.road_name 线路名
-	 * @apiSuccess {string} data.road_img 线路图
+	 * @apiSuccess {array} data.floor1 1层数据
+	 * @apiSuccess {array} data.floor2 2层数据
+	 * @apiSuccess {array} data.floor3 3层数据
+	 * @apiSuccess {int} data.exhibit_counts 展品数
+	 * @apiSuccess {string} data.road_long 游览时长
 	 *
 	 */
 	public function road_detail()
@@ -347,8 +351,8 @@ class MapExhibitController extends Controller
 				return response_json(1, []);
 			} else {
 				$road_data = $road_data->toArray();
-				//var_dump($road_data);
 				$data = array();
+				$data['road_name'] = $road_data['road_name'];
 
 				$data['floor1'] = $this->exhibit_handle($road_data['weight_exhibit_ids1'], 1, $language);
 				$data['floor2'] = $this->exhibit_handle($road_data['weight_exhibit_ids2'], 2, $language);

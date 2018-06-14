@@ -441,7 +441,7 @@ class PaiController extends Controller
 	 * @apiSuccess {int} comment_num 评论数
 	 * @apiSuccess {array} imgs 发布的图片
 	 * @apiSuccess {int} is_like 是否点赞 0未点赞 1已点赞
-	 * @apiSuccess {int} is_check 是否通过审核 1未通过 2已通过
+	 * @apiSuccess {int} is_check 是否通过审核 1审核中 2已通过 3审核失败
 	 * @apiSuccess {string} user_nicename 用户昵称
 	 * @apiSuccess {string} avatar 头像
 	 */

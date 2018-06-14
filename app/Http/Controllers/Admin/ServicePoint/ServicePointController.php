@@ -65,6 +65,7 @@ class ServicePointController extends BaseAdminController
 				'map_id'=>'required',
 				'x'=>'required',
 				'y'=>'required',
+				'stype'=>'required',
 			]);
 
 			$data = [
@@ -73,6 +74,7 @@ class ServicePointController extends BaseAdminController
 				'x' => request('x'),
 				'y' => request('y'),
 				'service_name' => request('service_name'),
+				'stype' => request('stype'),
 			];
 			//基本信息入库
 			if($id=='add'){
