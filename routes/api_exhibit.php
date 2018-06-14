@@ -38,6 +38,8 @@ Route::get('map_exhibit', 'MapExhibitController@map_exhibit');
 Route::get('map_near_exhibition', 'MapExhibitController@map_near_exhibition');
 //附近展品
 Route::get('map_near_exhibit', 'MapExhibitController@map_near_exhibit');
+//导航线路生成接口
+Route::get('road_navigation', 'MapExhibitController@road_navigation');
 //线路生成接口
 Route::get('road_info', 'MapExhibitController@road_info');
 //线路列表接口

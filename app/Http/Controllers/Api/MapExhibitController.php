@@ -12,6 +12,7 @@ use App\Models\VersionList;
 use App\Models\VisitRoad;
 use App\Models\NavigationRoad;
 use App\Dao\NavigationDao;
+use App\Models\Trajectory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -208,6 +209,73 @@ class MapExhibitController extends Controller
 			$data[$k]['floor'] = config('floor')[$g['floor_id']];
 		}
 		return response_json(1, $data);
+	}
+
+	/**
+	 * 导航线路生成接口
+	 *
+	 * @author yyj 20171117
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /road_navigation 306.导航线路生成接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
+	 * @apiParam {string} deviceno 机器号
+	 * @apiParam {int} map_id 地图id（楼层）
+	 * @apiParam {int} exhibit_id 终点展品id
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {int} x x轴坐标
+	 * @apiSuccess {int} y y轴坐标
+	 *
+	 */
+	public function road_navigation()
+	{
+
+		$this->validate([
+			'deviceno' => 'required',
+			'map_id' => 'required|in:1,2,3',
+			'exhibit_id' => 'required|min:0|integer',
+		]);
+
+		$map_id = request('map_id', 1);
+		$deviceno = request('deviceno');
+		$exhibit_id_last = request('exhibit_id');
+		$road_info = [];
+
+		$look_date = date('Y-m-d');
+
+		$trajectory_info = Trajectory::where('look_date', $look_date)->where('deviceno', $deviceno)->orderBy('updated_at', 'desc')->first();
+
+		if (empty($trajectory_info)) {
+			return response_json(-1, $road_info, '未定位到您的位置信息');
+		} else {
+			$trajectory_info = $trajectory_info->toArray();
+			if ($trajectory_info['map_id'] != $map_id) {
+				return response_json(-2, $road_info, '请走到' . $map_id . '层再导航');
+			}
+
+			$exhibit_info_last = Exhibit::where('id', $exhibit_id_last)->first();
+			if (empty($exhibit_info_last)) {
+				return response_json(-3, $road_info, '输入的展品id有误');
+			}
+
+			$road_arr_info = [];
+			$road_arr = NavigationDao::get_road($trajectory_info['x'], $trajectory_info['y'], $exhibit_info_last['x'], $exhibit_info_last['y'], $map_id);
+
+
+			if (count($road_arr_info) && count($road_arr)) {
+				unset($road_arr[0]);
+				$road_arr_info = array_merge($road_arr_info, $road_arr);
+			} else {
+				$road_arr_info = $road_arr;
+			}
+
+			$road_info = $road_arr_info;
+
+			return response_json(1, $road_info);
+		}
+
 	}
 
 	/**
