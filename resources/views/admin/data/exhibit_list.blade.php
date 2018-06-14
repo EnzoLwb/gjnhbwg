@@ -60,7 +60,7 @@
                 <div class="exhibit">
                     <ul class="exhibit-list">
                         @foreach($info as $g)
-                        <li>
+                        <li style="margin-bottom:80px;">
                             <div class="list-pic">
                                 <img src="{{json_decode($g['exhibit_img'],true)['exhibit_list']}}">
                                 <a class="btn-edit" href="{{route('admin.data.exhibit.edit', $g['id'])}}">编辑</a>
@@ -74,12 +74,14 @@
                                 @endif
                             </div>
                             <div class="list-tit">{{$g['exhibit_num']}}&nbsp;&nbsp;&nbsp;&nbsp;{{$g['exhibit_name']}}</div>
+                            <a onclick="choice(this)" data-id="{{$g['id']}}" href="javascript:void(0);"><div class="list-tit">添加学习单题目</div></a>
                             <div class="list-info">
                                 <span><i class="fa fa-eye fa-lg"></i>{{$g['look_num']}}人浏览</span>
                                 <span><i class="fa fa-thumbs-o-up fa-lg"></i>{{$g['like_num']}}人点赞</span>
                                 <span><i class="fa fa-commenting-o fa-lg"></i>{{$g['collection_num']}}人评论</span>
                                 <span><i class="fa fa-star-o fa-lg"></i>{{$g['comment_num']}}人收藏</span>
                             </div>
+
                         </li>
                         @endforeach
                     </ul>
@@ -101,6 +103,19 @@
     <script>
         $('#select_calss1,#select_calss2,#select_calss3').change(function(){
             $('#form_submit').submit();
-        })
+        });
+        function choice(obj){
+            var id = $(obj).attr('data-id');
+            var url='{{route("admin.data.exhibit.add_learn")}}/'+id;
+            layer.open({
+                title:"学习单题目列表",
+                type: 2,
+                area: ['800px', '850px'],
+                fix: true, //固定
+                maxmin: true,
+                move: false,
+                content:url
+            });
+        }
     </script>
 @endsection

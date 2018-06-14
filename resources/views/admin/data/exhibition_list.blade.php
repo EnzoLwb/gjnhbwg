@@ -45,8 +45,6 @@
                 </div>
             </div>
         </div>
-        <input type="text" class="form-control" id="uids" name="uids" value=""/>
-        <input type="text" class="form-control" id="uids_old" name="uids_old" value=""/>
         <div class="row">
             <div class="col-sm-12">
                 <div class="exhibition">
@@ -97,7 +95,7 @@
         layer.open({
             title:"学习单题目列表",
             type: 2,
-            area: ['300px', '850px'],
+            area: ['800px', '850px'],
             fix: true, //固定
             maxmin: true,
             move: false,

@@ -324,31 +324,32 @@ class ExhibitionController extends BaseAdminController
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
 	 */
 	public function add_learn($id){
-		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')
-			->select('learn.id','learn.title','learn_relation.exhibition_id')
-			->OrderBy('learn.id','desc')->paginate(2);
-		$list_all = LearnRelation::where('exhibition_id',$id)->get();
-		foreach ($list_all as $k=>$v){
-			$arr[]=$v['learn_id'];
+		$query = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')
+			->OrderBy('learn.id','desc');
+		if (request('learn_title')) {
+			$query = $query->where('learn.title', 'LIKE', '%' . request('learn_title') . '%');
 		}
-		$arr_new = implode(',',$arr);
-
+		$list = $query->select('learn.id','learn.title','learn_relation.exhibition_id')->paginate(2);
+		$list->appends(app('request')->all());
 		return view('admin.data.learn_exhibition', [
 			'list' => $list,
-			'exhibition_id'=>$id,
-			'arr_new'=>$arr_new
+			'exhibition_id'=>$id
 		]);
 	}
 
 	public function save_learn(){
-		$arr = explode(",",request('uids'));
-		$arr_new=[];
-		foreach($arr as $k=>$v){
-			if($v){
-				$arr_new[] = $v;
-			}
-		}
-		print_r($arr_new);
+		$exhibition_id =request('exhibition_id');
+		$learn_id =request('learn_id');
+		LearnRelation::insert([
+			'exhibition_id'=>$exhibition_id,
+			'learn_id'=>$learn_id
+		]);
+
+	}
+	public function del_learn(){
+		$exhibition_id =request('exhibition_id');
+		$learn_id =request('learn_id');
+		LearnRelation::where('learn_id',$learn_id)->where('exhibition_id',$exhibition_id)->delete();
 
 	}
 }
