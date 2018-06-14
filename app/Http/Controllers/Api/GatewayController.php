@@ -32,7 +32,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {string} type 信息类型
 	 * (1.bind:机器号绑定;2.heart:心跳响应;3.chat:信息推送),
 	 * type等于bind 机器号/uid绑定,执行uid/设备绑定接口,
-	 * type等于heart 心跳响应,使用tcp链接向服务器发送string数据'pong';
+	 * type等于heart 心跳响应,使用tcp链接向服务器发送string数据'heart_response';
 	 * type等于send_msg 并且send_type等于1表示普通发送消息 2 表示语音消息 'error_msg' 表示 断开连接或者其它问题 3代表有人加群或者退出群组
 	 * @apiSuccess {string} client_id 连接上tcp后获得的client_id
 	 * @apiSuccess {string} send_type 信息类型,标题 error_msg 表示错误

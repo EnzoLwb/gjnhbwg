@@ -8,13 +8,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>文创产品</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/reset.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/wccp.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-<img src="{{get_file_url($data->pro_img)}}">
-<!--标题--!>
-{{$data->pro_title}}
-<!--内容--!>
-{!! $data->pro_content !!}
+<div>
+    <img src="{{get_file_url($data->pro_img)}}" alt=""/>
+    <h1>
+        {{$data->pro_title}}
+    </h1>
+    {!! $data->pro_content !!}
+</div>
 </body>
 
 

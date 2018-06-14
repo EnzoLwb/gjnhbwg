@@ -8,9 +8,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>文创系列</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/reset.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/wcjs.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-{!! $data !!}
+<div>
+    {!! $data !!}
+</div>
 </body>
 
 
