@@ -282,28 +282,24 @@ class GatewayController extends Controller
 		$content=request('content');
 		$device_type= request('p') !='d' ? 1:2;
 		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
-		/*if (empty($to_client_id)) {
-			//断开连接或者uid输入错误
-			//					$arr['client_id'] = $client_id;
-			$arr['type'] = 'sent_msg';
-			$arr['send_type'] = 'error_msg';
-			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
-		}*/
-		//保存数据库
-		ChatMessage::create([
+		$data=[
 			'send_msg'=>$content,
 			'from_user_number'=>$from_user_number,
 			'to_user_number'=>$to_user_number,
 			'to_client_id'=>$to_client_id,
 			'send_type'=>$type,
 			'device_type'=>$device_type,
-		]);
+		];
 		$arr['type'] = 'sent_msg';
 		$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
 		$arr['send_content'] = $content;
 		if (!empty($to_client_id)){
 			GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		}else{
+			$data['is_read']=0;
 		}
+		//保存数据库
+		ChatMessage::create($data);
 		return response_json(1,'','发送成功');
 	}
 	//获得所有uid  测试用
@@ -382,29 +378,25 @@ class GatewayController extends Controller
 		$path=$url.$file['data']->file_path . '/' . $file['data']->file_name;
 		$device_type= request('p') !='d' ? 1:2;
 		$to_client_id= current(GatewayLib::getClientIdByUid($to_user_number));
-		if (empty($to_client_id)) {
-			//断开连接或者uid输入错误
-			//					$arr['client_id'] = $client_id;
-			$arr['type'] = 'sent_msg';
-			$arr['send_type'] = 'error_msg';
-			$arr['send_content'] = ['error_msg' => '断开连接或者to_uid输入错误'];
+		$data=[
+			'send_msg'=>$path,
+			'from_user_number'=>$from_user_number,
+			'to_user_number'=>$to_user_number,
+			'to_client_id'=>$to_client_id,
+			'send_type'=>2,
+			'device_type'=>$device_type,
+			'audio_duration'=>$vtime,
+		];
+		$arr['type'] = 'sent_msg';
+		$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
+		$arr['send_content'] = $path.'#'.$vtime;
+		if (!empty($to_client_id)){
+			GatewayLib::sendToClient( $to_client_id,json_encode($arr));
 		}else{
-			//保存数据库
-			ChatMessage::create([
-				'send_msg'=>$path,
-				'from_user_number'=>$from_user_number,
-				'to_user_number'=>$to_user_number,
-				'to_client_id'=>$to_client_id,
-				'send_type'=>2,
-				'device_type'=>$device_type,
-				'audio_duration'=>$vtime,
-			]);
-			$arr['type'] = 'sent_msg';
-			$arr['send_type'] = '2';//1表示文本信息 2表示语音信息
-			$arr['send_content'] = $path.'#'.$vtime;
-//			$arr['audio_duration'] = $vtime;
+			$data['is_read']=0;
 		}
-		GatewayLib::sendToClient( $to_client_id,json_encode($arr));
+		//保存数据库
+		ChatMessage::create($data);
 		$arr['send_content'] = $path;
 		$arr['audio_duration'] = $vtime;
 		return response_json(1, $arr,'发送成功');
@@ -458,9 +450,15 @@ class GatewayController extends Controller
 		//双方头像
 		$avatar['to_user_number']=Users::where('uid',$to_user_number)->value('avatar');
 		$avatar['from_user_number']=Users::where('uid',$from_user_number)->value('avatar');
-
 		$data['chat_record']=$list;
 		$data['avatar']=$avatar;
+		//更改为已读 from_user_number=to_user_number 并且 时
+		$data_read=[
+			'to_user_number'=>$from_user_number,
+			'from_user_number'=>$to_user_number,
+			'is_read'=>0
+		];
+		ChatMessage::where($data_read)->update(['is_read'=>1]);
 		return response_json(1, $data);
 	}
 	/**
@@ -477,7 +475,7 @@ class GatewayController extends Controller
 	 * @apiSuccess {object} data 操作结果1成功0失败
 	 * @apiSuccess {object} data.group_info  群组信息  包括group_id:对内的群组id  group_number：对外的群组id  name:群组名称
 	 * @apiSuccess {object} data.my_info    我的信息 如果是手机则返回avatar:头像  nickname：昵称  如果是导览机的用户返回空 使用自己的设备号和默认头像即可
-	 * @apiSuccess {array} data.user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号)
+	 * @apiSuccess {array} data.user_list    返回avatar:头像(导览机用户为空)  nickname：昵称(导览机为设备号) user_number：uid (导览机为设备号) is_read:是否有未读消息 1代表有未读消息
 	 */
 	public function users_list()
 	{
@@ -510,12 +508,17 @@ class GatewayController extends Controller
 		$data['user_list']=GroupMember::leftjoin('users','users.uid','=','group_member.member_id')
 			->where($where)->where('member_id','!=',$user_number)->select('users.avatar','users.nickname','users.uid','member_id')->get()->toArray();
 		foreach ($data['user_list'] as &$v){
+			$member[]=$v['member_id'];
 			if (!$v['uid']){
 				$v['avatar']='';
 				$v['nickname']=$v['member_id'];
 			}
 			$v['user_number']=$v['member_id'];
 			unset($v['member_id'],$v['uid']);
+		}
+		$is_read=ChatMessage::where(['to_user_number'=>$user_number,'is_read'=>0])->whereIn('from_user_number',$member)->pluck('from_user_number')->toArray();
+		foreach ($data['user_list'] as &$value){
+			 $value['is_read']=in_array($value['user_number'],$is_read) ? 1:0;
 		}
 		return response_json(1, $data);
 	}
