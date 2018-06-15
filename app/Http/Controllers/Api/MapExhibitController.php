@@ -484,6 +484,7 @@ class MapExhibitController extends Controller
 				} else {
 					$road_data = $road_data->toArray();
 					$data = array();
+					$data['road_id'] = $road_data['id'];
 					$data['road_name'] = $road_data['road_name'];
 
 					$floor1 = $this->exhibit_handle($road_data['weight_exhibit_ids1'], 1, $language);
