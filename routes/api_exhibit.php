@@ -46,6 +46,8 @@ Route::get('road_info', 'MapExhibitController@road_info');
 Route::get('road_list', 'MapExhibitController@road_list');
 //线路详情接口
 Route::get('road_detail', 'MapExhibitController@road_detail');
+//线路详情接口
+Route::get('road_detail_all', 'MapExhibitController@road_detail_all');
 
 //导览机版本资源更新
 Route::get('update_version_resource', 'MapExhibitController@update_version_resource');
