@@ -57,6 +57,30 @@ class CptController extends Controller
 			//短信验证码
 			$phone = $phoneOremail;
 
+
+			// 可添加针对手机号或IP的验证
+			$lastVerify = SmsVerify::where('mobile', $phone)->where('status', 1)->orderBy('created_at', 'DESC')->first();
+			if ($lastVerify && (date('U') - strtotime($lastVerify->created_at)) < 60) {
+				throw new ApiErrorException('操作过于频繁，请稍候再试');
+			}
+
+			// 将该手机号之前的验证码都置为失效
+			SmsVerify::where('mobile', $phone)->where('status', 1)->update(['status' => 3]);
+
+			// 生成手机验证码并保存
+			$smsObj = new SmsVerify();
+			$smsObj->mobile = $phone;
+			$smsObj->smscode = rand(100000, 999999);
+			$smsObj->ip = request()->ip();
+			$smsObj->plat = request('p');
+			$smsObj->save();
+			// 发送短信
+			$smsObj->sendSmsNotification();
+
+			return response_json(1, [], '发送成功');
+
+
+
 		} elseif ($vtype == 2) {
 			//邮箱验证码
 			$email = $phoneOremail;

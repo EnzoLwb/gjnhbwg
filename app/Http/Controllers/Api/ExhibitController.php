@@ -71,7 +71,7 @@ class ExhibitController extends Controller
 			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
 
-			$data['theme'][$k]['learn_url']="/api/learn_content_info/".request('p')."/".$g['exhibition_id'];
+			$data['theme'][$k]['learn_url']="/api/learn_content_info?type_id=1&p=".request('p')."&rela_id=".$g['exhibition_id'];
 		}
 		return response_json(1, $data);
 	}
@@ -252,6 +252,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} floor 所在楼层
 	 * @apiSuccess {string} reorder 上一页下一页所需排序
 	 * @apiSuccess {int} is_have_wenda 是否有问题，0没有   大于0表示有
+	 * @apiSuccess {string} learn_url 展品问答url
 	 */
 	public function exhibit_info()
 	{
@@ -321,6 +322,7 @@ class ExhibitController extends Controller
 			}
 
 			$data['is_have_wenda'] = 0;
+			$data['learn_url'] = '/api/learn_content_info?type_id=2&p='.request('p').'&rela_id='.$exhibit_id;
 			return response_json(1, $data);
 		} else {
 			return response_json(0, '', 'error exhibit_id');

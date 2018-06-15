@@ -500,10 +500,11 @@
                         timecost: time,
                         answer: answer,
                         p:"{{$p}}",
-                        exhibition_id:{{$exhibition_id}}
+                        rela_id:{{$rela_id}},
+                        type_id:{{$type_id}}
                     },
                     success: function (newid) {
-                        $.get("{{route('api.learn.answer_list')}}", {exhibition_id:{{$exhibition_id}},p:"{{$p}}",newid:newid}, function (data) {
+                        $.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {
                             $('#list').append(data);
                             $("#option-div").hide();
                             $("#list-div").show();

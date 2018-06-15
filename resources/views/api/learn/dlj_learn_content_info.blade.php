@@ -485,7 +485,8 @@
                         timecost: time,
                         answer: answer,
                         p:"{{$p}}",
-                        exhibition_id:{{$exhibition_id}}
+                        rela_id:{{$rela_id}},
+                        type_id:{{$type_id}}
                     },
                     success: function (newid) {
 

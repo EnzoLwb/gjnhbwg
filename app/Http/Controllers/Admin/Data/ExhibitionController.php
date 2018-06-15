@@ -329,7 +329,7 @@ class ExhibitionController extends BaseAdminController
 		if (request('learn_title')) {
 			$query = $query->where('learn.title', 'LIKE', '%' . request('learn_title') . '%');
 		}
-		$list = $query->select('learn.id','learn.title','learn_relation.exhibition_id')->paginate(60);
+		$list = $query->select('learn.id','learn.title','learn_relation.learn_id')->paginate(60);
 		$list->appends(app('request')->all());
 		return view('admin.data.learn_exhibition', [
 			'list' => $list,
@@ -341,15 +341,16 @@ class ExhibitionController extends BaseAdminController
 		$exhibition_id =request('exhibition_id');
 		$learn_id =request('learn_id');
 		LearnRelation::insert([
-			'exhibition_id'=>$exhibition_id,
-			'learn_id'=>$learn_id
+			'rela_id'=>$exhibition_id,
+			'learn_id'=>$learn_id,
+			'type_id'=>1
 		]);
 
 	}
 	public function del_learn(){
 		$exhibition_id =request('exhibition_id');
 		$learn_id =request('learn_id');
-		LearnRelation::where('learn_id',$learn_id)->where('exhibition_id',$exhibition_id)->delete();
+		LearnRelation::where('learn_id',$learn_id)->where('rela_id',$exhibition_id)->where('type_id',1)->delete();
 
 	}
 }
