@@ -156,12 +156,12 @@ class MenuDao extends BaseMdl
 						'priv' => 'admin-interaction-learn-question_list',
 						'order_num' => 10,
 					],
-//					[
-//						'text' => '问卷调查',
-//						'url' => route('admin.interaction.question'),
-//						'priv' => 'admin-interaction-question',
-//						'order_num' => 10,
-//					],
+					[
+						'text' => '问卷调查',
+						'url' => route('admin.interaction.question.index'),
+						'priv' => 'admin-interaction-question-index',
+						'order_num' => 10,
+					],
 
 				]
 			],
