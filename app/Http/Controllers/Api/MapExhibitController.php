@@ -448,7 +448,7 @@ class MapExhibitController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
-	 * @apiParam {int} road_id 路线id
+	 * @apiParam {int} road_id 路线id ,传0返回全部线路
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} data.road_id 线路id
 	 * @apiSuccess {string} data.road_name 线路名
