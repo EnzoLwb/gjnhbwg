@@ -438,7 +438,7 @@ class GatewayController extends Controller
 		$query=ChatMessage::whereIn('from_user_number',[$from_user_number,$to_user_number])
 			->whereIn('to_user_number',[$from_user_number,$to_user_number])
 			->select('from_user_number','send_type','audio_duration','send_msg')
-			->orderBy('created_at', 'desc');
+			->orderBy('created_at', 'asc');
 		if ($take!=0){
 			$query=$query->skip($skip)->take($take);
 		}
