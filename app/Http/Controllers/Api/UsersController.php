@@ -667,7 +667,7 @@ class UsersController extends Controller
 		}
 
 		if (request('password_old')) {
-			if (request('password_old') != $user->password) {
+			if (get_password(request('password_old'), $user->salt) != $user->password) {
 				throw new ApiErrorException('原密码错误');
 			}
 		}
