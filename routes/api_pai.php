@@ -3,6 +3,8 @@
 Route::get('pai_list', 'PaiController@pai_list');
 //随手怕评论列表
 Route::get('pai_comment_list', 'PaiController@pai_comment_list');
+//留言发布
+Route::post('send_words', 'PaiController@send_words');
 Route::group([
 	'middleware' => 'auth:api'
 ], function () {
@@ -12,8 +14,7 @@ Route::group([
 	Route::post('wx_upload_img', 'PaiController@wx_upload_img');
 	//随手拍发布
 	Route::post('send_pai', 'PaiController@send_pai');
-	//留言发布
-	Route::post('send_words', 'PaiController@send_words');
+
 	//评论随手拍
 	Route::post('pai_comment', 'PaiController@pai_comment');
 	//随手拍评论点赞取消

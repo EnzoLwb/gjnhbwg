@@ -61,7 +61,7 @@ class PaiController extends Controller
 	 * @apiGroup  Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
-	 * @apiParam {string} api_token 用户token
+	 * @apiParam {string} api_token 用户token(导览机不用)
 	 * @apiParam {string} word_content 内容最多输入500个字符
 	 * @apiParam {string} contacts 联系方式 手机号或者邮箱
 	 * @apiParam {string} word_img[] 调用图片上传接口后返回的图片地址 可提交多个 最多上传九张
@@ -74,7 +74,7 @@ class PaiController extends Controller
 			'word_content' => 'max:500|string',
 			'contacts' => 'required',
 		]);
-		$uid = Auth::user()->uid;
+		$uid = request('p')!='d' ? Auth::user()->uid : '0';
 		$content = request('word_content');
 		// 处理图片
 		$img = request('word_img');
