@@ -85,7 +85,7 @@ class PaiController extends Controller
 			"jpg",
 			"png"
 		);
-		if (is_array($imgs)) {
+		if (is_array($img)) {
 			foreach ($img as $k => $v) {
 				if (!empty($v)) {
 					$temp = explode(".", $v);
