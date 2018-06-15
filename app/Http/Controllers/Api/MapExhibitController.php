@@ -160,7 +160,7 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_near_exhibit 302.获取附近展品
+	 * @api {GET} /map_near_exhibit 302.获取附近展品（蓝牙号查询）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -206,7 +206,7 @@ class MapExhibitController extends Controller
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_list_img'] = $imgs;
 			$data[$k]['exhibition_name'] = $g['exhibition_name'];
-			$data[$k]['floor'] = config('floor')[$g['floor_id']];
+			$data[$k]['floor'] = $g['floor_id'];
 		}
 		return response_json(1, $data);
 	}
