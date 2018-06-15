@@ -77,7 +77,7 @@ class CptController extends Controller
 			// 发送短信
 			$smsObj->sendSmsNotification();
 
-			return response_json();
+			return response_json(1, [], '发送成功');
 
 
 
