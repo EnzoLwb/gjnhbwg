@@ -383,14 +383,14 @@ class UsersController extends Controller
 			$this->validate([
 				'username' => 'required|mobile|unique:users',
 				'smscode' => 'required',
-				'password' => 'required|min:6',
+				'password' => 'required|min:8',
 			]);
 
 		} elseif ($vtype == 2) {
 			$this->validate([
 				'username' => 'required|email|unique:users',
 				'smscode' => 'required',
-				'password' => 'required|min:6',
+				'password' => 'required|min:8',
 			]);
 		}
 
@@ -656,7 +656,7 @@ class UsersController extends Controller
 		}
 
 		$this->validate([
-			'password' => 'required|min:6|confirmed',
+			'password' => 'required|min:8|confirmed',
 			'password_confirmation' => 'required'
 		]);
 

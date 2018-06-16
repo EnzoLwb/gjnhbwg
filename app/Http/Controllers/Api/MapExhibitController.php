@@ -160,7 +160,7 @@ class MapExhibitController extends Controller
 	 * @author yyj 20180321
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /map_near_exhibit 302.获取附近展品
+	 * @api {GET} /map_near_exhibit 302.获取附近展品（蓝牙号查询）
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
@@ -206,7 +206,7 @@ class MapExhibitController extends Controller
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_list_img'] = $imgs;
 			$data[$k]['exhibition_name'] = $g['exhibition_name'];
-			$data[$k]['floor'] = config('floor')[$g['floor_id']];
+			$data[$k]['floor'] = $g['floor_id'];
 		}
 		return response_json(1, $data);
 	}
@@ -217,7 +217,7 @@ class MapExhibitController extends Controller
 	 * @author yyj 20171117
 	 * @return \Illuminate\Http\JsonResponse
 	 *
-	 * @api {GET} /road_navigation 306.导航线路生成接口
+	 * @api {GET} /road_navigation 307.导航线路生成接口
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
@@ -433,6 +433,87 @@ class MapExhibitController extends Controller
 
 				return response_json(1, $data);
 			}
+		}
+
+	}
+
+	/**
+	 * 路线列表接口
+	 *
+	 * @author yyj 20171117
+	 * @return \Illuminate\Http\JsonResponse
+	 *
+	 * @api {GET} /road_detail_all 306.路线详情全部接口
+	 * @apiGroup Exhibit
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
+	 * @apiParam {int} road_id 路线id ,传0返回全部线路
+	 * @apiSuccess {json} data 数据详情
+	 * @apiSuccess {int} data.road_id 线路id
+	 * @apiSuccess {string} data.road_name 线路名
+	 * @apiSuccess {array} data.floor 楼层数据
+	 * @apiSuccess {int} data.exhibit_counts 展品数
+	 * @apiSuccess {string} data.road_long 游览时长
+	 *
+	 */
+	public function road_detail_all()
+	{
+		$this->validate([
+			'language' => 'required|min:0|integer',
+			'road_id' => 'required|min:0|integer',
+		]);
+		$language = request('language', 1);
+		$road_id = request('road_id', 1);
+
+		if($road_id==0){
+			$road_exhibits = VisitRoad::where('type', 1)->get();
+		}else{
+			$road_exhibits = VisitRoad::where('id', $road_id)->where('type', 1)->get();
+		}
+
+		if (empty($road_exhibits)) {
+			return response_json(1, []);
+		} else {
+			$data_return =  array();
+			foreach ($road_exhibits as $rk=>$rv) {
+
+				$query = VisitRoad::orderBy('visit_road.id', 'asc')->join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road.type', 1)->where('visit_road.id', $rv['id'])->where('visit_road_language.language', $language);
+				$road_data = $query->select('visit_road.id as road_id', 'visit_road.road_long', 'visit_road.weight_exhibit_ids', 'visit_road.weight_exhibit_ids1', 'visit_road.weight_exhibit_ids2', 'visit_road.weight_exhibit_ids3', 'visit_road_language.road_name')->first();
+				if (empty($road_data)) {
+				} else {
+					$road_data = $road_data->toArray();
+					$data = array();
+					$data['road_id'] = $road_data['road_id'];
+					$data['road_name'] = $road_data['road_name'];
+
+					$floor1 = $this->exhibit_handle($road_data['weight_exhibit_ids1'], 1, $language);
+					if($floor1){
+						$data['floor'][] = $floor1;
+					}
+
+					$floor2 = $this->exhibit_handle($road_data['weight_exhibit_ids2'], 2, $language);
+					if($floor2){
+						$data['floor'][] = $floor2;
+					}
+
+					$floor3 = $this->exhibit_handle($road_data['weight_exhibit_ids3'], 3, $language);
+					if($floor3){
+						$data['floor'][] = $floor3;
+					}
+
+
+					$exhibit_ids = json_decode($road_data['weight_exhibit_ids'], true);
+					$data['exhibit_counts'] = count($exhibit_ids);
+					$data['road_long'] = $road_data['road_long'];
+
+					$data_return[]=$data;
+				}
+
+
+			}
+
+			return response_json(1, $data_return);
 		}
 
 	}
