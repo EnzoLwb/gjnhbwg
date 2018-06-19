@@ -423,7 +423,7 @@
     </div>
     <div class="btn-div">
         <bnutton type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
-            返回榜单
+            返回
         </bnutton>
     </div>
     <div id="right-layer-div" class="layer-div">
