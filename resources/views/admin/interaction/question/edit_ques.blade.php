@@ -17,7 +17,7 @@
 @section('body')
 <body>
 	<div class="js-check-wrap layer-div">
-	  <form method="post" class="form-horizontal" id="myform" action="{{url('/admin/interaction/question/edit_ques')}}">
+	  <form method="post" class="form-horizontal" id="myform" action="{{route('admin.interaction.question.edit_ques')}}">
 			<fieldset>
 				<div class="layer-msg-group">
 					<label class="layer-msg-key">问卷调查主题</label>
@@ -60,7 +60,7 @@
                           parent.layer.close(index);//关闭弹出层
                           var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                           //刷新父层页面
-                          parent.location.href ="{{url('/admin/interaction/question/')}}";
+                          parent.location.href ="{{route('admin.interaction.question.index')}}";
 
                       }, 1000);
                   }

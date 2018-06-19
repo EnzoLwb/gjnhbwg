@@ -442,9 +442,9 @@
 								<tr>
 									<td style="overflow: inherit;">
 										@if($vo->status==0)
-											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',[$vo['id'],1])}}" >开始调查</a>
+											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',[$vo['id'],1])}}" msg="删除问卷？" >开始调查</a>
 										@elseif($vo->status==1)
-											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',[$vo['id'],0])}}" >结束调查</a>
+											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',[$vo['id'],0])}}" msg="删除问卷？">结束调查</a>
 										@else
 
 										@endif
@@ -456,28 +456,19 @@
 							</table>
 						</div>
 						<!-- /.user-message -->
-
 						@if($vo->status==2)
 						<!-- 未开始的问卷 -->
 							<div class="user-controller controller-never">
-								<a href="javascript:edit_ques({{$vo->id}})"><i class="fa fa-gear" title="编辑问卷" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/quesinfo_list?id=' . $vo->id.'&title='.$vo->title)}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a class="ajaxBtn " href="javascript:void(0);" uri="{{url('/admin/interaction/question?del=' . $vo->id)}}" ><i class="fa fa-remove" title="删除问卷" style=""></i></a>
-							</div>
 						@elseif($vo->status==0)
 							<div class="user-controller controller-end">
-								<a href="javascript:edit_ques({{$vo->id}})"><i class="fa fa-gear" title="编辑问卷" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/quesinfo_list?id=' . $vo->id.'&title='.$vo->title)}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a  class="ajaxBtn " href="javascript:void(0);" uri="{{url('/admin/interaction/question?del=' . $vo->id)}}" ><i class="fa fa-remove" title="删除问卷" style=""></i></a>
-							</div>
-					@elseif($vo->status==1)
+						@elseif($vo->status==1)
 						<!-- 进行中的问卷 -->
 							<div class="user-controller controller-ing">
+						@endif
 								<a href="javascript:edit_ques({{$vo->id}})"><i class="fa fa-gear" title="编辑问卷" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/quesinfo_list?id=' . $vo->id.'&title='.$vo->title)}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a  class="ajaxBtn " href="javascript:void(0);" uri="{{url('/admin/interaction/question?del=' . $vo->id)}}" ><i class="fa fa-remove" title="删除问卷" style=""></i></a>
+								<a href="{{route('admin.interaction.question.quesinfo_list',['id'=>$vo->id,'title'=>$vo->title])}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
+								<a class="ajaxBtn" href="javascript:void(0);" uri="{{route('admin.interaction.question.index',['del'=> $vo->id])}}"  msg="删除问卷？"><i class="fa fa-remove" title="删除问卷111" style=""></i></a>
 							</div>
-					@endif
 
 					<!-- /.user-controller -->
 						<!-- 右侧下方显示 按钮-->
@@ -485,15 +476,15 @@
 
 							@if($vo->status==2)
 								<a href="javascript:edit_ques({{$vo->id}})"><i class="fa fa-gear" title="编辑问卷" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/quesinfo_list?id=' . $vo->id.'&title='.$vo->title)}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/ques_info?id=' . $vo->id)}}"><i class="fa fa-line-chart" title="统计结果" style=""></i></a>
+								<a href="{{route('admin.interaction.question.quesinfo_list',['id'=>$vo->id,'title'=>$vo->title])}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
+								<a href="{{route('admin.interaction.question.ques_info',['id'=>$vo->id])}}"><i class="fa fa-line-chart" title="统计结果" style=""></i></a>
 							@elseif($vo->status==0)
-								<a href="{{url('/admin/interaction/question/quesinfo_list?id=' . $vo->id.'&title='.$vo->title)}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/ques_info?id=' . $vo->id)}}"><i class="fa fa-line-chart" title="统计结果" style=""></i></a>
+								<a href="{{route('admin.interaction.question.quesinfo_list',['id'=>$vo->id,'title'=>$vo->title])}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
+								<a href="{{route('admin.interaction.question.ques_info',['id'=>$vo->id])}}"><i class="fa fa-line-chart" title="统计结果" style=""></i></a>
 								<a href="javascript:export_ques({{$vo->id}})"><i class="fa fa-download" title="导出报表" style=""></i></a>
 							@elseif($vo->status==1)
-								<a href="{{url('/admin/interaction/question/quesinfo_list?id=' . $vo->id.'&title='.$vo->title)}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a href="{{url('/admin/interaction/question/ques_info?id=' . $vo->id)}}"><i class="fa fa-line-chart" title="统计结果" style=""></i></a>
+								<a href="{{route('admin.interaction.question.quesinfo_list',['id'=>$vo->id,'title'=>$vo->title])}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
+								<a href="{{route('admin.interaction.question.ques_info',['id'=>$vo->id])}}"><i class="fa fa-line-chart" title="统计结果" style=""></i></a>
 								<a href="javascript:export_ques({{$vo->id}})"><i class="fa fa-download" title="导出报表" style=""></i></a>
 							@endif
 
@@ -570,7 +561,7 @@
 	<script>
 	function edit_ques(id){
 
-		var url="{{url('/admin/interaction/question/edit_ques?id=')}}"+id;
+		var url="{{route('admin.interaction.question.edit_ques')}}"+"?id="+id;
 		if(id=='add'){
 			var t="新增计划";
 		}
@@ -628,7 +619,7 @@
     	});
     	// 显示问卷详情
 		function show_info(id){
-			$.post("{{url('/admin/interaction/question/ajax_ques')}}", {
+			$.post("{{route('admin.interaction.question.ajax_ques')}}", {
         		id:id
    	         },
    	         function(data){
@@ -655,8 +646,7 @@
 		}
 		//导出问卷结果
         function export_ques(id){
-			window.location="{{url('/admin/interaction/question/ques_export?id=')}}"+id;
-
+			window.location="{{route('admin.interaction.question.ques_export')}}"+"?id="+id;
     	}
     </script>
 

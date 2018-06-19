@@ -32,7 +32,9 @@ class QuestionController extends BaseAdminController
 	 */
 	public function index()
 	{
+
 		if (request()->ajax()) {
+			dd(11);
 			$id =request('del');
 			$r =Queslist::where('id',$id)->delete();
 			if ($r) {
