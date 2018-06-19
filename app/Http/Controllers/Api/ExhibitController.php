@@ -71,7 +71,7 @@ class ExhibitController extends Controller
 			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
 
-			$data['theme'][$k]['learn_url']="/api/learn_content_info?type_id=1&p=".request('p')."&rela_id=".$g['exhibition_id'];
+			$data['theme'][$k]['learn_url']="/api/learn_content_info?type_id=1&p=".request('p')."&rela_id=".$g['exhibition_id']."&api_token=";
 		}
 		return response_json(1, $data);
 	}
