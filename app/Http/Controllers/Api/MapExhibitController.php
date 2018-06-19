@@ -249,16 +249,19 @@ class MapExhibitController extends Controller
 		$trajectory_info = Trajectory::where('look_date', $look_date)->where('deviceno', $deviceno)->orderBy('updated_at', 'desc')->first();
 
 		if (empty($trajectory_info)) {
-			return response_json(-1, $road_info, '未定位到您的位置信息');
+			//return response_json(-1, $road_info, '未定位到您的位置信息');
+			throw new ApiErrorException('未定位到您的位置信息');
 		} else {
 			$trajectory_info = $trajectory_info->toArray();
 			if ($trajectory_info['map_id'] != $map_id) {
-				return response_json(-2, $road_info, '请走到' . $map_id . '层再导航');
+				//return response_json(-2, $road_info, '请走到' . $map_id . '层再导航');
+				throw new ApiErrorException('请走到' . $map_id . '层再导航');
 			}
 
 			$exhibit_info_last = Exhibit::where('id', $exhibit_id_last)->first();
 			if (empty($exhibit_info_last)) {
-				return response_json(-3, $road_info, '输入的展品id有误');
+				//return response_json(-3, $road_info, '输入的展品id有误');
+				throw new ApiErrorException('输入的展品id有误');
 			}
 
 			$road_arr_info = [];

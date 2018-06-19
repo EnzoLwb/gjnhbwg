@@ -33,6 +33,7 @@ class LearnController extends Controller
 	 *
 	 * @api {GET} /learn_content_info 1.获取学习单页面
 	 * @apiGroup Learn
+	 * @apiIgnore
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
 	 * @apiParam {int} exhibition_id 展厅id
