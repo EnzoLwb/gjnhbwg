@@ -61,6 +61,16 @@ class LearnController extends Controller
 				'uid'=>$uid,
 				'option_title'=> ['A','B','C','D','E','F','G','H','I','J']
 			]);
+		}elseif ($type_id==2){
+			$uid=0;
+			return view('api.learn.learn_content_info_exhibit',[
+				'list'=>$list,
+				'p'=>request('p'),
+				'rela_id'=>$rela_id,
+				'type_id'=>$type_id,
+				'uid'=>$uid,
+				'option_title'=> ['A','B','C','D','E','F','G','H','I','J']
+			]);
 		}else{
 
 //			$uid = Auth::user()->uid;
