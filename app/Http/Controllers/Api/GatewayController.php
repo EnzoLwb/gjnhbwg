@@ -213,11 +213,14 @@ class GatewayController extends Controller
 		$group_number=request('group_number');
 		$plat=request('p')!='d'?'1':'2';
 		$group_info=Group::where('group_number',$group_number)->first();
+
 		if (is_null($group_info)){
 			return response_json(0,[],'不存在的群组号，加入失败！');
 		}
-		$group=GatewayLib::getAllGroupIdList($group_info['id']);
-		if (!in_array($group_info['id'],$group)) return response_json(0,[],'不存在的群组ID，加入失败！');
+		//检查是否已经在此群中
+		$in_group=GroupMember::where(['member_id'=>$user_number,'group_id'=>$group_info['id']])->count();
+		//		$group=GatewayLib::getAllGroupIdList($group_info['id']);
+		if ($in_group) return response_json(0,[],'您已经在此群组中');
 		//显示我的信息(我的头像 我的昵称 )
 		if ($plat==1){
 			//app
@@ -232,6 +235,7 @@ class GatewayController extends Controller
 		$where=array('group_id'=>$group_info['id']);
 		$data['user_list']=GroupMember::leftjoin('users','users.uid','=','group_member.member_id')
 			->where($where)->where('member_id','!=',$user_number)->select('users.avatar','users.nickname','users.uid','member_id')->get()->toArray();
+
 		foreach ($data['user_list'] as &$v){
 			if (!$v['uid']){
 				$v['avatar']='';
@@ -491,7 +495,8 @@ class GatewayController extends Controller
 			return response_json(0,[],'不存在的群组号');
 		}
 		$group=GatewayLib::getAllGroupIdList($group_info['id']);
-		if (!in_array($group_info['id'],$group)) return response_json(0,[],'不存在的群组ID');
+		/*dd($group);
+		if (!in_array($group_info['id'],$group)) return response_json(0,[],'不存在的群组ID');*/
 		//显示我的信息(我的头像 我的昵称 )
 		if ($plat==1){
 			//app
@@ -507,6 +512,7 @@ class GatewayController extends Controller
 		$where=array('group_id'=>$group_id);
 		$data['user_list']=GroupMember::leftjoin('users','users.uid','=','group_member.member_id')
 			->where($where)->where('member_id','!=',$user_number)->select('users.avatar','users.nickname','users.uid','member_id')->get()->toArray();
+		$member=[];
 		foreach ($data['user_list'] as &$v){
 			$member[]=$v['member_id'];
 			if (!$v['uid']){
@@ -518,7 +524,7 @@ class GatewayController extends Controller
 		}
 		$is_read=ChatMessage::where(['to_user_number'=>$user_number,'is_read'=>0])->whereIn('from_user_number',$member)->pluck('from_user_number')->toArray();
 		foreach ($data['user_list'] as &$value){
-			 $value['is_read']=in_array($value['user_number'],$is_read) ? 1:0;
+			$value['is_read']=in_array($value['user_number'],$is_read) ? 1:0;
 		}
 		return response_json(1, $data);
 	}
