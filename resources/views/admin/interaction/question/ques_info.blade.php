@@ -117,8 +117,8 @@
 	<div class="js-check-wrap">
 		<div class="nav-div">
 			<ul class="nav nav-tabs">
-				<li><a href="{{url('/admin/interaction/question')}}">问卷管理</a></li>
-				<li class="active"><a href="{{url('/admin/interaction/question/ques_info?id='.$id)}}">结果统计</a></li>
+				<li><a href="{{route('admin.interaction.question.index')}}">问卷管理</a></li>
+				<li class="active"><a href="{{route('admin.interaction.question.ques_info',['id'=>$id])}}">结果统计</a></li>
 			</ul>
 		</div>
 
@@ -304,7 +304,7 @@
 <script>
     function ques_textinfo(quesinfo_id,ques_id,title){
 
-        var url="{{url('/admin/interaction/question/ques_textinfo?&ques_id=')}}"+ques_id+"&quesinfo_id="+quesinfo_id;
+        var url="{{route('admin.interaction.question.ques_textinfo')}}"+"?ques_id="+ques_id+"&quesinfo_id="+quesinfo_id;
         var index=layer.open({
             title:title,
             type: 2,

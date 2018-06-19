@@ -221,6 +221,7 @@ class MapExhibitController extends Controller
 	 * @apiGroup Exhibit
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,d:导览机
+	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {string} deviceno 机器号
 	 * @apiParam {int} map_id 地图id（楼层）
 	 * @apiParam {int} exhibit_id 终点展品id
@@ -228,17 +229,19 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} x x轴坐标
 	 * @apiSuccess {int} y y轴坐标
-	 *
 	 */
 	public function road_navigation()
 	{
 
+
 		$this->validate([
+			'language' => 'required|min:0|integer',
 			'deviceno' => 'required',
 			'map_id' => 'required|in:1,2,3',
 			'exhibit_id' => 'required|min:0|integer',
 		]);
 
+		$language = request('language', 1);
 		$map_id = request('map_id', 1);
 		$deviceno = request('deviceno');
 		$exhibit_id_last = request('exhibit_id');
@@ -249,21 +252,21 @@ class MapExhibitController extends Controller
 		$trajectory_info = Trajectory::where('look_date', $look_date)->where('deviceno', $deviceno)->orderBy('updated_at', 'desc')->first();
 
 		if (empty($trajectory_info)) {
-			return response_json(-1, $road_info, '未定位到您的位置信息');
+			return response_json(-1, $road_info, $this->getErrormsg_na($language, -1, $map_id));
 		} else {
 			$trajectory_info = $trajectory_info->toArray();
 			if ($trajectory_info['map_id'] != $map_id) {
-				return response_json(-2, $road_info, '请走到' . $map_id . '层再导航');
+				return response_json(-2, $road_info, $this->getErrormsg_na($language, -2, $map_id));
 			}
 
-			$exhibit_info_last = Exhibit::where('id', $exhibit_id_last)->first();
+			$exhibit_info_last = Exhibit::where('id', $exhibit_id_last)->where('map_id',$map_id)->first();
 			if (empty($exhibit_info_last)) {
-				return response_json(-3, $road_info, '输入的展品id有误');
+				return response_json(-3, $road_info, $this->getErrormsg_na($language, -3, $map_id));
+
 			}
 
 			$road_arr_info = [];
 			$road_arr = NavigationDao::get_road($trajectory_info['x'], $trajectory_info['y'], $exhibit_info_last['x'], $exhibit_info_last['y'], $map_id);
-
 
 			if (count($road_arr_info) && count($road_arr)) {
 				unset($road_arr[0]);
@@ -277,6 +280,41 @@ class MapExhibitController extends Controller
 			return response_json(1, $road_info);
 		}
 
+	}
+
+	function getErrormsg_na($language, $code, $map_id)
+	{
+		$errormsg[1] = array(
+			'-1' => '未定位到您的位置信息',
+			'-2' => '请走到' . $map_id . '层再导航',
+			'-3' => '输入的展品id有误',
+		);
+		$errormsg[2] = array(
+			'-1' => 'No location information to your location',
+			'-2' => 'Please go to the' . $map_id . 'floor and navigate',
+			'-3' => 'The imported exhibit ID is mistaken',
+		);
+		$errormsg[3] = array(
+			'-1' => '위치 정보 없음',
+			'-2' =>  $map_id . '층 제항으로 가세요',
+			'-3' => '입력된 전시품 id 를 잘못 입력하십시오',
+		);
+		$errormsg[4] = array(
+			'-1' => '位置情報を指定していません',
+			'-2' => $map_id . '階までお歩きください',
+			'-3' => '入力された展示品のidが間違っています。',
+		);
+		$errormsg[5] = array(
+			'-1' => "Localisation d'informations non à votre position",
+			'-2' => "S'il vous plaît, jusqu'à la couche" . $map_id . "et de navigation",
+			'-3' => 'Il y a une erreur présente une entrée id',
+		);
+		$errormsg[6] = array(
+			'-1' => 'не Ориентируйтесь на информацию о месте',
+			'-2' => ' Пожалуйста, пройдите на' . $map_id . 'этаж, пожалуйста',
+			'-3' => 'введенный экспонат был ошибкой',
+		);
+		return $errormsg[$language][$code];
 	}
 
 	/**
@@ -466,17 +504,17 @@ class MapExhibitController extends Controller
 		$language = request('language', 1);
 		$road_id = request('road_id', 1);
 
-		if($road_id==0){
+		if ($road_id == 0) {
 			$road_exhibits = VisitRoad::where('type', 1)->get();
-		}else{
+		} else {
 			$road_exhibits = VisitRoad::where('id', $road_id)->where('type', 1)->get();
 		}
 
 		if (empty($road_exhibits)) {
 			return response_json(1, []);
 		} else {
-			$data_return =  array();
-			foreach ($road_exhibits as $rk=>$rv) {
+			$data_return = array();
+			foreach ($road_exhibits as $rk => $rv) {
 
 				$query = VisitRoad::orderBy('visit_road.id', 'asc')->join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road.type', 1)->where('visit_road.id', $rv['id'])->where('visit_road_language.language', $language);
 				$road_data = $query->select('visit_road.id as road_id', 'visit_road.road_long', 'visit_road.weight_exhibit_ids', 'visit_road.weight_exhibit_ids1', 'visit_road.weight_exhibit_ids2', 'visit_road.weight_exhibit_ids3', 'visit_road_language.road_name')->first();
@@ -488,28 +526,26 @@ class MapExhibitController extends Controller
 					$data['road_name'] = $road_data['road_name'];
 
 					$floor1 = $this->exhibit_handle($road_data['weight_exhibit_ids1'], 1, $language);
-					if($floor1){
+					if ($floor1) {
 						$data['floor'][] = $floor1;
 					}
 
 					$floor2 = $this->exhibit_handle($road_data['weight_exhibit_ids2'], 2, $language);
-					if($floor2){
+					if ($floor2) {
 						$data['floor'][] = $floor2;
 					}
 
 					$floor3 = $this->exhibit_handle($road_data['weight_exhibit_ids3'], 3, $language);
-					if($floor3){
+					if ($floor3) {
 						$data['floor'][] = $floor3;
 					}
-
 
 					$exhibit_ids = json_decode($road_data['weight_exhibit_ids'], true);
 					$data['exhibit_counts'] = count($exhibit_ids);
 					$data['road_long'] = $road_data['road_long'];
 
-					$data_return[]=$data;
+					$data_return[] = $data;
 				}
-
 
 			}
 

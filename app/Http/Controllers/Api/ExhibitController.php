@@ -12,6 +12,7 @@ use App\Models\ExUserVisit;
 use App\Models\ExUserVisitfoot;
 use App\Models\ExhibitCommentLikelist;
 use App\Models\VisitRoad;
+use App\Models\LearnRelation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -71,7 +72,7 @@ class ExhibitController extends Controller
 			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
 
-			$data['theme'][$k]['learn_url']="/api/learn_content_info?type_id=1&p=".request('p')."&rela_id=".$g['exhibition_id'];
+			$data['theme'][$k]['learn_url'] = "/api/learn_content_info?type_id=1&p=" . request('p') . "&rela_id=" . $g['exhibition_id'] . "&api_token=";
 		}
 		return response_json(1, $data);
 	}
@@ -267,7 +268,7 @@ class ExhibitController extends Controller
 			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 		})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
 			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
-		})->where('exhibit.id', $exhibit_id)->select('exhibit_language.exhibit_name','exhibit_language.content as exhibit_content', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_language.audio', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibition_language.exhibition_name', 'exhibition.floor_id', 'exhibit.exhibition_id')->first();
+		})->where('exhibit.id', $exhibit_id)->select('exhibit_language.exhibit_name', 'exhibit_language.content as exhibit_content', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_language.audio', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibition_language.exhibition_name', 'exhibition.floor_id', 'exhibit.exhibition_id')->first();
 		$data = [];
 		if (!empty($exhibit_info)) {
 			$data['exhibit_id'] = $exhibit_info->exhibit_id;
@@ -321,8 +322,10 @@ class ExhibitController extends Controller
 
 			}
 
-			$data['is_have_wenda'] = 0;
-			$data['learn_url'] = '/api/learn_content_info?type_id=2&p='.request('p').'&rela_id='.$exhibit_id;
+			$is_have_wenda = LearnRelation::where('type_id', 2)->where('rela_id', $exhibit_id)->count();
+			$data['is_have_wenda'] = $is_have_wenda ? 1 : 0;
+
+			$data['learn_url'] = '/api/learn_content_info?type_id=2&p=' . request('p') . '&rela_id=' . $exhibit_id;
 			return response_json(1, $data);
 		} else {
 			return response_json(0, '', 'error exhibit_id');
@@ -418,7 +421,7 @@ class ExhibitController extends Controller
 			} elseif ($type == 2) {
 				Exhibit::where('id', $exhibit_id)->increment('collection_num');
 			}
-			$data['is_like']=1;
+			$data['is_like'] = 1;
 		} else {
 			$r = ExhibitLike::where('uid', $uid)->where('exhibit_id', $exhibit_id)->where('type', $type)->delete();
 			if ($type == 1) {
@@ -426,13 +429,13 @@ class ExhibitController extends Controller
 			} elseif ($type == 2) {
 				Exhibit::where('id', $exhibit_id)->decrement('collection_num');
 			}
-			$data['is_like']=0;
+			$data['is_like'] = 0;
 		}
 		if ($r) {
-			$data['result']=1;
+			$data['result'] = 1;
 			return response_json(1, $data);
 		} else {
-			$data['result']=0;
+			$data['result'] = 0;
 			return response_json(1, $data);
 		}
 	}
@@ -561,17 +564,17 @@ class ExhibitController extends Controller
 				'comment_id' => $comment_id
 			]);
 			ExhibitComment::where('id', $comment_id)->increment('like_num');
-			$data['is_like']=1;
+			$data['is_like'] = 1;
 		} else {
 			$r = ExhibitCommentLikelist::where('uid', $uid)->where('comment_id', $comment_id)->delete();
 			ExhibitComment::where('id', $comment_id)->decrement('like_num');
-			$data['is_like']=0;
+			$data['is_like'] = 0;
 		}
 		if ($r) {
-			$data['result']=1;
+			$data['result'] = 1;
 			return response_json(1, $data);
 		} else {
-			$data['result']=0;
+			$data['result'] = 0;
 			return response_json(1, $data);
 		}
 	}
@@ -626,7 +629,7 @@ class ExhibitController extends Controller
 
 			//foot start
 			$u_ex_finfo = ExUserVisitfoot::where('uid', $uid)->where('exhibit_id', $exhibit_id)->first();
-			$n_time =date('Y-m-d H:i:s', time());
+			$n_time = date('Y-m-d H:i:s', time());
 			if (empty($u_ex_finfo)) {
 				ExUserVisitfoot::create([
 					'uid' => $uid,
@@ -691,8 +694,6 @@ class ExhibitController extends Controller
 		}
 		return response_json(1, $data);
 	}
-
-
 
 	/**
 	 * 热门展品接口

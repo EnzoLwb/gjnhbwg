@@ -250,17 +250,13 @@
 @endsection
 @section('body')
 <body onload="ajax_ques();">
-    <!-- <ul class="tab-top">
-        <li class=""><a href="{{url('/admin/interaction/question')}}">问卷管理</a></li>
-        <li class="active"><a href="{{url('/admin/interaction/question/quesinfo_list?id='.$ques_id.'&title='.$title)}}">{{$title}}</a></li>
-    </ul> -->
 <div class="js-check-wrap">
     <div class="row">
         <div class="col-sm-12">
             <div class="tabs-container">
                 <ul class="nav nav-tabs">
-                    <li class=""><a href="{{url('/admin/interaction/question')}}">问卷管理</a></li>
-                    <li class="active"><a href="{{url('/admin/interaction/question/quesinfo_list?id='.$ques_id.'&title='.$title)}}">{{$title}}</a></li>
+                    <li class=""><a href="{{route('admin.interaction.question.index')}}">问卷管理</a></li>
+                    <li class="active"><a href="{{route('admin.interaction.question.quesinfo_list',['id'=>$ques_id,'title'=>$title])}}">{{$title}}</a></li>
                 </ul>
             </div>
         </div>
@@ -278,7 +274,7 @@
                 <span style="    margin-left: 1%;font-size: 20px;top: 28%;position: absolute;color: #5084CD;"></span>
             </div>
             <div class="survey_main">
-                <form method="post" class="form-container" id="myform" action="{{url('/admin/interaction/question/edit_quesinfo')}}">
+                <form method="post" class="form-container" id="myform" action="{{route('admin.interaction.question.edit_quesinfo')}}">
                     <div class="survey_container" id="ajax_page">
                     </div>
                     <input type="hidden" name="ques_id" value="{{$ques_id}}" />
@@ -300,7 +296,7 @@
     function ajax_ques(){
         //获取服务器数据
 
-        $.post("{{url('/admin/interaction/question/ajax_quesinfo')}}", {
+        $.post("{{route('admin.interaction.question.ajax_quesinfo')}}", {
                     ques_id:{{$ques_id}}
                 },
                 function(data){
@@ -578,7 +574,7 @@
                 layer.close(index);
                 layer.msg('加载中', {icon: 16,scrollbar: false,shade: [0.3, '#393D49'],time:0});
 
-                var del_url="{{url('/admin/interaction/question/ajax_forminfo?type=del')}}&del_id="+id;
+                var del_url="{{route('admin.interaction.question.ajax_forminfo')}}"+"?type=del&del_id="+id;
                 $.post(del_url, $('#myform').serialize(),
                         function(data){
                             layer.closeAll();
@@ -593,7 +589,7 @@
         // 新增题目
         $('.pages_more').click(function(){
             layer.msg('加载中', {icon: 16,scrollbar: false,shade: [0.3, '#393D49'],time:0});
-            $.post("{{url('/admin/interaction/question/ajax_forminfo?type=add')}}", $('#myform').serialize(),
+            $.post("{{route('admin.interaction.question.ajax_forminfo')}}"+"?type=add", $('#myform').serialize(),
                     function(data){
                         layer.closeAll();
                         show_quesinfo(data);

@@ -32,6 +32,7 @@ class QuestionController extends BaseAdminController
 	 */
 	public function index()
 	{
+
 		if (request()->ajax()) {
 			$id =request('del');
 			$r =Queslist::where('id',$id)->delete();
@@ -40,7 +41,6 @@ class QuestionController extends BaseAdminController
 				QuesinfoOption::where('ques_id',$id)->delete();
 				QuesinfoList::where('ques_id',$id)->delete();
 				QuesTextinfo::where('ques_id',$id)->delete();
-
 				return $this->success();
 			} else {
 				return $this->error();
@@ -635,6 +635,7 @@ class QuestionController extends BaseAdminController
 			//所有其他选项及问答题详情
 			$where3['ques_id'] = $id;
 			$text_info = QuesTextinfo::where('ques_id',$id)->get()->toArray();
+			$new=[];
 			foreach($text_info as $k=>$v){
 				$new[$v['quesinfo_id']]['quesinfo_id'] = $v['quesinfo_id'];
 			}
