@@ -36,7 +36,9 @@
         ul, li {
             list-style-type: none;
         }
-
+        #layui-layer1{
+            border-radius: 5px;
+        }
         .swiper-container {
             position: relative;
             width: 90%;
@@ -67,13 +69,16 @@
             width: 80px;
             height: 80px;
             border-radius: 40px;
-            background-color: #ffb400;
+            background-color: #57B4FE;
             float: left;
         }
 
         .score-circle-div {
             display: table;
             margin: auto;
+            height: 80px;
+            line-height: 80%;
+            text-align: center;
         }
 
         .score-div > .score-circle label {
@@ -116,7 +121,7 @@
         }
 
         li.right-focus {
-            background-color: #ffb400;
+            background-color: #57B4FE;
         }
 
         li.wrong-focus {
@@ -128,8 +133,8 @@
             height: 24px;
             width: 24px;
             line-height: 24px;
-            border-radius: 12px;
-            background-color: #ffb400;
+            border-radius: 20px;
+            background-color: #57B4FE;
             float: left;
             margin-left: 3px;
         }
@@ -139,7 +144,7 @@
         }
 
         li > .right-option-label {
-            background-color: #ffb400;
+            background-color: #57B4FE;
         }
 
         .answer-label {
@@ -163,13 +168,13 @@
             width: 60%;
             height: 40px;
             margin: 20px auto;
-            border-radius: 4px;
+            border-radius: 20px;
         }
 
         .btn-div > .yellow-btn {
-            background: #ffb400;
+            background: #57B4FE;
             color: #fff;
-            border: 1px solid #ffb400;
+            border: 1px solid #57B4FE;
             font-size: 18px;
         }
 
@@ -183,8 +188,8 @@
 
         .layer-div > .next {
             display: block;
-            color: #ffb400;
-            border-top: 1px solid #ffb400;
+            color: #57B4FE;
+            border-top: 1px solid #57B4FE;
         }
 
         .layer-div > .layer-div-img {
@@ -251,7 +256,7 @@
             width: 100px;
             height: 100px;
             border-radius: 50px;
-            background-color: #ffb400;
+            background-color: #57B4FE;
             float: left;
         }
 
@@ -269,7 +274,7 @@
         }
 
         #list-div .score-div > .score-title label {
-            color: #ffb400;
+            color: #57B4FE;
             margin-top: 30px;
             margin-left: 15px;
             font-size: 23px;
@@ -286,26 +291,29 @@
             margin-top: 20px;
             border: 1px solid #eee;
             box-shadow: 0px 0px 4px #ccc;
-
         }
 
         .table-div > .table {
             margin-bottom: 0;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         .table-div > .table th, .table-div > .table td {
             text-align: center;
+            padding: 5px;
         }
 
         .table-div > .table > caption {
             height: 40px;
-            color: #ffb400;
+            color: #57B4FE;
             font-size: 18px;
             line-height: 40px;
         }
 
         .table-div > .table > thead > tr {
-            background-color: #ffb400;
+            background-color: #57B4FE;
             color: #fff;
         }
 
@@ -318,7 +326,7 @@
         }
 
         .table-div > .table > tbody > .self-tr {
-            color: #ffb400;
+            color: #57B4FE;
         }
 
         .btn-div > .btn {
@@ -326,20 +334,25 @@
             width: 60%;
             height: 40px;
             margin: 10px auto 0;
-            border-radius: 4px;
+            border-radius: 20px;
             font-size: 18px;
+            outline: none;
         }
 
         .btn-div > .yellow-btn {
-            background: #ffb400;
+            background: #57B4FE;
             color: #fff;
         }
 
         .btn-div > .white-btn {
-            background: #fff;
-            color: #aaa;
+            background: #BBBBBB;
+            border: 1px solid #BBBBBB;
+            color: #fff;
         }
-
+        #again-btn,#answer-btn{
+            width:40%;
+            display: inline-block;
+        }
         #return-btn {
             margin-bottom: 20px;
         }
@@ -382,13 +395,19 @@
         <div class="num-div"><label class="num-label">1</label><label>/10</label></div>
     </div>
     <div class="btn-div">
-        <input type="button" id="prev-btn" class="btn white-btn" style="display:none;" value="上一题"/>
+        <button type="button" id="prev-btn" class="btn white-btn" style="display:none;">
+            上一题
+        </button>
     </div>
     <div class="btn-div">
-        <input type="button" id="next-btn" class="btn yellow-btn" style="display:none;" value="下一题"/>
+        <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
+            下一题
+        </button>
     </div>
     <div class="btn-div">
-        <input type="button" id="return-btn" class="btn yellow-btn" style="display:none;" value="返回榜单"/>
+        <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
+            下一题
+        </button>
     </div>
     <div id="right-layer-div" class="layer-div">
         <img class="layer-div-img" src="{{cdn('morder/images/right.png')}}"/>
@@ -404,10 +423,13 @@
 <div id="list-div">
     <div class="score-div">
         <div class="score-circle">
-            <div class="score-circle-div"><label class="score-label" id="result">100</label><label>分</label></div>
-            <label class="center-label">耗时</label>
-            <br/>
-            <label class="time-label" id="lasttime">00:00:00</label>
+            <div class="score-circle-div"><label class="score-label" id="result">
+                    100</label><label>分</label>
+                <br/><br/>
+                <label class="center-label">耗时</label>
+                <br/><br/>
+                <label class="time-label" id="lasttime">00:00:00</label>
+            </div>
         </div>
         <div class="score-title">
             <label>恭喜，完成答题！</label>
@@ -428,9 +450,13 @@
             </tbody>
         </table>
     </div>
-    <div class="btn-div">
-        <input type="button" id="again-btn" class="btn yellow-btn" value="再来一次"/>
-        <input type="button" id="answer-btn" class="btn white-btn" value="查看答案"/>
+    <div sty class="btn-div">
+        <button type="button" id="again-btn" class="btn yellow-btn">
+            再来一次
+        </button>
+        <button type="button" id="answer-btn" class="btn white-btn" >
+            查看答案
+        </button>
     </div>
 </div>
 <!-- Swiper JS -->

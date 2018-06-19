@@ -15,9 +15,11 @@
     <style>
         html {
             background-color: #fff;
+            height: 100%;
         }
 
         body {
+            height: 100%;
             background: #fff;
             font-family: "Microsoft Yahei";
             font-size: 14px;
@@ -33,6 +35,10 @@
             user-select: none;
         }
 
+        #layui-layer1 {
+            border-radius: 8px;
+        }
+
         ul, li {
             list-style-type: none;
         }
@@ -40,7 +46,7 @@
         .swiper-container {
             position: relative;
             width: 90%;
-            min-height: 400px;
+            /*min-height: 400px;*/
             margin: 0px auto 20px;
             background-color: #f5f5f5;
         }
@@ -67,13 +73,15 @@
             width: 80px;
             height: 80px;
             border-radius: 40px;
-            background-color: #ffb400;
+            background-color: #57B4FE;
             float: left;
         }
 
         .score-circle-div {
             display: table;
             margin: auto;
+            height: 80px;
+            line-height: 80px;
         }
 
         .score-div > .score-circle label {
@@ -81,13 +89,10 @@
         }
 
         .score-div > .score-circle .score-label {
-            margin-top: 30px;
-            margin-left: 10px;
             font-size: 30px;
         }
 
         #option-div .score-div > .score-title {
-            float: right;
             height: 100px;
 
         }
@@ -103,20 +108,22 @@
             margin: auto;
         }
 
-        ul {
-            margin: 20px;
-        }
-
         li {
             line-height: 30px;
             background-color: #a1a1a1;
             border-radius: 15px;
             color: #fff;
             margin: 10px auto;
+            width: 45%;
+            float: left;
+        }
+
+        li:nth-child(odd) {
+            margin-right: 70px;
         }
 
         li.right-focus {
-            background-color: #ffb400;
+            background-color: #57B4FE;
         }
 
         li.wrong-focus {
@@ -129,7 +136,7 @@
             width: 24px;
             line-height: 24px;
             border-radius: 12px;
-            background-color: #ffb400;
+            background-color: #57B4FE;
             float: left;
             margin-left: 3px;
         }
@@ -139,7 +146,7 @@
         }
 
         li > .right-option-label {
-            background-color: #ffb400;
+            background-color: #57B4FE;
         }
 
         .answer-label {
@@ -163,13 +170,13 @@
             width: 60%;
             height: 40px;
             margin: 20px auto;
-            border-radius: 4px;
+            border-radius: 20px;
         }
 
         .btn-div > .yellow-btn {
-            background: #ffb400;
+            background: #57B4FE;
             color: #fff;
-            border: 1px solid #ffb400;
+            border: 1px solid #57B4FE;
             font-size: 18px;
         }
 
@@ -183,18 +190,19 @@
 
         .layer-div > .next {
             display: block;
-            color: #ffb400;
-            border-top: 1px solid #ffb400;
+            color: #57B4FE;
+            border-top: 1px solid #57B4FE;
         }
 
         .layer-div > .layer-div-img {
             display: block;
             margin: 10px auto;
+            width: 104px;
         }
 
         .layer-div > label {
             display: block;
-            margin: 10px auto 0;
+            margin: 25px auto 0;
             text-align: center;
             font-size: 20px;
         }
@@ -206,7 +214,7 @@
 
         .back-div1 {
             width: 70%;
-            margin: 50px auto 0;
+            margin: 0 auto;
             background-color: rgba(249, 249, 249, 0.9);
             height: 5px;
         }
@@ -228,51 +236,58 @@
 
         #option-div {
             /*display: none;*/
+            padding-top: 20px;
         }
 
         #list-div {
             display: none;
-            background-color: #f7f7f7;
+            background-color: #fff;
             color: #aaa;
-            margin-top: 20px;
+            height: 100%;
+            padding-top: 50px;
+            /*margin-top: 20px;*/
         }
 
         #list-div label {
             display: inline-block;
         }
 
-        #list-div .score-div {
+       /* #list-div .score-div {
             width: 300px;
             height: 100px;
             margin: 0px auto;
-        }
+        }*/
 
-        #list-div .score-div > .score-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50px;
-            background-color: #ffb400;
-            float: left;
+        #list-div > .score-circle {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background-color: #57B4FE;
+            color: #fff;
         }
-
-        #list-div .score-div > .score-circle > .center-label {
+        #result{
+            font-size: 40px;
+        }
+        #list-div > .score-circle > .center-label {
             margin: auto 36px;
         }
 
-        #list-div .score-div > .score-circle > .time-label {
+        #list-div > .score-circle > .time-label {
             margin-left: 22px;
         }
 
         #list-div .score-title {
-            float: left;
+            /*float: left;*/
             height: 100px;
+            text-align: center;
         }
 
-        #list-div .score-div > .score-title label {
-            color: #ffb400;
+        #list-div > .score-title label {
+            color: #57B4FE;
             margin-top: 30px;
-            margin-left: 15px;
-            font-size: 23px;
+            /*margin-left: 15px;*/
+            font-size: 35px;
 
         }
 
@@ -299,13 +314,13 @@
 
         .table-div > .table > caption {
             height: 40px;
-            color: #ffb400;
+            color: #57B4FE;
             font-size: 18px;
             line-height: 40px;
         }
 
         .table-div > .table > thead > tr {
-            background-color: #ffb400;
+            background-color: #57B4FE;
             color: #fff;
         }
 
@@ -318,32 +333,46 @@
         }
 
         .table-div > .table > tbody > .self-tr {
-            color: #ffb400;
+            color: #57B4FE;
         }
 
         .btn-div > .btn {
             display: block;
             width: 60%;
             height: 40px;
+            line-height: 40px;
             margin: 10px auto 0;
-            border-radius: 4px;
+            border-radius: 20px;
             font-size: 18px;
+            outline: none;
+            text-align: center;
         }
 
         .btn-div > .yellow-btn {
-            background: #ffb400;
+            background: #57B4FE;
             color: #fff;
         }
 
         .btn-div > .white-btn {
-            background: #fff;
-            color: #aaa;
+            background: #BBBBBB;
+            border: 1px solid #BBBBBB;
+            color: #fff;
         }
 
         #return-btn {
             margin-bottom: 20px;
         }
-
+        #again-btn,#answer-btn{
+            width: 225px;
+            height: 58px;
+            line-height: 58px;
+            text-align: center;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        #again-btn{
+            margin-right: 50px;
+        }
     </style>
 </head>
 <body>
@@ -367,7 +396,8 @@
                         <div class="answer-div">
                             <ul>
                                 @foreach($v['option'] as $kk=>$vv)
-                                    <li class="option-li @if($vv['isanswer']==1) right-li @endif" id="{{$v['id']}}_{{$vv['id']}}">
+                                    <li class="option-li @if($vv['isanswer']==1) right-li @endif"
+                                        id="{{$v['id']}}_{{$vv['id']}}">
                                         <label class="option-label">{{$option_title[$kk]}}</label>
                                         <label class="answer-label">{{$vv['option']}}</label>
                                     </li>
@@ -382,13 +412,19 @@
         <div class="num-div"><label class="num-label">1</label><label>/10</label></div>
     </div>
     <div class="btn-div">
-        <input type="button" id="prev-btn" class="btn white-btn" style="display:none;" value="上一题"/>
+        <button type="button" id="prev-btn" class="btn white-btn" style="display:none;">
+            上一题
+        </button>
     </div>
     <div class="btn-div">
-        <input type="button" id="next-btn" class="btn yellow-btn" style="display:none;" value="下一题"/>
+        <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
+            下一题
+        </button>
     </div>
     <div class="btn-div">
-        <input type="button" id="return-btn" class="btn yellow-btn" style="display:none;" value="返回"/>
+        <bnutton type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
+            返回榜单
+        </bnutton>
     </div>
     <div id="right-layer-div" class="layer-div">
         <img class="layer-div-img" src="{{cdn('morder/images/right.png')}}"/>
@@ -402,20 +438,28 @@
     </div>
 </div>
 <div id="list-div">
-    <div class="score-div">
-        <div class="score-circle">
-            <div class="score-circle-div"><label class="score-label" id="result">100</label><label>分</label></div>
-            <label class="center-label">耗时</label>
+    {{--<div class="score-div">
+
+    </div>--}}
+    <div class="score-circle">
+        <div style="line-height: 20px;text-align: center" class="score-circle-div">
+            <label class="score-label" id="result">100</label>
+            <label>分</label><br/><br/>
+            <label style="font-size: 22px" class="center-label">耗时</label>
             <br/>
-            <label class="time-label" id="lasttime">00:00:00</label>
-        </div>
-        <div class="score-title">
-            <label>恭喜，完成答题！</label>
+            <label style="font-size: 22px" class="time-label" id="lasttime">00:00:00</label>
         </div>
     </div>
-    <div class="btn-div">
-        <input type="button" id="again-btn" class="btn yellow-btn" value="再来一次"/>
-        <input type="button" id="answer-btn" class="btn white-btn" value="查看答案"/>
+    <div class="score-title">
+        <label>恭喜，完成答题！</label>
+    </div>
+    <div style="text-align: center" class="btn-div">
+        <button type="button" id="again-btn" class="btn yellow-btn">
+            再来一次
+        </button>
+        <button type="button" id="answer-btn" class="btn white-btn">
+            查看答案
+        </button>
     </div>
 </div>
 <!-- Swiper JS -->
@@ -464,7 +508,7 @@
                 type: 1,
                 title: false,
                 closeBtn: 0,
-                area: ['80%', '154px'],
+                area: ['440px', '240px'],
                 offset: ["110px"],
                 shade: [0.3, '#393D49'],
                 content: content //这里content是一个DOM，这个元素要放在body根节点下
@@ -484,7 +528,7 @@
                     data: {
                         timecost: time,
                         answer: answer,
-                        p:"{{$p}}",
+                        p: "{{$p}}",
                         rela_id:{{$rela_id}},
                         type_id:{{$type_id}}
                     },
