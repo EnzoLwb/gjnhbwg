@@ -224,10 +224,9 @@ class MapExhibitController extends Controller
 	 * @apiParam {string} deviceno 机器号
 	 * @apiParam {int} map_id 地图id（楼层）
 	 * @apiParam {int} exhibit_id 终点展品id
-	 * @apiSuccess {int} status 1正常生成线路数据 ， -1未定位到您的位置信息，-2楼层位置不对，请切换楼层 ，-3输入的展品id有误
-	 * @apiSuccess {json} data 数据详情
-	 * @apiSuccess {int} x x轴坐标
-	 * @apiSuccess {int} y y轴坐标
+	 * @apiSuccess {array} data 数据详情
+	 * @apiSuccess {int} data.code 1正常生成线路数据 ， -1未定位到您的位置信息，-2楼层位置不对，请切换楼层 ，-3输入的展品id有误
+	 * @apiSuccess {array} data.road_info xy数据详情
 	 *
 	 */
 	public function road_navigation()
@@ -250,18 +249,24 @@ class MapExhibitController extends Controller
 
 		if (empty($trajectory_info)) {
 			//return response_json(-1, $road_info, '未定位到您的位置信息');
-			throw new ApiErrorException('未定位到您的位置信息');
+			$data['code']=-1;
+			$data['road_info']=$road_info;
+			return response_json(1, $data,'未定位到您的位置信息');
 		} else {
 			$trajectory_info = $trajectory_info->toArray();
 			if ($trajectory_info['map_id'] != $map_id) {
 				//return response_json(-2, $road_info, '请走到' . $map_id . '层再导航');
-				throw new ApiErrorException('请走到' . $map_id . '层再导航');
+				$data['code']=-2;
+				$data['road_info']=$road_info;
+				return response_json(1, $data,'请走到' . $map_id . '层再导航');
 			}
 
 			$exhibit_info_last = Exhibit::where('id', $exhibit_id_last)->first();
 			if (empty($exhibit_info_last)) {
 				//return response_json(-3, $road_info, '输入的展品id有误');
-				throw new ApiErrorException('输入的展品id有误');
+				$data['code']=-3;
+				$data['road_info']=$road_info;
+				return response_json(1, $data,'输入的展品id有误');
 			}
 
 			$road_arr_info = [];
@@ -276,8 +281,9 @@ class MapExhibitController extends Controller
 			}
 
 			$road_info = $road_arr_info;
-
-			return response_json(1, $road_info);
+			$data['code']=1;
+			$data['road_info']=$road_info;
+			return response_json(1, $data);
 		}
 
 	}
