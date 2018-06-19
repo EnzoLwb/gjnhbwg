@@ -34,7 +34,6 @@ class QuestionController extends BaseAdminController
 	{
 
 		if (request()->ajax()) {
-			dd(11);
 			$id =request('del');
 			$r =Queslist::where('id',$id)->delete();
 			if ($r) {
@@ -42,7 +41,6 @@ class QuestionController extends BaseAdminController
 				QuesinfoOption::where('ques_id',$id)->delete();
 				QuesinfoList::where('ques_id',$id)->delete();
 				QuesTextinfo::where('ques_id',$id)->delete();
-
 				return $this->success();
 			} else {
 				return $this->error();
