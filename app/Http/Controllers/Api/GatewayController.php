@@ -551,6 +551,7 @@ class GatewayController extends Controller
 		$user_number=request('user_number');
 		$type=request('p')!='d' ? 'uid':'deviceno';
 		$res=Trajectory::where($type,$user_number)->orderby('updated_at','desc')->select('x','y','map_id')->first();
-		return response_json(1,$res);
+		$return=!empty($res) ? 1:0;
+		return response_json($return,$res);
 	}
 }
