@@ -15,11 +15,10 @@
     <style>
         html {
             background-color: #fff;
-            height: 100%;
+            height:100%;
         }
-
         body {
-            height: 100%;
+            height:100%;
             background: #fff;
             font-family: "Microsoft Yahei";
             font-size: 14px;
@@ -35,18 +34,16 @@
             user-select: none;
         }
 
-        #layui-layer1 {
-            border-radius: 8px;
-        }
-
         ul, li {
             list-style-type: none;
         }
-
+        .layui-layer {
+            border-radius: 8px;
+        }
         .swiper-container {
             position: relative;
             width: 90%;
-            /*min-height: 400px;*/
+            min-height: 400px;
             margin: 0px auto 20px;
             background-color: #f5f5f5;
         }
@@ -81,7 +78,8 @@
             display: table;
             margin: auto;
             height: 80px;
-            line-height: 80px;
+            line-height: 80%;
+            text-align: center;
         }
 
         .score-div > .score-circle label {
@@ -89,10 +87,13 @@
         }
 
         .score-div > .score-circle .score-label {
+            margin-top: 30px;
+            margin-left: 10px;
             font-size: 30px;
         }
 
         #option-div .score-div > .score-title {
+            float: right;
             height: 100px;
 
         }
@@ -108,18 +109,16 @@
             margin: auto;
         }
 
+        ul {
+            margin: 20px;
+        }
+
         li {
             line-height: 30px;
             background-color: #a1a1a1;
             border-radius: 15px;
             color: #fff;
             margin: 10px auto;
-            width: 45%;
-            float: left;
-        }
-
-        li:nth-child(odd) {
-            margin-right: 70px;
         }
 
         li.right-focus {
@@ -135,7 +134,7 @@
             height: 24px;
             width: 24px;
             line-height: 24px;
-            border-radius: 12px;
+            border-radius: 20px;
             background-color: #57B4FE;
             float: left;
             margin-left: 3px;
@@ -197,12 +196,11 @@
         .layer-div > .layer-div-img {
             display: block;
             margin: 10px auto;
-            width: 104px;
         }
 
         .layer-div > label {
             display: block;
-            margin: 25px auto 0;
+            margin: 10px auto 0;
             text-align: center;
             font-size: 20px;
         }
@@ -214,7 +212,7 @@
 
         .back-div1 {
             width: 70%;
-            margin: 0 auto;
+            margin: 50px auto 0;
             background-color: rgba(249, 249, 249, 0.9);
             height: 5px;
         }
@@ -236,44 +234,40 @@
 
         #option-div {
             /*display: none;*/
-            padding-top: 20px;
         }
 
         #list-div {
             display: none;
-            background-color: #fff;
+            /*background-color: #f7f7f7;*/
             color: #aaa;
-            height: 100%;
-            padding-top: 50px;
             /*margin-top: 20px;*/
+            padding-top: 25%;
         }
 
         #list-div label {
             display: inline-block;
         }
 
-       /* #list-div .score-div {
+        #list-div .score-div {
             width: 300px;
-            height: 100px;
-            margin: 0px auto;
-        }*/
-
-        #list-div > .score-circle {
-            width: 140px;
-            height: 140px;
+            /*height: 100px;*/
             margin: 0 auto;
-            border-radius: 50%;
+        }
+
+        #list-div .score-div > .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
             background-color: #57B4FE;
-            color: #fff;
+            margin: 0 auto;
+            /*float: left;*/
         }
-        #result{
-            font-size: 40px;
-        }
-        #list-div > .score-circle > .center-label {
+
+        #list-div .score-div > .score-circle > .center-label {
             margin: auto 36px;
         }
 
-        #list-div > .score-circle > .time-label {
+        #list-div .score-div > .score-circle > .time-label {
             margin-left: 22px;
         }
 
@@ -283,11 +277,11 @@
             text-align: center;
         }
 
-        #list-div > .score-title label {
+        #list-div .score-div > .score-title label {
             color: #57B4FE;
             margin-top: 30px;
-            /*margin-left: 15px;*/
-            font-size: 35px;
+            margin-left: 15px;
+            font-size: 23px;
 
         }
 
@@ -301,15 +295,18 @@
             margin-top: 20px;
             border: 1px solid #eee;
             box-shadow: 0px 0px 4px #ccc;
-
         }
 
         .table-div > .table {
             margin-bottom: 0;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         .table-div > .table th, .table-div > .table td {
             text-align: center;
+            padding: 5px;
         }
 
         .table-div > .table > caption {
@@ -340,12 +337,10 @@
             display: block;
             width: 60%;
             height: 40px;
-            line-height: 40px;
             margin: 10px auto 0;
             border-radius: 20px;
             font-size: 18px;
             outline: none;
-            text-align: center;
         }
 
         .btn-div > .yellow-btn {
@@ -358,20 +353,12 @@
             border: 1px solid #BBBBBB;
             color: #fff;
         }
-
-        #return-btn {
-            margin-bottom: 20px;
-        }
         #again-btn,#answer-btn{
-            width: 225px;
-            height: 58px;
-            line-height: 58px;
-            text-align: center;
-            border-radius: 30px;
+            width:40%;
             display: inline-block;
         }
-        #again-btn{
-            margin-right: 50px;
+        #return-btn {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -396,8 +383,7 @@
                         <div class="answer-div">
                             <ul>
                                 @foreach($v['option'] as $kk=>$vv)
-                                    <li class="option-li @if($vv['isanswer']==1) right-li @endif"
-                                        id="{{$v['id']}}_{{$vv['id']}}">
+                                    <li class="option-li @if($vv['isanswer']==1) right-li @endif" id="{{$v['id']}}_{{$vv['id']}}">
                                         <label class="option-label">{{$option_title[$kk]}}</label>
                                         <label class="answer-label">{{$vv['option']}}</label>
                                     </li>
@@ -422,9 +408,9 @@
         </button>
     </div>
     <div class="btn-div">
-        <bnutton type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
-            返回
-        </bnutton>
+        <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
+            返回榜单
+        </button>
     </div>
     <div id="right-layer-div" class="layer-div">
         <img class="layer-div-img" src="{{cdn('morder/images/right.png')}}"/>
@@ -438,26 +424,40 @@
     </div>
 </div>
 <div id="list-div">
-    {{--<div class="score-div">
-
-    </div>--}}
-    <div class="score-circle">
-        <div style="line-height: 20px;text-align: center" class="score-circle-div">
-            <label class="score-label" id="result">100</label>
-            <label>分</label><br/><br/>
-            <label style="font-size: 22px" class="center-label">耗时</label>
-            <br/>
-            <label style="font-size: 22px" class="time-label" id="lasttime">00:00:00</label>
+    <div class="score-div">
+        <div class="score-circle">
+            <div class="score-circle-div"><label class="score-label" id="result">
+                    100</label><label>分</label>
+                <br/><br/>
+                <label class="center-label">耗时</label>
+                <br/><br/>
+                <label class="time-label" id="lasttime">00:00:00</label>
+            </div>
+        </div>
+        <div class="score-title">
+            <label>恭喜，完成答题！</label>
         </div>
     </div>
-    <div class="score-title">
-        <label>恭喜，完成答题！</label>
-    </div>
+    {{--<div class="table-div">
+        <table class="table table-bordered table-striped">
+            <caption>总排行榜</caption>
+            <thead>
+            <tr>
+                <th>排名</th>
+                <th>姓名</th>
+                <th>得分</th>
+                <th>日期</th>
+            </tr>
+            </thead>
+            <tbody id="list">
+            </tbody>
+        </table>
+    </div>--}}
     <div style="text-align: center" class="btn-div">
         <button type="button" id="again-btn" class="btn yellow-btn">
             再来一次
         </button>
-        <button type="button" id="answer-btn" class="btn white-btn">
+        <button type="button" id="answer-btn" class="btn white-btn" >
             查看答案
         </button>
     </div>
@@ -508,7 +508,7 @@
                 type: 1,
                 title: false,
                 closeBtn: 0,
-                area: ['440px', '240px'],
+                area: ['80%', '154px'],
                 offset: ["110px"],
                 shade: [0.3, '#393D49'],
                 content: content //这里content是一个DOM，这个元素要放在body根节点下
@@ -528,15 +528,17 @@
                     data: {
                         timecost: time,
                         answer: answer,
-                        p: "{{$p}}",
+                        p:"{{$p}}",
                         rela_id:{{$rela_id}},
                         type_id:{{$type_id}}
                     },
                     success: function (newid) {
-
-                        $("#option-div").hide();
-                        $("#list-div").show();
-                        $("html").css("background-color", "#f5f5f5");
+                        $.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {
+                            $('#list').append(data);
+                            $("#option-div").hide();
+                            $("#list-div").show();
+                            $("html").css("background-color", "#f5f5f5");
+                        });
                     }
                 });
                 layer.closeAll();

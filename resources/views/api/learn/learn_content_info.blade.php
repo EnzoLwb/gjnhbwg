@@ -16,7 +16,6 @@
         html {
             background-color: #fff;
         }
-
         body {
             background: #fff;
             font-family: "Microsoft Yahei";
@@ -36,8 +35,8 @@
         ul, li {
             list-style-type: none;
         }
-        #layui-layer1{
-            border-radius: 5px;
+        .layui-layer {
+            border-radius: 8px;
         }
         .swiper-container {
             position: relative;
@@ -406,7 +405,7 @@
     </div>
     <div class="btn-div">
         <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
-            下一题
+            返回榜单
         </button>
     </div>
     <div id="right-layer-div" class="layer-div">
@@ -450,7 +449,7 @@
             </tbody>
         </table>
     </div>
-    <div sty class="btn-div">
+    <div style="text-align: center" class="btn-div">
         <button type="button" id="again-btn" class="btn yellow-btn">
             再来一次
         </button>

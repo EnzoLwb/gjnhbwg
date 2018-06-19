@@ -35,10 +35,9 @@
             user-select: none;
         }
 
-        #layui-layer1 {
+        .layui-layer {
             border-radius: 8px;
         }
-
         ul, li {
             list-style-type: none;
         }
