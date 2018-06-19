@@ -442,9 +442,9 @@
 								<tr>
 									<td style="overflow: inherit;">
 										@if($vo->status==0)
-											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',[$vo['id'],1])}}" msg="删除问卷？" >开始调查</a>
+											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',['id'=>$vo['id'],'status'=>1])}}" msg="开始调查？" >开始调查</a>
 										@elseif($vo->status==1)
-											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',[$vo['id'],0])}}" msg="删除问卷？">结束调查</a>
+											<a class="ajaxBtn btn-diaocha" href="javascript:void(0);" uri="{{route('admin.interaction.question.ques_status',['id'=>$vo['id'],'status'=>0])}}" msg="结束调查？">结束调查</a>
 										@else
 
 										@endif
@@ -467,7 +467,7 @@
 						@endif
 								<a href="javascript:edit_ques({{$vo->id}})"><i class="fa fa-gear" title="编辑问卷" style=""></i></a>
 								<a href="{{route('admin.interaction.question.quesinfo_list',['id'=>$vo->id,'title'=>$vo->title])}}"><i class="fa fa-edit" title="题目管理" style=""></i></a>
-								<a class="ajaxBtn" href="javascript:void(0);" uri="{{route('admin.interaction.question.index',['del'=> $vo->id])}}"  msg="删除问卷？"><i class="fa fa-remove" title="删除问卷111" style=""></i></a>
+								<a class="ajaxBtn" href="javascript:void(0);" uri="{{route('admin.interaction.question.index',['del'=> $vo->id])}}"  msg="删除问卷？"><i class="fa fa-remove" title="删除问卷" style=""></i></a>
 							</div>
 
 					<!-- /.user-controller -->
@@ -604,7 +604,7 @@
 		        }, speed, callback );
 		    };
     		$('a').click(function(e){
-    			e.stopPropagation();
+    			// e.stopPropagation();
     		});
 
 

@@ -34,7 +34,7 @@ class QuestionController extends Controller
 	 * @apiSuccess {string} msg 文字信息
 	 * @apiSuccessExample {json} 返回值
 	 *
-	 * {"status":1,"data":[{"id":1,"title":"\u6d4b\u8bd51","description":"\u6d4b\u8bd51","detail_url":"http:\/\/api.hnsb_pw.com\/api\/quesinfo?p=i&question_id=1"}],"msg":""}
+	 * {"status":1,"data":[{"id":1,"title":"\u6d4b\u8bd51","description":"\u6d4b\u8bd51","detail_url":"http:\/\/http://192.168.10.158:8309\/api\/quesinfo?p=i&question_id=1"}],"msg":""}
 	 */
 	public function question_list(){
 		$question_list = Queslist::where('status',1)->select('id','title','description')->get();

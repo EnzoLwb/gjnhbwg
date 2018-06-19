@@ -635,6 +635,7 @@ class QuestionController extends BaseAdminController
 			//所有其他选项及问答题详情
 			$where3['ques_id'] = $id;
 			$text_info = QuesTextinfo::where('ques_id',$id)->get()->toArray();
+			$new=[];
 			foreach($text_info as $k=>$v){
 				$new[$v['quesinfo_id']]['quesinfo_id'] = $v['quesinfo_id'];
 			}
