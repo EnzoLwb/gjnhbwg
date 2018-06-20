@@ -8,33 +8,100 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>参观指南</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/dlj/reset.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/h5view/dlj/cgzn.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-<p>交通路线</p>
-{!! $jt->jiaotong !!}
-<p>联系方式</p>
-{!! $jt->contact !!}
-<br><br><br>
-{{--参观须知--}}
-{!! $xz->shuoming !!}
-<br>
-{!! $xz->zysx !!}
-<br><br><br>
-{{--设备租赁--}}
-{{--步骤一--}}
-{!! $zl->step1 !!}
-<br>
-{{--步骤二--}}
-{!! $zl->step2 !!}
-<br>
-{{--步骤三--}}
-{!! $zl->step3 !!}
-<br>
-{{--步骤四--}}
-{!! $zl->step4 !!}
-<br>
-{{--步骤五--}}
-{!! $zl->step5 !!}
+<div class="wrap">
+    <div class="header">
+        <div class="active">
+            交通周边
+        </div>
+        <div>
+            参观须知
+        </div>
+        <div>
+            设备租赁
+        </div>
+    </div>
+    <!--交通周边-->
+    <div class="content content1">
+        <ul>
+            <li style="margin-bottom: 40px" class="clearfloat">
+                <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
+                <div class="info1">
+                    {!! $jt->jiaotong !!}
+                </div>
+            </li>
+            <li>
+                <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
+                <div class="info2">
+                    {!! $jt->contact !!}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!--参观须知-->
+    <div class="content content2">
+        <ul>
+            <li style="margin-bottom: 49px" class="clearfloat">
+                <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
+                <div class="info1">
+                    {!! $xz->shuoming !!}
+                </div>
+            </li>
+            <li>
+                <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
+                <div class="info2">
+                    {!! $xz->zysx !!}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!--设备租赁-->
+    <div class="content content3">
+        <div class="flex">
+            <div class="item">
+                <img src="{{cdn('img/h5view/item1.png')}}" alt=""/>
+                <p>{!! $zl->step1 !!}</p>
+            </div>
+            <div class="item">
+                <img src="{{cdn('img/h5view/item2.png')}}" alt=""/>
+                <p>{!! $zl->step2 !!}</p>
+            </div>
+            <div class="item">
+                <img src="{{cdn('img/h5view/item3.png')}}" alt=""/>
+                <p>{!! $zl->step3 !!}/台</p>
+            </div>
+        </div>
+        <div class="flex2">
+            <div class="item">
+                <img src="{{cdn('img/h5view/item4.png')}}" alt=""/>
+                <p>{!! $zl->step4 !!}/轮椅/婴儿车</p>
+            </div>
+            <div class="item">
+                <img src="{{cdn('img/h5view/item5.png')}}" alt=""/>
+                <p> {!! $zl->step5 !!}</p>
+            </div>
+        </div>
+    </div>
+    <!--<p class="remarks"> <sup>*</sup> 最终解释权归国家（海南）南海博物馆所有</p>-->
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".header div").on("click",function () {
+            $(this).addClass("active").siblings().removeClass("active");
+            $(".content").eq($(this).index()).show().siblings(".content").hide()
+        });
+        var val = '';
+        $(".item p").each(function (i) {
+            val = $(this).text().replace(/\s/g,"<br>");
+            $(this).html(val);
+        })
+    })
+</script>
 </body>
 
 

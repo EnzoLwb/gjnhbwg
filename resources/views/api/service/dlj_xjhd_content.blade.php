@@ -8,9 +8,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>宣教活动</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/dlj/reset.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/h5view/dlj/xjhd.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-<p>标题</p>
+{{--<p>标题</p>
 {{$data['title']}}
 <p>副标题</p>
 {!! $data->title_1 !!}
@@ -25,9 +29,30 @@
 <p>时长</p>
 {!! $data->active_time !!}
 <p>简介</p>
-{!! $data->content !!}
+{!! $data->content !!}--}}
 
-
+<div class="wrap clearfloat">
+    <img src="{{get_file_url($data['img'])}}">
+    <div class="info">
+        <h1 class="title">
+            {{$data['title']}}
+        </h1>
+        <h2>
+            活动时间：{!! $data->active_date !!}
+        </h2>
+        <h2>
+            活动地点：{!! $data->active_place !!}
+        </h2>
+        <h2>
+            活动时长：{!! $data->active_date !!}
+        </h2>
+        <h2>
+            活动价格：{!! $data->active_price !!}
+        </h2>
+        {!! $data->content !!}
+        <div style="background: rgba(255,255,255,.8);position: fixed;width: 100%;height: 30px;bottom: 0"></div>
+    </div>
+</div>
 
 </body>
 

@@ -18,6 +18,10 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body div {
   padding: 4.5333333333vw 5.8666666667vw 0;
 }

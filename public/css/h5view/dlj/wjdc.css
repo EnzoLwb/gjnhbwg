@@ -1,7 +1,6 @@
-html, body {
+/*html, body {
   min-height: 100%;
-}
-
+}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -18,6 +17,10 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body .wrap {
   padding-top: 3.02734375vw;
   width: 83.49609375vw;
@@ -28,6 +31,7 @@ body .wrap p {
   line-height: 2.9296875vw;
   color: #57B4FE;
   margin-bottom: 0.9765625vw;
+  word-break: break-all;
 }
 body .wrap .box {
   background: rgba(187, 187, 187, 0.2);

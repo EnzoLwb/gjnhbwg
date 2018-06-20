@@ -1,7 +1,6 @@
-html, body {
+/*html, body {
   min-height: 100%;
-}
-
+}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -18,21 +17,45 @@ html, body {
   box-sizing: border-box;
 }
 
-body div {
-  padding: 10.9333333333vw 10.5333333333vw 0 9.6vw;
+p {
+  word-break: break-all;
 }
-body div img {
+
+body .wrap {
+  box-sizing: border-box;
+  padding: 4.19921875vw 3.515625vw;
+  position: relative;
+  height: 29.296875vw;
+}
+body .wrap .swiper-container {
+  width: 28.41796875vw;
+  height: 20.99609375vw;
   display: block;
+  position: fixed;
+  top: 4.19921875vw;
+  left: 3.515625vw;
+  border-radius: 5px;
+}
+body .wrap .swiper-container img {
   width: 100%;
 }
-body div h1 {
-  font-size: 4.8vw;
-  margin: 4vw auto 4.9333333333vw;
-  text-align: center;
+body .wrap .info {
+  float: right;
+  width: 43.1640625vw;
+  position: relative;
 }
-body div p {
-  font-size: 4vw;
-  line-height: 6.4vw;
+body .wrap .info p {
+  font-size: 1.953125vw;
+  line-height: 3.125vw;
+  text-indent: 2em;
+  color: #8B8B8B;
+}
+body .wrap .info p.title {
+  font-size: 2.44140625vw;
+  line-height: 3.125vw;
+  text-indent: 0;
+  color: #000000;
+  margin-bottom: 2.44140625vw;
 }
 
 /*# sourceMappingURL=wccp.css.map */

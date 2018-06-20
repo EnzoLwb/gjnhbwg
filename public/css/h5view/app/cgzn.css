@@ -18,6 +18,10 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 .header {
   height: 6.7466266867vh;
   background: #F4F8FF;

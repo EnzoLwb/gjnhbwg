@@ -1,17 +1,40 @@
 @import "index";
-body div{
-  padding: vw(82) vw(79) 0 vw(72);
-  img{
-    display: block;
-    width: 100%;
-  }
-  h1{
-    font-size: vw(36);
-    margin: vw(30) auto vw(37);
-    text-align: center;
-  }
-  p{
-    font-size: vw(30);
-    line-height: vw(48);
+body{
+  .wrap{
+    box-sizing: border-box;
+    padding: vw(43) vw(36);
+    position: relative;
+    height: vw(300);
+    .swiper-container{
+      width: vw(291);
+      height: vw(215);
+      display: block;
+      position: fixed;
+      top: vw(43);
+      left: vw(36);
+      border-radius: 5px;
+      img{
+        width: 100%;
+      }
+    }
+    .info{
+      float: right;
+      width: vw(442);
+      position: relative;
+
+      p{
+        font-size: vw(20);
+        line-height: vw(32);
+        text-indent: 2em;
+        color: #8B8B8B;
+      }
+      p.title{
+        font-size: vw(25);
+        line-height: vw(32);
+        text-indent: 0;
+        color: #000000;
+        margin-bottom: vw(25);
+      }
+    }
   }
 }

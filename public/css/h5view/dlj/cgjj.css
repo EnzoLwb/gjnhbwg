@@ -1,7 +1,6 @@
-html, body {
+/*html, body {
   min-height: 100%;
-}
-
+}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -16,6 +15,10 @@ html, body {
 
 * {
   box-sizing: border-box;
+}
+
+p {
+  word-break: break-all;
 }
 
 body .wrap {
@@ -44,6 +47,7 @@ body .wrap .info p.title {
   font-size: 2.83203125vw;
   text-indent: 0;
   color: #262932;
+  margin-bottom: 10px;
 }
 
 /*# sourceMappingURL=cgjj.css.map */

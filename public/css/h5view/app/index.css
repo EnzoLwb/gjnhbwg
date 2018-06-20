@@ -18,4 +18,8 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 /*# sourceMappingURL=index.css.map */

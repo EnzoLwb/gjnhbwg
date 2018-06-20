@@ -18,6 +18,10 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body div p {
   font-size: 4vw;
   line-height: 6.4vw;

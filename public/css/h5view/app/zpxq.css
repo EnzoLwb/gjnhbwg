@@ -19,6 +19,10 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body div {
   min-height: 100%;
   font-size: 4.8vw;

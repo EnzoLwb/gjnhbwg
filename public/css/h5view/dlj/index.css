@@ -1,7 +1,6 @@
-html, body {
+/*html, body {
   min-height: 100%;
-}
-
+}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -16,6 +15,10 @@ html, body {
 
 * {
   box-sizing: border-box;
+}
+
+p {
+  word-break: break-all;
 }
 
 /*# sourceMappingURL=index.css.map */
