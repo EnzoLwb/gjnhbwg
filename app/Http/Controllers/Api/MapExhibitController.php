@@ -280,15 +280,23 @@ class MapExhibitController extends Controller
 			$data['road_info'] = $road_info;
 
 			$start_ex = Exhibit::where('auto_num',$trajectory_info['auto_num'])->first();
-			$exhibit_arr[]=$start_ex['id'];
-			$exhibit_arr[]=$exhibit_info_last['id'];
-			$exhibit_arr = array_unique($exhibit_arr);
+			//$exhibit_arr[]=$start_ex['id'];
+			//$exhibit_arr[]=$exhibit_info_last['id'];
 
-			$exhibit_list = Exhibit::join('exhibit_language', function ($join) use ($language) {
+			$exhibit_list1 = Exhibit::join('exhibit_language', function ($join) use ($language) {
 				$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 			})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
 				$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
-			})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name', 'exhibition.floor_id')->get();
+			})->where('exhibit.is_show_list', 1)->where('exhibit.id', $start_ex['id'])->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name', 'exhibition.floor_id')->first();
+
+			$exhibit_list2 = Exhibit::join('exhibit_language', function ($join) use ($language) {
+				$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
+			})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
+				$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
+			})->where('exhibit.is_show_list', 1)->where('exhibit.id', $exhibit_info_last['id'])->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name', 'exhibition.floor_id')->first();
+
+			$exhibit_list[]= $exhibit_list1;
+			$exhibit_list[]= $exhibit_list2;
 
 			$data1 = [];
 			foreach ($exhibit_list as $k => $g) {
