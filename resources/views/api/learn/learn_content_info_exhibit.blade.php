@@ -530,7 +530,8 @@
                         answer: answer,
                         p:"{{$p}}",
                         rela_id:{{$rela_id}},
-                        type_id:{{$type_id}}
+                        type_id:{{$type_id}},
+                        uid:{{$uid}}
                     },
                     success: function (newid) {
                         $.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {

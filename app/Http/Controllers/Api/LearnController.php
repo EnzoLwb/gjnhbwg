@@ -6,6 +6,7 @@ use App\Models\Exhibit;
 use App\Models\Learn;
 use App\Models\LearnData;
 use App\Models\LearnOption;
+use App\Exceptions\ApiErrorException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -44,6 +45,13 @@ class LearnController extends Controller
 	{
 		$rela_id = request('rela_id');
 		$type_id = request('type_id');
+		$api_token = request('api_token');
+
+		if((request('p')=='i'||request('p')=='a')&&$type_id==1&&$api_token==''){
+			return response_json(-1, '','api_token error');
+		}
+
+
 		//随机抽选10题
 		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')->where('learn_relation.rela_id',$rela_id)
 			->where('type_id',$type_id)
@@ -63,7 +71,13 @@ class LearnController extends Controller
 				'option_title'=> ['A','B','C','D','E','F','G','H','I','J']
 			]);
 		}elseif ($type_id==2){
-			$uid=0;
+			$userinfo = Auth::user();
+			if(!$userinfo){
+				$uid=0;
+			}else{
+				$uid=$userinfo->uid;
+			}
+
 			return view('api.learn.learn_content_info_exhibit',[
 				'list'=>$list,
 				'p'=>request('p'),
@@ -74,9 +88,11 @@ class LearnController extends Controller
 			]);
 		}else{
 
-//			$uid = Auth::user()->uid;
-			$uid=0;
-//			return response_json(0, '','请先登录');
+			$userinfo = Auth::user();
+			if(!$userinfo){
+				return response_json(-1, '','api_token error');
+			}
+			$uid=$userinfo->uid;
 			return view('api.learn.learn_content_info',[
 				'list'=>$list,
 				'p'=>request('p'),
@@ -90,7 +106,7 @@ class LearnController extends Controller
 
 	}
 	public function save_answer(){
-		$uid = 0;
+		$uid = request('uid',0);
 		$answer = request('answer');
 		$timecost = request('timecost');
 		$rela_id = request('rela_id');
