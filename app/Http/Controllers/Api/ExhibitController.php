@@ -95,6 +95,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {string} exhibition_imgs 展厅图片
 	 * @apiSuccess {int} floor  所在楼层
 	 * @apiSuccess {string} content_url 内容h5
+	 * @apiSuccess {string} learn_url 学习单url
 	 */
 	public function exhibition_info()
 	{
@@ -125,6 +126,7 @@ class ExhibitController extends Controller
 			$data['exhibition_info']['exhibition_imgs'] = $imgs;
 			unset($data['exhibition_info']['exhibition_img']);
 			$data['exhibition_info']['content_url'] = '/api/exhibition_content_info/' . $language . '/' . $exhibition_id . '?p=' . $p . '&language=' . $language;
+			$data['exhibition_info']['learn_url'] = "/api/learn_content_info?type_id=1&p=" . request('p') . "&rela_id=" . $exhibition_id . "&api_token=";
 		} else {
 			$data['exhibition_info'] = [];
 		}
