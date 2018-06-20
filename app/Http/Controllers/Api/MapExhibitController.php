@@ -226,9 +226,10 @@ class MapExhibitController extends Controller
 	 * @apiParam {int} map_id 地图id（楼层）
 	 * @apiParam {int} exhibit_id 终点展品id
 	 * @apiSuccess {int} status 1正常生成线路数据 ， -1未定位到您的位置信息，-2楼层位置不对，请切换楼层 ，-3输入的展品id有误
-	 * @apiSuccess {json} data 数据详情
-	 * @apiSuccess {int} x x轴坐标
-	 * @apiSuccess {int} y y轴坐标
+	 * @apiSuccess {json} data.road_info 线路数据详情
+	 * @apiSuccess {int} data.road_info.x x轴坐标
+	 * @apiSuccess {int} data.road_info.y y轴坐标
+	 * @apiSuccess {json} data.exhibit_info 线路起点终点展品信息
 	 */
 	public function road_navigation()
 	{
@@ -276,8 +277,35 @@ class MapExhibitController extends Controller
 			}
 
 			$road_info = $road_arr_info;
+			$data['road_info'] = $road_info;
 
-			return response_json(1, $road_info);
+			$start_ex = Exhibit::where('auto_num',$trajectory_info['auto_num'])->first();
+			$exhibit_arr[]=$start_ex['id'];
+			$exhibit_arr[]=$exhibit_info_last['id'];
+			$exhibit_arr = array_unique($exhibit_arr);
+
+			$exhibit_list = Exhibit::join('exhibit_language', function ($join) use ($language) {
+				$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
+			})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
+				$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
+			})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name', 'exhibition.floor_id')->get();
+
+			$data1 = [];
+			foreach ($exhibit_list as $k => $g) {
+				$imgs = json_decode($g['exhibit_img'], true);
+				$imgs = isset($imgs['exhibit_icon1']) ? $imgs['exhibit_icon1'] : '';
+				$data1[$k]['exhibit_name'] = $g['exhibit_name'];
+				$data1[$k]['exhibit_id'] = $g['exhibit_id'];
+				$data1[$k]['exhibit_icon1'] = $imgs;
+				$data1[$k]['x'] = $g['x'];
+				$data1[$k]['y'] = $g['y'];
+				//$data1[$k]['exhibition_name'] = $g['exhibition_name'];
+				//$data1[$k]['floor'] = $g['floor_id'];
+			}
+
+			$data['exhibit_info']= $data1;
+
+			return response_json(1, $data);
 		}
 
 	}
