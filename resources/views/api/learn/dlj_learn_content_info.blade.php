@@ -17,7 +17,6 @@
             background-color: #fff;
             height: 100%;
         }
-
         body {
             height: 100%;
             background: #fff;
@@ -113,12 +112,8 @@
             border-radius: 15px;
             color: #fff;
             margin: 10px auto;
-            width: 45%;
-            float: left;
-        }
-
-        li:nth-child(odd) {
-            margin-right: 70px;
+            width: 70%;
+            /*float: left;*/
         }
 
         li.right-focus {
@@ -138,6 +133,7 @@
             background-color: #57B4FE;
             float: left;
             margin-left: 3px;
+            vertical-align: middle;
         }
 
         li > .wrong-option-label {
@@ -151,6 +147,8 @@
         .answer-label {
             width: 85%;
             word-break: break-word;
+            vertical-align: middle;
+            text-align: left;
         }
 
         .num-div {
@@ -228,10 +226,12 @@
         .fa {
             color: #fff;
         }
+/*
 
         .answer-div {
             margin-bottom: 50px;
         }
+*/
 
         #option-div {
             /*display: none;*/

@@ -22,8 +22,16 @@ p {
   word-break: break-all;
 }
 
+.wrap {
+  padding-top: 6.7466266867vh;
+  position: relative;
+}
+
 .header {
-  height: 6.7466266867vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   background: #F4F8FF;
   display: flex;
   flex-direction: row;

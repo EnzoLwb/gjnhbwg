@@ -1,6 +1,13 @@
 @import "index";
+.wrap{
+  padding-top: vh(90);
+  position: relative;
+}
 .header{
-  height: vh(90);
+  width: 100%;
+  position: fixed;
+  top:0;
+  left: 0;
   background: #F4F8FF;
   display: flex;
   flex-direction: row;

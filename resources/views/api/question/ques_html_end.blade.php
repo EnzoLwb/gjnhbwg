@@ -59,6 +59,9 @@
             .content .intro{
                 font-size: 0.9rem;
             }
+            .content .ques_content img{
+                width: 45%;
+            }
         }
         .content .intro p{
             margin: 0;

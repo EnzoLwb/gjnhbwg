@@ -28,7 +28,8 @@
         html {
             padding: 0;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         body {
@@ -39,14 +40,16 @@
             background: rgba(0, 0, 0, 0);
             font: normal 100% pingfang, San Francisco, Roboto, Microsoft YaHei Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .content {
             width: 100%;
             height: 100%;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .content .intro {
@@ -180,7 +183,10 @@
             padding: 1px 35px 1px 25px;
             word-wrap:break-word;
         }
-
+        .input-wrap textarea{
+            position: absolute;
+            z-index: 99;
+        }
         @media screen and (max-width: 320px) {
             .input-wrap {
                 width: 91%;
@@ -457,15 +463,15 @@
                                     </div>
                                 @else
                                     <div class="input-wrap">
-                                        <input type="radio" value="t_{{$g['id']}}" name="ques_option{{$k}}">
+                                        <input style="height: 50%" type="radio" value="t_{{$g['id']}}" name="ques_option{{$k}}">
                                         @if($g['option_info']=="不满意(请注明原因)____________")
                                             {{$arr['j']}}
                                         @else
                                             {{$arr['e']}}
                                         @endif
                                         <span class="input-tag"></span>
-                                        {{--<input type="text" value="" name="ques_option_text{{$k}}"/>--}}
-                                        <textarea style="vertical-align: top" name="ques_option_text{{$k}}" id="" cols="30" rows="8"></textarea>
+                                        <input type="text" value="" name="ques_option_text{{$k}}"/>
+                                        {{--<textarea style="vertical-align: top" name="ques_option_text{{$k}}" id="" cols="30" rows="8"></textarea>--}}
                                     </div>
                                 @endif
                             @endforeach

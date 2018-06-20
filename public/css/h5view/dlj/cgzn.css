@@ -1,7 +1,6 @@
-html, body {
+/*html, body {
   min-height: 100%;
-}
-
+}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -18,12 +17,24 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
+.wrap {
+  padding-top: 18.9753320683vh;
+  position: relative;
+}
+
 .header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 14.0417457306vh;
   background: #F4F8FF;
   display: flex;
   flex-direction: row;
-  margin-bottom: 32px;
 }
 .header div {
   width: 100%;
