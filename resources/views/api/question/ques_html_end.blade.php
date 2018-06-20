@@ -91,7 +91,7 @@
         }
         .content .ques_content p {
             text-align: center;
-            color: #C43E46;
+            color: #57B4FE;
         }
 
         ::-webkit-scrollbar {
@@ -108,8 +108,12 @@
 </head>
 <body>
 <div class="content">
+   {{-- <div class="intro">
+        <p>{{$arr['a']}}：</p>
+        <p>{{$arr['b']}}</p>
+    </div>--}}
     <div class="ques_content">
-        <img src="/img/ques_end.png">
+        <img src="{{cdn('img/h5view/end.png')}}">
         <p>{{$arr['msg']}}</p>
     </div>
 </div>
@@ -118,7 +122,6 @@
     $(function(){
         var clentWidth = window.innerWidth, clientHeight = window.innerHeight;
         $('html, body').css('width', clentWidth).css('height', clientHeight);
-
     });
 </script>
 </body>

@@ -2,8 +2,9 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
-    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <script src="/js/jquery-1.12.4.min.js"></script>
     <meta name="csrf-token" content="{{csrf_token()}}">
@@ -16,9 +17,10 @@
     </script>
     <title>{{$arr['title']}}</title>
     <style type="text/css">
-        button, a{
+        button, a {
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
+
         /*@font-face {
             font-family: 'pingfang';
             src: url('__ROOT__/public/Common/fonts/pingfang.ttf');
@@ -28,6 +30,7 @@
             margin: 0;
             overflow: hidden;
         }
+
         body {
             padding: 0;
             margin: 0;
@@ -38,15 +41,16 @@
             -webkit-font-smoothing: antialiased;
             overflow: hidden;
         }
-        .content{
+
+        .content {
             width: 100%;
             height: 100%;
             position: relative;
             overflow: hidden;
         }
-        .content .intro{
+
+        .content .intro {
             width: 90%;
-            height: 32%;
             margin: 0 auto;
             padding: 20px 0;
             font-size: 1rem;
@@ -57,20 +61,22 @@
             -o-box-sizing: border-box;
             box-sizing: border-box;
         }
+
         /**max width 320px**/
-        @media screen and (max-width:320px) {
-            .content .intro{
+        @media screen and (max-width: 320px) {
+            .content .intro {
                 font-size: 0.9rem;
             }
         }
-        .content .intro p{
+
+        .content .intro p {
             margin: 0;
-            color: #C43E46;
+            color: #57B4FE;
         }
 
-        .content form{
+        .content form {
             width: 90%;
-            height: 60%;
+            min-height: 60%;
             margin: 0 auto;
             /*padding: 45px 30px 5px 30px;*/
             /*background: url(__ROOT__/public/Common/images/main_bg.png);*/
@@ -84,7 +90,8 @@
             -o-box-sizing: border-box;
             box-sizing: border-box;
         }
-        .content form .ques_content{
+
+        .content form .ques_content {
             width: 100%;
             height: 92%;
             border: none;
@@ -100,40 +107,47 @@
             box-sizing: border-box;
         }
 
-        .content form .ques_content > div.ques_item{
-            width: 100%;
-            /*height: 100%;*/
+        .content form .ques_content > div.ques_item {
+            /*width: 100%;*/
+            min-height: 100%;
             display: none;
-            max-height: 90%;
+            background:rgba(187,187,187,0.2);
+            padding: 10px;
         }
-        .content form .ques_content > div.ques_item h1{
+
+        .content form .ques_content > div.ques_item h1 {
             font-size: 1rem;
             font-weight: normal;
         }
-        .content form .ques_content > div.ques_item.current{
+
+        .content form .ques_content > div.ques_item.current {
             display: block;
         }
-        .answer_content{
+
+        .answer_content {
             font-size: 1rem;
             margin: 1rem 0;
             max-height: 90%;
             overflow-x: hidden;
             overflow-y: auto;
         }
-        .content form .action_btn{
-            position: absolute;
+
+        .content form .action_btn {
+            /*position: absolute;*/
             width: 100%;
             height: 40px;
-            left: 0;
-            bottom: -30px;
+            margin-bottom: 20px;
+            /*left: 0;*/
+            /*bottom: -30px;*/
             text-align: center;
         }
-        .content form .action_btn .btn{
+
+        .content form .action_btn .btn {
             height: 100%;
             width: 34%;
             min-width: 110px;
             /*background: url(__ROOT__/public/Common/images/btn_bg.png);*/
-            background: #C43E46;
+            background: #57B4FE;
             border-radius: 20px;
             border: none;
             color: #fff;
@@ -141,43 +155,47 @@
             font-size: 16px;
             display: none;
         }
-        .content form .action_btn .btn.show{
+
+        .content form .action_btn .btn.show {
             display: inline-block;
             margin: 0 20px;
         }
-        @media screen and (max-width:320px) {
-            .content form .action_btn .btn.show{
+
+        @media screen and (max-width: 320px) {
+            .content form .action_btn .btn.show {
                 margin: 0 10px;
             }
         }
-        .content form textarea:focus, .content form .action_btn .btn:focus, .content form .action_btn .btn:active{
+
+        .content form textarea:focus, .content form .action_btn .btn:focus, .content form .action_btn .btn:active {
             outline: none;
         }
 
         /* radio and checkbox */
-        .input-wrap{
+        .input-wrap {
             position: relative;
-            width: 95%;
+            width: 89%;
             line-height: 2rem;
-            padding-left: 25px;
             margin-left: 2%;
-            padding-top: 1px;
-            padding-bottom: 1px;
+            padding: 1px 35px 1px 25px;
+            word-wrap:break-word;
         }
-        @media screen and (max-width:320px) {
+
+        @media screen and (max-width: 320px) {
             .input-wrap {
                 width: 91%;
             }
         }
+
         input[type="radio"] {
             position: absolute;
             left: 0;
             top: 0;
             width: 100%;
-            height: 20px;
+            height: 100%;
             z-index: 10;
             opacity: 0;
-            filter:alpha(opacity=0);
+            filter: alpha(opacity=0);
         }
 
         input[type="radio"] + span {
@@ -185,7 +203,7 @@
             left: 0;
             top: 0.5rem;
             display: block;
-            border: 1px solid #C43E46;
+            border: 1px solid #57B4FE;
             background: #fff;
             border-radius: 15px;
             width: 15px;
@@ -193,12 +211,12 @@
             z-index: 0;
         }
 
-        input[type="radio"]:hover + span{
-            border: 1px solid #C43E46;
+        input[type="radio"]:hover + span {
+            border: 1px solid #57B4FE;
         }
 
-        input[type="radio"]:checked + span  {
-            border: 1px solid #C43E46;
+        input[type="radio"]:checked + span {
+            border: 1px solid #57B4FE;
         }
 
         input[type="radio"]:checked + span:after {
@@ -208,7 +226,7 @@
             height: 7px;
             margin-top: 4px;
             margin-left: 4px;
-            background-color: #C43E46;
+            background-color: #57B4FE;
             border-radius: 50%;
         }
 
@@ -220,7 +238,7 @@
             height: 20px;
             z-index: 10;
             opacity: 0;
-            filter:alpha(opacity=0);
+            filter: alpha(opacity=0);
         }
 
         input[type="radio"].default,
@@ -228,7 +246,7 @@
             width: 15px;
             height: 15px;
             opacity: 1;
-            filter:alpha(opacity=1);
+            filter: alpha(opacity=1);
         }
 
         input[type="checkbox"] + span {
@@ -245,7 +263,7 @@
         }
 
         input[type="checkbox"]:hover + span,
-        input[type="checkbox"]:checked + span  {
+        input[type="checkbox"]:checked + span {
             /*border: 1px solid #5D9CEC;*/
         }
 
@@ -261,12 +279,12 @@
             margin-top: 4px;
         }
 
-        input[type="button"], button{
+        input[type="button"], button {
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             -webkit-appearance: none;
         }
 
-        input[type="text"]{
+        input[type="text"] {
             display: block;
             width: 80%;
             height: 28px;
@@ -274,6 +292,7 @@
             border: 1px solid #e2e2e2;
             -webkit-appearance: none;
         }
+
         /*input[type="text"] + input[type="radio"], input[type="text"] + input[type="checkbox"]{
             height: 0;
         }
@@ -281,56 +300,93 @@
             display: none;
         }*/
 
-        .moveToLeft{
+        .moveToLeft {
             -webkit-animation: moveToLeft .6s ease both;
             -moz-animation: moveToLeft .6s ease both;
             animation: moveToLeft .6s ease both;
         }
-        .moveFromRight{
+
+        .moveFromRight {
             -webkit-animation: moveFromRight .6s ease both;
             -moz-animation: moveFromRight .6s ease both;
             animation: moveFromRight .6s ease both;
         }
+
         /*翻页动画效果*/
         /*左出*/
         @-webkit-keyframes moveToLeft {
-            to { -webkit-transform: translateX(-100%); }
+            to {
+                -webkit-transform: translateX(-100%);
+            }
         }
+
         @-moz-keyframes moveToLeft {
-            to { -moz-transform: translateX(-100%); }
+            to {
+                -moz-transform: translateX(-100%);
+            }
         }
+
         @keyframes moveToLeft {
-            to { transform: translateX(-100%); }
+            to {
+                transform: translateX(-100%);
+            }
         }
+
         /*右进*/
         @-webkit-keyframes moveFromRight {
-            from { -webkit-transform: translateX(100%); }
+            from {
+                -webkit-transform: translateX(100%);
+            }
         }
+
         @-moz-keyframes moveFromRight {
-            from { -moz-transform: translateX(100%); }
+            from {
+                -moz-transform: translateX(100%);
+            }
         }
+
         @keyframes moveFromRight {
-            from { transform: translateX(100%); }
+            from {
+                transform: translateX(100%);
+            }
         }
+
         /*左进*/
         @-webkit-keyframes moveFromLeft {
-            from { -webkit-transform: translateX(-100%); }
+            from {
+                -webkit-transform: translateX(-100%);
+            }
         }
+
         @-moz-keyframes moveFromLeft {
-            from { -moz-transform: translateX(-100%); }
+            from {
+                -moz-transform: translateX(-100%);
+            }
         }
+
         @keyframes moveFromLeft {
-            from { transform: translateX(-100%); }
+            from {
+                transform: translateX(-100%);
+            }
         }
+
         /*右出*/
         @-webkit-keyframes moveToRight {
-            to { -webkit-transform: translateX(100%); }
+            to {
+                -webkit-transform: translateX(100%);
+            }
         }
+
         @-moz-keyframes moveToRight {
-            to { -moz-transform: translateX(100%); }
+            to {
+                -moz-transform: translateX(100%);
+            }
         }
+
         @keyframes moveToRight {
-            to { transform: translateX(100%); }
+            to {
+                transform: translateX(100%);
+            }
         }
 
         ::-webkit-scrollbar {
@@ -353,14 +409,13 @@
     </div>
     <form id="myform" action="{{route('api.question.info',['p'=>$p])}}">
         <div class="ques_content">
-			<?php
-			$ques_arr=['1'=>$arr['c'],'2'=>$arr['d'],'3'=>''];
-			//                $option_en=['1'=>'A','2'=>'B','3'=>'C','4'=>'D','5'=>'E','6'=>'F','7'=>'G','8'=>'H','9'=>'I','10'=>'J','11'=>'K','12'=>'L','13'=>'M','14'=>'N'];
-			$option_en=['0'=>'A','1'=>'B','2'=>'C','3'=>'D','4'=>'E','5'=>'F','6'=>'G','7'=>'H','8'=>'I','9'=>'J','10'=>'K','11'=>'L','12'=>'M','13'=>'N'];
+            <?php
+            $ques_arr = ['1' => $arr['c'], '2' => $arr['d'], '3' => ''];
+            //                $option_en=['1'=>'A','2'=>'B','3'=>'C','4'=>'D','5'=>'E','6'=>'F','7'=>'G','8'=>'H','9'=>'I','10'=>'J','11'=>'K','12'=>'L','13'=>'M','14'=>'N'];
+            $option_en = ['0' => 'A', '1' => 'B', '2' => 'C', '3' => 'D', '4' => 'E', '5' => 'F', '6' => 'G', '7' => 'H', '8' => 'I', '9' => 'J', '10' => 'K', '11' => 'L', '12' => 'M', '13' => 'N'];
 
-			?>
+            ?>
             @foreach($info as $k=>$vo)
-
                 <div class="ques_item">
                     <h1>{{$k+1}}、{{$vo['question']}}{{$ques_arr[$vo['type']]}}:</h1>
                     <div class="answer_content">
@@ -374,7 +429,8 @@
                             @foreach($vo['option_info'] as $kk=>$g)
                                 @if($g['option_type']==1)
                                     <div class="input-wrap">
-                                        <input type="checkbox" value="{{$g['id']}}" name="ques_option{{$k}}[]">{{$option_en[$kk]}}.{{$g['option_info']}}
+                                        <input type="checkbox" value="{{$g['id']}}"
+                                               name="ques_option{{$k}}[]">{{$option_en[$kk]}}.{{$g['option_info']}}
                                         <span class="input-tag"></span>
                                     </div>
                                 @else
@@ -386,7 +442,8 @@
                                             {{$arr['e']}}
                                         @endif
                                         <span class="input-tag"></span>
-                                        <input type="text" value="" name="ques_option_text{{$k}}" />
+                                        {{--<input type="text" value="" name="ques_option_text{{$k}}"/>--}}
+                                        <textarea style="vertical-align: top" name="ques_option_text{{$k}}" id="" cols="30" rows="8"></textarea>
                                     </div>
                                 @endif
                             @endforeach
@@ -394,8 +451,8 @@
                             @foreach($vo['option_info'] as $kk=>$g)
                                 @if($g['option_type']==1)
                                     <div class="input-wrap">
-
-                                        <input type="radio" value="r_{{$g['id']}}" name="ques_option{{$k}}">{{$option_en[$kk]}}.{{$g['option_info']}}
+                                        <input type="radio" value="r_{{$g['id']}}"
+                                               name="ques_option{{$k}}">{{$option_en[$kk]}}.{{$g['option_info']}}
                                         <span class="input-tag"></span>
                                     </div>
                                 @else
@@ -407,7 +464,8 @@
                                             {{$arr['e']}}
                                         @endif
                                         <span class="input-tag"></span>
-                                        <input type="text" value="" name="ques_option_text{{$k}}" />
+                                        {{--<input type="text" value="" name="ques_option_text{{$k}}"/>--}}
+                                        <textarea style="vertical-align: top" name="ques_option_text{{$k}}" id="" cols="30" rows="8"></textarea>
                                     </div>
                                 @endif
                             @endforeach
@@ -415,11 +473,9 @@
                         <input type="hidden" value="{{$vo['type']}}" name="ques_type{{$k}}"/>
                     </div>
                 </div>
-
             @endforeach
         </div>
         <div class="action_btn">
-
             <input type="hidden" name="num" value="{{$num}}">
             <input type="hidden" name="ques_id" value="{{$ques_id}}">
             <input type="button" class="btn-prev btn" value="{{$arr['f']}}">
@@ -430,13 +486,13 @@
 </div>
 
 <script type="text/javascript">
-    $(function(){
+    $(function () {
         var clentWidth = window.innerWidth, clientHeight = window.innerHeight;
         $('html, body').css('width', clentWidth).css('height', clientHeight);
 
-        if($('.ques_item').length == 1){
+        if ($('.ques_item').length == 1) {
             $('.btn-submit').addClass('show');
-        }else{
+        } else {
             $('.btn-next').addClass('show');
         }
 
@@ -444,78 +500,78 @@
 
         // 2017-05-02改为下一题按钮切换
         // $('input[type="radio"]').click(function(){
-        $('.btn-next').click(function(){
-            var nownum = $('.current').index() + 1, showNum = $('.current').index() + 2, allNum = +$('.ques_item').length;
-            if($('.current' + ' :checked').length == 0){
-                layer.msg('请选择答案',{icon: 5,scrollbar: false,time: 2000,shade: [0.3, '#393D49']});
+        $('.btn-next').click(function () {
+            var nownum = $('.current').index() + 1, showNum = $('.current').index() + 2,
+                allNum = +$('.ques_item').length;
+            if ($('.current' + ' :checked').length == 0) {
+                layer.msg('请选择答案', {icon: 5, scrollbar: false, time: 2000, shade: [0.3, '#393D49']});
                 return false;
-            }else{
-                if(nownum == allNum){
-                }else{
+            } else {
+                if (nownum == allNum) {
+                } else {
                     var hideDom = $('.current'), showDom = $('.current').next();
                     hideDom.removeClass('current');
                     hideDom.addClass('moveToLeft');
                     showDom.addClass('current').addClass('moveFromRight');
-                    setTimeout(function(){
+                    setTimeout(function () {
                         hideDom.removeClass('moveToLeft');
                         showDom.removeClass('moveFromRight');
                     }, 600);
                 }
-                if(showNum == allNum){
+                if (showNum == allNum) {
                     $('.btn-next').removeClass('show');
                     $('.btn-prev').addClass('show');
                     $('.btn-submit').addClass('show');
-                }else{
+                } else {
                     $('.btn-prev').addClass('show');
                 }
             }
-
         });
-
-        $('.btn-prev').click(function(){
-            var nownum = $('.current').index() +1, showNum = $('.current').index() - 1, allNum = +$('.ques_item').length;
-            if(nownum == 0){
-            }else{
+        $('.btn-prev').click(function () {
+            var nownum = $('.current').index() + 1, showNum = $('.current').index() - 1,
+                allNum = +$('.ques_item').length;
+            if (nownum == 0) {
+            } else {
                 var hideDom = $('.current'), showDom = $('.current').prev();
                 hideDom.removeClass('current');
                 hideDom.addClass('moveToRight');
                 showDom.addClass('current').addClass('moveFromLeft');
-                setTimeout(function(){
+                setTimeout(function () {
                     hideDom.removeClass('moveToRight');
                     showDom.removeClass('moveFromLeft');
                 }, 600);
             }
-            if(showNum == 0){
+            if (showNum == 0) {
                 $('.btn-prev').removeClass('show');
                 $('.btn-submit').removeClass('show');
                 $('.btn-next').addClass('show');
-            }else{
+            } else {
                 $('.btn-next').addClass('show');
                 $('.btn-submit').removeClass('show');
             }
         });
 
-        $('input[type="text"]').on('focus', function(){
+        $('input[type="text"]').on('focus', function () {
             var that = $(this);
-            if(that.prev().prev().attr('type') == 'radio' || that.prev().prev().attr('type') == 'checkbox'){
-                if(!that.prev().prev().is(':checked')){
+            if (that.prev().prev().attr('type') == 'radio' || that.prev().prev().attr('type') == 'checkbox') {
+                if (!that.prev().prev().is(':checked')) {
                     that.prev().prev().trigger('click');
                 }
             }
         });
     });
-    $("#ajax_submit").click(function(){
-        layer.msg("{{$arr['i']}}", {icon: 16,scrollbar: false,shade: [0.3, '#393D49'],time:0});
-        var ajax_url=$('#myform').attr('action');
+    $("#ajax_submit").click(function () {
+        layer.msg("{{$arr['i']}}", {icon: 16, scrollbar: false, shade: [0.3, '#393D49'], time: 0});
+        var ajax_url = $('#myform').attr('action');
         $.post(ajax_url, $('#myform').serialize(),
-            function(data){
+            function (data) {
                 console.log(data);
                 layer.closeAll();
-                if(data.code=='error'){
-                    layer.msg(data.info,{icon: 5,scrollbar: false,time: 2000,shade: [0.3, '#393D49']});
+                if (data.code == 'error') {
+                    layer.msg(data.info, {icon: 5, scrollbar: false, time: 2000, shade: [0.3, '#393D49']});
                 }
-                else if(data.code=='success'){
-                    location.href='{{route('api.question.info')}}'+'?p={{$p}}&question_id={{$question_id}}'+"&end=1";
+                else if (data.code == 'success') {
+                    location.href = '{{route('api.question.info')}}' + '?p={{$p}}&question_id={{$question_id}}' + "&end=1";
                     //layer.msg(data.info,{icon: 6,scrollbar: false,time: 1000,shade: [0.3, '#393D49']});
                 }
             })
