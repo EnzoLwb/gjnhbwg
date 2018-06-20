@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{$name}</title>
-    <link rel="stylesheet" href="../../../exhibit_content.css">
+    <link rel="stylesheet" href="./exhibit_content.css">
 </head>
 <body>
-<h1>展品名称</h1>
-<p>{$name}</p>
-<h1>展品简介</h1>
-{$content}
+<div class="wrap clearfloat">
+    <div class="info">
+        <p class="title">
+            {$name}
+        </p>
+        {$content}
+        <div style="background: rgba(255,255,255,.8);position: fixed;width: 100%;height: 30px;bottom: 0"></div>
+    </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,44 @@
+.clearfloat:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+
+.clearfloat {
+    zoom: 1;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body .wrap {
+    padding: 1.953125vw 3.515625vw;
+    /*img{
+      width: vw(434);
+      height: vw(421);
+      display: block;
+      position: fixed;
+      top: vw(21);
+      left: vw(36);
+    }*/
+}
+body .wrap .info {
+    /*float: right;
+    width: vw(485);*/
+}
+body .wrap .info p {
+    font-size: 1.953125vw;
+    line-height: 3.3203125vw;
+    color: #323232;
+}
+body .wrap .info p.title {
+    font-size: 2.83203125vw;
+    text-indent: 0;
+    color: #262932;
+    margin-bottom: 2.9296875vw;
+}
+
+/*# sourceMappingURL=zpxq.css.map */
