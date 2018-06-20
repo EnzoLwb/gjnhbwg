@@ -84,7 +84,7 @@ class DevicenoController extends Controller
 	 * @api {POST} /positions 02.定位上传接口
 	 * @apiGroup Deviceno
 	 * @apiVersion 1.0.0
-	 * @apiParam {string} p 平台，i：IOS，a：安卓
+	 * @apiParam {string} p 平台，i：IOS，a：安卓 d:导览机
 	 * @apiParam {string} deviceno 机器号
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} auto_num 蓝牙编号
@@ -105,7 +105,7 @@ class DevicenoController extends Controller
 			$uid=0;
 		}
 		$this->validate([
-			'p' => 'required|in:i,a',
+			'p' => 'required|in:i,a,d',
 			'deviceno' => 'required',
 			'auto_num' => 'required|integer'
 		]);
