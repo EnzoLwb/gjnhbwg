@@ -92,8 +92,7 @@ p {
 .content3 p.remarks {
   text-align: center;
   width: 100%;
-  position: fixed;
-  bottom: 9.4666666667vw;
+  margin-top: 2.6666666667vw;
   font-size: 2.8vw;
   color: #818080;
 }
