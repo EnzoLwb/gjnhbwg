@@ -1,0 +1,49 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body .wrap {
+  box-sizing: border-box;
+  padding: 1.953125vw 3.515625vw;
+}
+body .wrap .swiper-container {
+  width: 42.3828125vw;
+  height: 41.11328125vw;
+  display: block;
+  position: fixed;
+  top: 2.05078125vw;
+  left: 3.515625vw;
+}
+body .wrap .info {
+  float: right;
+  width: 47.36328125vw;
+}
+body .wrap .info p {
+  font-size: 1.953125vw;
+  line-height: 4.1015625vw;
+  text-indent: 2em;
+  color: #323232;
+}
+body .wrap .info p.title {
+  font-size: 2.83203125vw;
+  text-indent: 0;
+  color: #262932;
+}
+
+/*# sourceMappingURL=cgjj.css.map */

@@ -1,0 +1,21 @@
+html, body {
+  height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/*# sourceMappingURL=index.css.map */

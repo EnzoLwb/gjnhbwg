@@ -1,0 +1,103 @@
+@import "index";
+body{
+  .wrap{
+    padding: vw(37) vw(27) 0;
+    header{
+      margin-bottom: vw(38);
+      color: #57B4FE;
+      font-size: vw(47);
+      .text{
+        line-height: vw(225);
+        margin-left: vw(82);
+      }
+      .scoreTime{
+        float: left;
+        width: vw(225);
+        height: vw(225);
+        border-radius: 50%;
+        background: #57B4FE;
+        border: vw(1) solid #57B4FE;
+        color: #fff;
+        font-size: vw(47);
+        //font-weight: bold;
+        text-align: center;
+        p:first-child{
+          margin-top: vw(10);
+        }
+        p{
+          .score{
+            font-size: vw(73);
+            vertical-align: middle;
+          }
+          .timer{
+            font-size: vw(31);
+          }
+          sub{
+            vertical-align: middle;
+            font-size: vw(31);;
+          }
+        }
+      }
+    }
+    .content{
+      table{
+        text-align: center;
+        width: 100%;
+        font-size: vw(28);
+        box-shadow: 0 0 vw(6) vw(6) rgba(136,136,136,0.3);
+        tr:nth-child(even){
+          background: #F0EEEC;
+        }
+
+      }
+      .tabHead{
+        tr:first-child{
+          td{
+            height: vw(82);
+            line-height: vw(82);
+            font-size: vw(36);
+            color: #57B4FE;
+          }
+        }
+        tr:nth-child(2){
+          td{
+            font-size: vw(32);
+          }
+        }
+        tr:nth-child(3){
+          td{
+            padding-top: vw(9);
+          }
+        }
+        tr{
+          td{
+            height: vw(61);
+            line-height: vw(61);
+          }
+        }
+        .specialTr{
+          color: #57B4FE;
+        }
+      }
+    }
+    .pre,.next{
+      display: inline-block;
+      width: vw(285);
+      height: vw(100);
+      line-height: vw(100);
+      font-weight: bold;
+      font-size: vw(36);
+      color: #fff;
+      text-align: center;
+      border-radius: vw(45);
+      margin-top: vw(80);
+    }
+    .pre{
+      background: #BBBBBB;
+    }
+    .next{
+      background: #57B4FE;
+      float: right;
+    }
+  }
+}

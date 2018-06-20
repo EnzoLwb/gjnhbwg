@@ -1,0 +1,31 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body div {
+  font-size: 4vw;
+  line-height: 6.4vw;
+  text-indent: 2em;
+  color: #8B8B8B;
+}
+body div p {
+  text-indent: 2em;
+}
+
+/*# sourceMappingURL=xjhd.css.map */

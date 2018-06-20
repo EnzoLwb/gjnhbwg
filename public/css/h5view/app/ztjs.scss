@@ -1,0 +1,12 @@
+@import "index";
+body{
+  div{
+    p{
+      font-size: vw(30);
+      line-height: vw(48);
+      text-indent: 2em;
+      color: #022444;
+    }
+    padding: vw(34) vw(44) 0;
+  }
+}

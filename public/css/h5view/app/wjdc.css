@@ -1,0 +1,113 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body .wrap {
+  padding: 10.2666666667vw 8.6666666667vw 0;
+}
+body .wrap p {
+  font-size: 3.3333333333vw;
+  line-height: 5.8666666667vw;
+  color: #57B4FE;
+  margin-bottom: 6.9333333333vw;
+}
+body .wrap .box {
+  border: 0.2666666667vw solid #BBBBBB;
+  padding: 8.5333333333vw;
+}
+body .wrap .box p {
+  font-size: 3.3333333333vw;
+  font-weight: bold;
+  margin-bottom: 6vw;
+  color: #000000;
+}
+body .wrap .box ul {
+  margin-left: 5.3333333333vw;
+}
+body .wrap .box ul li {
+  margin-bottom: 6.2666666667vw;
+}
+body .wrap .box ul li .unchecked {
+  display: inline-block;
+  width: 2.5333333333vw;
+  height: 2.5333333333vw;
+  margin-right: 4vw;
+  background: #57B4FE;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+body .wrap .box ul li .checked {
+  display: inline-block;
+  width: 4vw;
+  height: 4vw;
+  margin-right: 4vw;
+  margin-left: -0.6666666667vw;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: url("../img/wjdcB.png") no-repeat;
+  background-size: cover;
+}
+body .wrap .pre, body .wrap .next {
+  display: inline-block;
+  width: 38vw;
+  height: 13.3333333333vw;
+  line-height: 13.3333333333vw;
+  font-weight: bold;
+  font-size: 4.8vw;
+  color: #fff;
+  text-align: center;
+  border-radius: 6vw;
+  margin-top: 10.6666666667vw;
+}
+body .wrap .pre {
+  background: #BBBBBB;
+}
+body .wrap .next {
+  background: #57B4FE;
+  float: right;
+}
+body .thanks {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10.2666666667vw 8.6666666667vw 0;
+}
+body .thanks p {
+  font-size: 3.3333333333vw;
+  line-height: 5.8666666667vw;
+  color: #57B4FE;
+  margin-bottom: 6.9333333333vw;
+}
+body .thanks img {
+  width: 18.5333333333vw;
+  height: 18.5333333333vw;
+  display: block;
+  margin: 23.3333333333vw auto 7.4666666667vw;
+}
+body .thanks h1 {
+  text-align: center;
+  font-size: 4vw;
+  line-height: 7.4666666667vw;
+  color: #57B4FE;
+}
+
+/*# sourceMappingURL=wjdc.css.map */

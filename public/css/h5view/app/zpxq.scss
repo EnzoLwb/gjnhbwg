@@ -1,0 +1,15 @@
+@import "index";
+
+body div {
+  min-height: 100%;
+
+  font-size: vw(36);
+  line-height: vw(60);
+  padding: vw(72) vw(42) vw(30);
+  color: #FFFFFF;
+  font-family: PingFang SC;
+  background: -webkit-linear-gradient(#4196CD, #377CBC); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(#4196CD, #377CBC); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(#4196CD, #377CBC); /* Firefox 3.6 - 15 */
+  background: linear-gradient(#4196CD, #377CBC); /* 标准的语法 */
+}

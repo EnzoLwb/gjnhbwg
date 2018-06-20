@@ -1,0 +1,100 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wrap .head {
+  background: #57B4FE;
+  padding: 5.4666666667vw 0 2.9333333333vw 7.3333333333vw;
+}
+.wrap .head p:first-child {
+  font-size: 6.4vw;
+  font-weight: bold;
+  color: #2F91AA;
+  margin: 0vw auto 2.9333333333vw;
+}
+.wrap .head p {
+  color: #EE771D;
+  font-size: 3.7333333333vw;
+}
+.wrap .content {
+  margin-top: 3.6vw;
+  border-bottom: 1.1244377811vh solid #ddeff5;
+}
+.wrap .content div {
+  margin-bottom: 1.8666666667vw;
+  padding-right: 5.7333333333vw;
+  text-align: right;
+}
+.wrap .content div label {
+  font-size: 4vw;
+  vertical-align: middle;
+}
+.wrap .content div label:first-child {
+  margin-right: 5.6vw;
+}
+.wrap .content div input[type="text"], .wrap .content div select {
+  width: 59.6vw;
+  height: 8.4vw;
+  background: #CCEAFF;
+  padding-left: 4.9333333333vw;
+  color: #6888C5;
+  outline: none;
+}
+.wrap .content div input::-webkit-input-placeholder {
+  color: #6888C5;
+}
+.wrap .content div input::-moz-placeholder {
+  color: #6888C5;
+}
+.wrap .content div input:-ms-input-placeholder {
+  color: #6888C5;
+}
+.wrap .content div select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  margin-bottom: 2.9333333333vw;
+}
+.wrap .content div label.languages:last-child {
+  margin-right: 26.4vw;
+}
+.wrap .content div input[type="radio"] + label::before {
+  content: "\a0";
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  width: .6em;
+  height: .6em;
+  margin-right: .4em;
+  border-radius: 50%;
+  border: 1px solid #61B2EB;
+  padding: .2em;
+}
+.wrap .content div input[type="radio"] + .active::before {
+  text-indent: .15em;
+  line-height: 1;
+  background-color: #61B2EB;
+  background-clip: content-box;
+}
+.wrap .content div input[type="radio"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+
+/*# sourceMappingURL=gryyjj.css.map */

@@ -1,0 +1,138 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 8.8vw 6.6666666667vw;
+}
+body .wrap {
+  height: 100%;
+  background: #F5F5F5;
+  padding: 10.6666666667vw 9.3333333333vw;
+  position: relative;
+}
+body .wrap .countDown {
+  margin-bottom: 10.1333333333vw;
+  font-size: 4.2666666667vw;
+  line-height: 14.8vw;
+  color: #333333;
+  text-align: right;
+}
+body .wrap .countDown .score {
+  display: block;
+  width: 14.8vw;
+  height: 14.8vw;
+  line-height: 14.8vw;
+  text-align: center;
+  font-size: 6vw;
+  float: left;
+  border-radius: 50%;
+  background: #57B4FE;
+  color: #fff;
+}
+body .wrap .countDown .score sub {
+  font-size: 2.9333333333vw;
+}
+body .wrap .subject {
+  margin-bottom: 10.1333333333vw;
+  font-size: 4.2666666667vw;
+  line-height: 5.3333333333vw;
+  color: #333333;
+}
+body .wrap .option {
+  background: #A1A1A1;
+  font-size: 4vw;
+  line-height: 6.6666666667vw;
+  color: #FFFFFF;
+  border-radius: 6vw;
+  padding: 0.8vw 5.3333333333vw 0.8vw 6.6666666667vw;
+  min-width: 61.3333333333vw;
+  display: inline-block;
+  margin-bottom: 2.9333333333vw;
+}
+body .wrap .option span {
+  display: inline-block;
+  width: 7.2vw;
+  height: 7.2vw;
+  line-height: 7.2vw;
+  background: #57B4FE;
+  border-radius: 50%;
+  margin-left: -5.6vw;
+  margin-right: 1.3333333333vw;
+  text-align: center;
+}
+body .wrap .pageNum {
+  position: absolute;
+  bottom: 3.0666666667vw;
+  right: 2.6666666667vw;
+  font-size: 4vw;
+}
+body .wrap .active {
+  background: #57B4FE;
+}
+body .wrap .activeE {
+  background: #EE4F5B;
+}
+body .completeAnswer {
+  width: 55.8666666667vw;
+  height: 13.3333333333vw;
+  line-height: 13.3333333333vw;
+  text-align: center;
+  border-radius: 6vw;
+  margin: 8.4vw auto 0;
+  color: #FFFFFF;
+  background: #57B4FE;
+}
+body .result {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+body .result div {
+  position: relative;
+  margin-top: 31.3333333333vw;
+  text-align: center;
+}
+body .result div img {
+  width: 78.4vw;
+}
+body .result div p.resultText {
+  width: 100%;
+  position: absolute;
+  bottom: 13.4666666667vw;
+  font-size: 4.8vw;
+  font-weight: bold;
+  text-align: center;
+  color: #505050;
+}
+body .result div p.next {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  font-size: 4vw;
+  height: 9.6vw;
+  line-height: 9.6vw;
+  text-align: center;
+}
+
+/*# sourceMappingURL=xxd.css.map */

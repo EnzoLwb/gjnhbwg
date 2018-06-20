@@ -1,0 +1,106 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body .wrap {
+  padding: 4.9333333333vw 3.6vw 0;
+}
+body .wrap header {
+  margin-bottom: 5.0666666667vw;
+  color: #57B4FE;
+  font-size: 6.2666666667vw;
+}
+body .wrap header .text {
+  line-height: 30vw;
+  margin-left: 10.9333333333vw;
+}
+body .wrap header .scoreTime {
+  float: left;
+  width: 30vw;
+  height: 30vw;
+  border-radius: 50%;
+  background: #57B4FE;
+  border: 0.1333333333vw solid #57B4FE;
+  color: #fff;
+  font-size: 6.2666666667vw;
+  text-align: center;
+}
+body .wrap header .scoreTime p:first-child {
+  margin-top: 1.3333333333vw;
+}
+body .wrap header .scoreTime p .score {
+  font-size: 9.7333333333vw;
+  vertical-align: middle;
+}
+body .wrap header .scoreTime p .timer {
+  font-size: 4.1333333333vw;
+}
+body .wrap header .scoreTime p sub {
+  vertical-align: middle;
+  font-size: 4.1333333333vw;
+}
+body .wrap .content table {
+  text-align: center;
+  width: 100%;
+  font-size: 3.7333333333vw;
+  box-shadow: 0 0 0.8vw 0.8vw rgba(136, 136, 136, 0.3);
+}
+body .wrap .content table tr:nth-child(even) {
+  background: #F0EEEC;
+}
+body .wrap .content .tabHead tr:first-child td {
+  height: 10.9333333333vw;
+  line-height: 10.9333333333vw;
+  font-size: 4.8vw;
+  color: #57B4FE;
+}
+body .wrap .content .tabHead tr:nth-child(2) td {
+  font-size: 4.2666666667vw;
+}
+body .wrap .content .tabHead tr:nth-child(3) td {
+  padding-top: 1.2vw;
+}
+body .wrap .content .tabHead tr td {
+  height: 8.1333333333vw;
+  line-height: 8.1333333333vw;
+}
+body .wrap .content .tabHead .specialTr {
+  color: #57B4FE;
+}
+body .wrap .pre, body .wrap .next {
+  display: inline-block;
+  width: 38vw;
+  height: 13.3333333333vw;
+  line-height: 13.3333333333vw;
+  font-weight: bold;
+  font-size: 4.8vw;
+  color: #fff;
+  text-align: center;
+  border-radius: 6vw;
+  margin-top: 10.6666666667vw;
+}
+body .wrap .pre {
+  background: #BBBBBB;
+}
+body .wrap .next {
+  background: #57B4FE;
+  float: right;
+}
+
+/*# sourceMappingURL=dtwc.css.map */

@@ -1,0 +1,39 @@
+@charset "UTF-8";
+html, body {
+  height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body div {
+  min-height: 100%;
+  font-size: 4.8vw;
+  line-height: 8vw;
+  padding: 9.6vw 5.6vw 4vw;
+  color: #FFFFFF;
+  font-family: PingFang SC;
+  background: -webkit-linear-gradient(#4196CD, #377CBC);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(#4196CD, #377CBC);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(#4196CD, #377CBC);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(#4196CD, #377CBC);
+  /* 标准的语法 */
+}
+
+/*# sourceMappingURL=zpxq.css.map */

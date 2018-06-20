@@ -1,0 +1,132 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 8.8vw 6.6666666667vw;
+}
+body .wrap {
+  height: 100%;
+  background: #F5F5F5;
+  padding: 10.6666666667vw 9.3333333333vw;
+  position: relative;
+}
+body .wrap .borderTop {
+  width: 90%;
+  position: absolute;
+  top: -4vw;
+  left: 5%;
+}
+body .wrap .borderBottom {
+  width: 90%;
+  position: absolute;
+  bottom: -4vw;
+  left: 5%;
+}
+body .wrap .countDown {
+  margin-bottom: 10.1333333333vw;
+  font-size: 4.2666666667vw;
+  line-height: 14.8vw;
+  color: #333333;
+  text-align: right;
+}
+body .wrap .countDown .score {
+  display: block;
+  width: 14.8vw;
+  height: 14.8vw;
+  line-height: 14.8vw;
+  text-align: center;
+  font-size: 6vw;
+  float: left;
+  border-radius: 50%;
+  background: #57B4FE;
+  color: #fff;
+}
+body .wrap .countDown .score sub {
+  font-size: 2.9333333333vw;
+}
+body .wrap .subject {
+  margin-bottom: 10.1333333333vw;
+  font-size: 4.2666666667vw;
+  line-height: 5.3333333333vw;
+  color: #333333;
+}
+body .wrap .option {
+  background: #A1A1A1;
+  font-size: 4vw;
+  line-height: 6.6666666667vw;
+  color: #FFFFFF;
+  border-radius: 6vw;
+  padding: 0.8vw 5.3333333333vw 0.8vw 6.6666666667vw;
+  min-width: 61.3333333333vw;
+  display: inline-block;
+  margin-bottom: 2.9333333333vw;
+}
+body .wrap .option span {
+  display: inline-block;
+  width: 7.2vw;
+  height: 7.2vw;
+  line-height: 7.2vw;
+  background: #57B4FE;
+  border-radius: 50%;
+  margin-left: -5.6vw;
+  margin-right: 1.3333333333vw;
+  text-align: center;
+}
+body .wrap .pageNum {
+  position: absolute;
+  bottom: 3.0666666667vw;
+  right: 2.6666666667vw;
+  font-size: 4vw;
+}
+body .wrap .active {
+  background: #57B4FE;
+}
+body .wrap .activeE {
+  background: #EE4F5B;
+}
+body .btnWrap .pre, body .btnWrap .next, body .btnWrap .goback {
+  display: inline-block;
+  width: 38vw;
+  height: 10.6666666667vw;
+  line-height: 10.6666666667vw;
+  font-weight: bold;
+  font-size: 4vw;
+  color: #fff;
+  text-align: center;
+  border-radius: 6vw;
+}
+body .btnWrap .pre {
+  background: #BBBBBB;
+  margin-top: 10.6666666667vw;
+}
+body .btnWrap .next {
+  background: #57B4FE;
+  float: right;
+  margin-top: 10.6666666667vw;
+}
+body .btnWrap .goback {
+  display: block;
+  margin: 4vw auto 0;
+  width: 55.8666666667vw;
+  height: 10.6666666667vw;
+  background: #57B4FE;
+}
+
+/*# sourceMappingURL=ckda.css.map */

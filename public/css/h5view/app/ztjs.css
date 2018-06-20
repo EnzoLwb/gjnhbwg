@@ -1,0 +1,31 @@
+html, body {
+  height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body div {
+  padding: 4.5333333333vw 5.8666666667vw 0;
+}
+body div p {
+  font-size: 4vw;
+  line-height: 6.4vw;
+  text-indent: 2em;
+  color: #022444;
+}
+
+/*# sourceMappingURL=ztjs.css.map */

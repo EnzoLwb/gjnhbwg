@@ -1,0 +1,116 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body .wrap {
+  padding-top: 3.02734375vw;
+  width: 83.49609375vw;
+  margin: 0 auto;
+}
+body .wrap p {
+  font-size: 1.953125vw;
+  line-height: 2.9296875vw;
+  color: #57B4FE;
+  margin-bottom: 0.9765625vw;
+}
+body .wrap .box {
+  background: rgba(187, 187, 187, 0.2);
+}
+body .wrap .box p {
+  font-size: 2.34375vw;
+  font-weight: bold;
+  margin-bottom: 4.39453125vw;
+  color: #000000;
+  padding: 1.7578125vw 0 0 2.1484375vw;
+}
+body .wrap .box ul {
+  margin-left: 3.90625vw;
+}
+body .wrap .box ul li {
+  margin-bottom: 2.44140625vw;
+  float: left;
+  width: 30%;
+}
+body .wrap .box ul li .unchecked {
+  display: inline-block;
+  width: 1.7578125vw;
+  height: 1.7578125vw;
+  margin-right: 1.66015625vw;
+  background: #57B4FE;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+body .wrap .box ul li .checked {
+  display: inline-block;
+  width: 1.7578125vw;
+  height: 1.7578125vw;
+  margin-right: 1.66015625vw;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: url("../img/wjdcB.png") no-repeat;
+  background-size: cover;
+}
+body .wrap .pre, body .wrap .next {
+  display: inline-block;
+  width: 22.55859375vw;
+  height: 5.6640625vw;
+  line-height: 5.6640625vw;
+  font-size: 2.34375vw;
+  color: #fff;
+  text-align: center;
+  border-radius: 4.39453125vw;
+  margin-top: 1.66015625vw;
+}
+body .wrap .pre {
+  background: #BBBBBB;
+  margin-right: 8.3984375vw;
+}
+body .wrap .next {
+  background: #57B4FE;
+}
+body .thanks {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 3.02734375vw 7.32421875vw 0;
+}
+body .thanks p {
+  font-size: 2.44140625vw;
+  line-height: 4.296875vw;
+  color: #57B4FE;
+  margin-bottom: 5.078125vw;
+}
+body .thanks img {
+  width: 11.42578125vw;
+  height: 11.42578125vw;
+  display: block;
+  margin: 3.7109375vw auto 2.63671875vw;
+}
+body .thanks h1 {
+  text-align: center;
+  font-size: 1.953125vw;
+  line-height: 3.515625vw;
+  color: #57B4FE;
+  font-weight: 500;
+}
+
+/*# sourceMappingURL=wjdc.css.map */

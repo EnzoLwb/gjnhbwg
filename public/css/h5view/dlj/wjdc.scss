@@ -1,0 +1,99 @@
+@import "index";
+body{
+  .wrap{
+    //display: none;
+    padding-top: vw(31);
+    width: vw(855);
+    margin: 0 auto;
+    p{
+      font-size: vw(20);
+      line-height: vw(30);
+      color: #57B4FE;
+      margin-bottom: vw(10);
+    }
+    .box{
+      background:rgba(187,187,187,.2);
+      p{
+        font-size: vw(24);
+        font-weight: bold;
+        margin-bottom: vw(45);
+        color: #000000;
+        padding: vw(18) 0 0 vw(22);
+      }
+      ul{
+        margin-left: vw(40);
+        li{
+          margin-bottom: vw(25);
+          float: left;
+          width: 30%;
+          .unchecked{
+            display: inline-block;
+            width: vw(18);
+            height: vw(18);
+            margin-right: vw(17);
+            background: #57B4FE;
+            border-radius: 50%;
+            vertical-align: middle;
+          }
+          .checked{
+            display: inline-block;
+            width: vw(18);
+            height: vw(18);
+            margin-right: vw(17);
+            border-radius: 50%;
+            vertical-align: middle;
+            background: url("../img/wjdcB.png") no-repeat;
+            background-size: cover;
+          }
+        }
+      }
+    }
+    .pre,.next{
+      display: inline-block;
+      width: vw(231);
+      height: vw(58);
+      line-height: vw(58);
+      font-size: vw(24);
+      color: #fff;
+      text-align: center;
+      border-radius: vw(45);
+      margin-top: vw(17);
+    }
+    .pre{
+      background: #BBBBBB;
+      margin-right: vw(86);
+    }
+    .next{
+      background: #57B4FE;
+    }
+  }
+  .thanks{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: vw(31) vw(75) 0;
+    p{
+      font-size: vw(25);
+      line-height: vw(44);
+      color: #57B4FE;
+      margin-bottom: vw(52);
+    }
+    img {
+      width: vw(117);
+      height: vw(117);
+      display: block;
+      margin: vw(38) auto vw(27) ;
+    }
+    h1{
+      text-align: center;
+      font-size: vw(20);
+      line-height: vw(36);
+      color: #57B4FE;
+      font-weight: 500;
+    ;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+html, body {
+  min-height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body div {
+  padding: 10.9333333333vw 10.5333333333vw 0 9.6vw;
+}
+body div img {
+  display: block;
+  width: 100%;
+}
+body div h1 {
+  font-size: 4.8vw;
+  margin: 4vw auto 4.9333333333vw;
+  text-align: center;
+}
+body div p {
+  font-size: 4vw;
+  line-height: 6.4vw;
+}
+
+/*# sourceMappingURL=wccp.css.map */

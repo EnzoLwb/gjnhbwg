@@ -1,0 +1,114 @@
+@import "index";
+body{
+  padding: vw(66) vw(50);
+  .wrap{
+    height: 100%;
+    background: #F5F5F5;
+    padding:vw(80) vw(70);
+    position: relative;
+    .borderTop{
+      width: 90%;
+      position: absolute;
+      top: vw(-30);
+      left: 5%;
+    }
+    .borderBottom{
+      width: 90%;
+      position: absolute;
+      bottom: vw(-30);
+      left: 5%;
+    }
+    .countDown{
+      margin-bottom: vw(76);
+      font-size: vw(32);
+      line-height: vw(111);
+      color: #333333;
+      text-align: right;
+      .score{
+        display: block;
+        width: vw(111);
+        height: vw(111);
+        line-height: vw(111);
+        text-align: center;
+        font-size: vw(45);
+        float: left;
+        border-radius: 50%;
+        background: #57B4FE;
+        color: #fff;
+        sub{
+          font-size: vw(22);
+        }
+      }
+    }
+    .subject{
+      margin-bottom: vw(76);
+      font-size: vw(32);
+      line-height: vw(40);
+      color: #333333;
+    }
+    .option{
+      background: #A1A1A1;
+      font-size: vw(30);
+      line-height: vw(50);
+      color: #FFFFFF;
+      border-radius: vw(45);
+      padding: vw(6) vw(40) vw(6) vw(50);
+      min-width: vw(460);
+      display: inline-block;
+      margin-bottom: vw(22);
+      span{
+        display: inline-block;
+        width: vw(54);
+        height: vw(54);
+        line-height: vw(54);
+        background: #57B4FE;
+        border-radius: 50%;
+        margin-left: vw(-42);
+        margin-right: vw(10);
+        text-align: center;
+      }
+    }
+    .pageNum{
+      position: absolute;
+      bottom: vw(23);
+      right: vw(20);
+      font-size: vw(30);
+    }
+    .active{
+      background: #57B4FE;
+    }
+    .activeE{
+      background: #EE4F5B;
+    }
+  }
+  .btnWrap{
+    .pre,.next,.goback{
+      display: inline-block;
+      width: vw(285);
+      height: vw(80);
+      line-height: vw(80);
+      font-weight: bold;
+      font-size: vw(30);
+      color: #fff;
+      text-align: center;
+      border-radius: vw(45);
+    }
+    .pre{
+      background: #BBBBBB;
+      margin-top: vw(80);
+    }
+    .next{
+      background: #57B4FE;
+      float: right;
+      margin-top: vw(80);
+    }
+    .goback{
+      display: block;
+      margin: vw(30) auto 0;
+      width: vw(419);
+      height: vw(80);
+      background: #57B4FE;
+    }
+  }
+}
+
