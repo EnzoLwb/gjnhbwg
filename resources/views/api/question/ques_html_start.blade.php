@@ -43,6 +43,17 @@
             overflow-x: hidden;
             overflow-y: auto;
         }
+        .clearfloat:after {
+            display: block;
+            clear: both;
+            content: "";
+            visibility: hidden;
+            height: 0;
+        }
+
+        .clearfloat {
+            zoom: 1;
+        }
 
         .content {
             width: 100%;
@@ -56,8 +67,7 @@
             width: 90%;
             margin: 0 auto;
             padding: 20px 0;
-            font-size: 1rem;
-            font-size: 2.6vh;
+            font-size: 22px;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             -ms-box-sizing: border-box;
@@ -66,12 +76,11 @@
         }
 
         /**max width 320px**/
-        @media screen and (max-width: 320px) {
+        @media only screen and (max-width: 450px) {
             .content .intro {
                 font-size: 0.9rem;
             }
         }
-
         .content .intro p {
             margin: 0;
             color: #57B4FE;
@@ -81,12 +90,9 @@
             width: 90%;
             min-height: 60%;
             margin: 0 auto;
-            /*padding: 45px 30px 5px 30px;*/
-            /*background: url(__ROOT__/public/Common/images/main_bg.png);*/
             background-size: 100% 100%;
             background-repeat: no-repeat;
             position: relative;
-            /*overflow: hidden;*/
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             -ms-box-sizing: border-box;
@@ -98,7 +104,7 @@
             width: 100%;
             height: 92%;
             border: none;
-            font-size: 1rem;
+            font-size: 20px;
             padding: 20px;
             overflow-x: hidden;
             overflow-y: auto;
@@ -119,7 +125,7 @@
         }
 
         .content form .ques_content > div.ques_item h1 {
-            font-size: 1rem;
+            font-size: 24px;
             font-weight: normal;
         }
 
@@ -128,7 +134,7 @@
         }
 
         .answer_content {
-            font-size: 1rem;
+            font-size: 20px;
             margin: 1rem 0;
             max-height: 90%;
             overflow-x: hidden;
@@ -164,7 +170,7 @@
             margin: 0 20px;
         }
 
-        @media screen and (max-width: 320px) {
+        @media screen and (max-width: 450px) {
             .content form .action_btn .btn.show {
                 margin: 0 10px;
             }
@@ -178,7 +184,7 @@
         .input-wrap {
             position: relative;
             width: 89%;
-            line-height: 2rem;
+            line-height: 26px;
             margin-left: 2%;
             padding: 1px 35px 1px 25px;
             word-wrap:break-word;
@@ -187,7 +193,7 @@
             position: absolute;
             z-index: 99;
         }
-        @media screen and (max-width: 320px) {
+        @media screen and (max-width: 450px) {
             .input-wrap {
                 width: 91%;
             }
@@ -205,16 +211,16 @@
         }
 
         input[type="radio"] + span {
-            position: absolute;
-            left: 0;
-            top: 0.5rem;
-            display: block;
+            display: inline-block;
             border: 1px solid #57B4FE;
             background: #fff;
             border-radius: 15px;
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             z-index: 0;
+            margin-top: 2px;
+            margin-right: 10px;
+            float: left;
         }
 
         input[type="radio"]:hover + span {
@@ -228,12 +234,13 @@
         input[type="radio"]:checked + span:after {
             content: '';
             display: block;
-            width: 7px;
-            height: 7px;
-            margin-top: 4px;
-            margin-left: 4px;
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            margin-left: 2px;
             background-color: #57B4FE;
             border-radius: 50%;
+            vertical-align: middle;
         }
 
         input[type="checkbox"] {
@@ -272,7 +279,6 @@
         input[type="checkbox"]:checked + span {
             /*border: 1px solid #5D9CEC;*/
         }
-
         input[type="checkbox"]:checked + span:after {
             content: '';
             display: block;
@@ -284,12 +290,10 @@
             margin-left: 3px;
             margin-top: 4px;
         }
-
         input[type="button"], button {
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             -webkit-appearance: none;
         }
-
         input[type="text"] {
             display: block;
             width: 80%;
@@ -305,6 +309,32 @@
         input[type="text"] + input[type="radio"] + .input-tag, input[type="text"] + input[type="checkbox"] + .input-tag{
             display: none;
         }*/
+
+        @media only screen and (max-width: 450px) {
+            .content form .ques_content > div.ques_item h1 {
+                font-size: 1rem;
+                font-weight: normal;
+            }
+            .answer_content {
+                font-size: 1rem;
+            }
+            input[type="radio"] + span {
+                border-radius: 50%;
+                width: 1rem;
+                height: 1rem;
+                margin-top: 2px;
+                margin-right: 10px;
+            }
+            input[type="radio"]:checked + span:after {
+                width: 0.8rem;
+                height: 0.8rem;
+                margin-top: 0.1rem;
+                margin-left: 0.1rem;
+                background-color: #57B4FE;
+                border-radius: 50%;
+                vertical-align: middle;
+            }
+        }
 
         .moveToLeft {
             -webkit-animation: moveToLeft .6s ease both;
@@ -427,27 +457,27 @@
                     <div class="answer_content">
                         @if($vo['type']==3)
                             <div class="answer_content">
-                                <div class="input-wrap">
+                                <div class="input-wrap clearfloat">
                                     <input type="text" value="" name="ques_option_text{{$k}}"/>
                                 </div>
                             </div>
                         @elseif($vo['type']==2)
                             @foreach($vo['option_info'] as $kk=>$g)
                                 @if($g['option_type']==1)
-                                    <div class="input-wrap">
-                                        <input type="checkbox" value="{{$g['id']}}"
-                                               name="ques_option{{$k}}[]">{{$option_en[$kk]}}.{{$g['option_info']}}
+                                    <div class="input-wrap clearfloat">
+                                        <input type="checkbox" value="{{$g['id']}}" name="ques_option{{$k}}[]">
                                         <span class="input-tag"></span>
+                                        {{$option_en[$kk]}}.{{$g['option_info']}}
                                     </div>
                                 @else
-                                    <div class="input-wrap">
+                                    <div class="input-wrap clearfloat">
                                         <input type="checkbox" value="{{$g['id']}}" name="t_ques_option{{$k}}[]">
+                                        <span class="input-tag"></span>
                                         @if($g['option_info']=="不满意(请注明原因)____________")
                                             {{$arr['j']}}
                                         @else
                                             {{$arr['e']}}
                                         @endif
-                                        <span class="input-tag"></span>
                                         {{--<input type="text" value="" name="ques_option_text{{$k}}"/>--}}
                                         <textarea style="vertical-align: top" name="ques_option_text{{$k}}" id="" cols="30" rows="8"></textarea>
                                     </div>
@@ -456,20 +486,20 @@
                         @elseif($vo['type']==1)
                             @foreach($vo['option_info'] as $kk=>$g)
                                 @if($g['option_type']==1)
-                                    <div class="input-wrap">
-                                        <input type="radio" value="r_{{$g['id']}}"
-                                               name="ques_option{{$k}}">{{$option_en[$kk]}}.{{$g['option_info']}}
+                                    <div class="input-wrap clearfloat">
+                                        <input type="radio" value="r_{{$g['id']}}" name="ques_option{{$k}}">
                                         <span class="input-tag"></span>
+                                        {{$option_en[$kk]}}.{{$g['option_info']}}
                                     </div>
                                 @else
-                                    <div class="input-wrap">
+                                    <div class="input-wrap clearfloat">
                                         <input style="height: 50%" type="radio" value="t_{{$g['id']}}" name="ques_option{{$k}}">
+                                        <span class="input-tag"></span>
                                         @if($g['option_info']=="不满意(请注明原因)____________")
                                             {{$arr['j']}}
                                         @else
                                             {{$arr['e']}}
                                         @endif
-                                        <span class="input-tag"></span>
                                         <input type="text" value="" name="ques_option_text{{$k}}"/>
                                         {{--<textarea style="vertical-align: top" name="ques_option_text{{$k}}" id="" cols="30" rows="8"></textarea>--}}
                                     </div>

@@ -1,24 +1,30 @@
 @import "index";
 body{
   .wrap{
-    padding: vw(20) vw(36);
-    img{
+    padding: vw(34) vw(47) 0 0;
+    .leftImg{
       width: vw(434);
       height: vw(421);
+      line-height: vw(421);
+      text-align: center;
       display: block;
       position: fixed;
       top: vw(21);
-      left: vw(36);
+      left: vw(40);
+      img{
+        max-width: 100%;
+        //vertical-align: middle;
+      }
     }
     .info{
       float: right;
-      width: vw(485);
+      width: vw(462);
       p{
         font-size: vw(20);
         line-height: vw(38);
         text-indent: 2em;
         color: #323232;
-        margin-top: 39px;
+        margin-top:vw(25);
         word-break: break-all;
       }
       h2{

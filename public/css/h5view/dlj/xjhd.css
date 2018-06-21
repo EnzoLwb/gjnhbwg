@@ -19,26 +19,31 @@ p {
 }
 
 body .wrap {
-  padding: 20px 36px;
+  padding: 34px 47px 0 0;
 }
-body .wrap img {
+body .wrap .leftImg {
   width: 434px;
   height: 421px;
+  line-height: 421px;
+  text-align: center;
   display: block;
   position: fixed;
   top: 21px;
-  left: 36px;
+  left: 40px;
+}
+body .wrap .leftImg img {
+  max-width: 100%;
 }
 body .wrap .info {
   float: right;
-  width: 485px;
+  width: 462px;
 }
 body .wrap .info p {
   font-size: 20px;
   line-height: 38px;
   text-indent: 2em;
   color: #323232;
-  margin-top: 39px;
+  margin-top: 25px;
   word-break: break-all;
 }
 body .wrap .info h2 {

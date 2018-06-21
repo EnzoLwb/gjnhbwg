@@ -55,7 +55,7 @@
             box-sizing: border-box;
         }
         /**max width 320px**/
-        @media screen and (max-width:320px) {
+        @media only screen and (max-width:450px) {
             .content .intro{
                 font-size: 0.9rem;
             }
@@ -69,7 +69,7 @@
 
         .content .ques_content{
             width: 90%;
-            height: 70%;
+            /*height: 70%;*/
             margin: 0 auto;
             padding: 60px 30px 5px 30px;
             /*background: url(__ROOT__/public/Common/images/main_bg.png);*/
@@ -90,7 +90,7 @@
             box-sizing: border-box;
         }
         .content .ques_content img{
-            width: 45%;
+            width: 120px;
         }
         .content .ques_content p {
             text-align: center;

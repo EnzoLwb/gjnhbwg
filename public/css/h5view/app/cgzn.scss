@@ -26,13 +26,13 @@
   img{
     width: vw(141);
   }
+  padding: vw(40) vw(50) 0;
 }
 .content2,.content1{
   font-size: vw(30);
   line-height: vw(50);
   color: #6283C2;
   text-align: center;
-  padding: vw(58) vw(76) 0;
   p{
     text-align: left;
     img{
@@ -41,7 +41,7 @@
     }
   }
   img{
-    margin-bottom: vw(25);
+    margin-bottom: vw(20);
   }
   img:nth-of-type(2){
     margin-top: vw(30);
@@ -57,7 +57,7 @@
     text-align: center;
     width: 50%;
     float: left;
-    margin-top: vw(71);
+    margin-top: vw(40);
   }
   .item:nth-of-type(5){
     width: 100%;

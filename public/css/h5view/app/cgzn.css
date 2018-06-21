@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 .clearfloat:after {
   display: block;
   clear: both;
@@ -43,6 +47,9 @@ p {
   border-bottom: 0.6666666667vw solid #57B4FE;
 }
 
+.content {
+  padding: 5.3333333333vw 6.6666666667vw 0;
+}
 .content img {
   width: 18.8vw;
 }
@@ -52,7 +59,6 @@ p {
   line-height: 6.6666666667vw;
   color: #6283C2;
   text-align: center;
-  padding: 7.7333333333vw 10.1333333333vw 0;
 }
 .content2 p, .content1 p {
   text-align: left;
@@ -62,7 +68,7 @@ p {
   margin: 0 auto;
 }
 .content2 img, .content1 img {
-  margin-bottom: 3.3333333333vw;
+  margin-bottom: 2.6666666667vw;
 }
 .content2 img:nth-of-type(2), .content1 img:nth-of-type(2) {
   margin-top: 4vw;
@@ -80,7 +86,7 @@ p {
   text-align: center;
   width: 50%;
   float: left;
-  margin-top: 9.4666666667vw;
+  margin-top: 5.3333333333vw;
 }
 .content3 .item:nth-of-type(5) {
   width: 100%;
