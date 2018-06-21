@@ -1,7 +1,3 @@
-html, body {
-  min-height: 100%;
-}
-
 .clearfloat:after {
   display: block;
   clear: both;
@@ -18,10 +14,15 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body div {
   font-size: 4vw;
   line-height: 6.4vw;
   text-indent: 2em;
+  padding: 0 8vw;
   color: #8B8B8B;
 }
 body div p {

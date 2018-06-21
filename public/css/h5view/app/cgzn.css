@@ -44,7 +44,7 @@ p {
 }
 
 .content {
-  padding: 5.3333333333vw 6.6666666667vw;
+  padding: 5.3333333333vw 6.6666666667vw 0;
 }
 .content img {
   width: 18.8vw;
