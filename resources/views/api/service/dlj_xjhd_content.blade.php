@@ -15,7 +15,9 @@
 </head>
 <body>
 <div class="wrap clearfloat">
-    <img src="{{get_file_url($data['img'])}}">
+    <div class="leftImg">
+        <img src="{{get_file_url($data['img'])}}">
+    </div>
     <div class="info">
         <h1 class="title">
             {{$data['title']}}

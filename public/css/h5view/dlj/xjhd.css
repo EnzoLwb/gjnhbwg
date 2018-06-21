@@ -19,19 +19,21 @@ p {
 }
 
 body .wrap {
-  padding: 20px 36px;
+  padding: 34px 47px 0 0;
 }
-body .wrap img {
-  width: 291px;
-  height: 215px;
+body .wrap .leftImg {
+  width: 434px;
+  height: 421px;
+  line-height: 421px;
+  text-align: center;
   display: block;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 21px;
+  left: 40px;
 }
 body .wrap .info {
   float: right;
-  width: 442px;
+  width: 462px;
 }
 body .wrap .info p {
   font-size: 20px;
