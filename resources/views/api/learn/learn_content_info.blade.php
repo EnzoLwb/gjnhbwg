@@ -6,7 +6,6 @@
     <!-- Link Swiper's CSS -->
     <link href="{{cdn('js/dist/css/swiper.min.css')}}" rel="stylesheet" type="text/css">
     {{--<link href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css" rel="stylesheet">--}}
-    <title>ksjfksj</title>
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
     <script src="{{cdn('js/bootstrap.min.js')}}"></script>
     <script src="{{cdn('js/plugins/layer/layer.js')}}"></script>
