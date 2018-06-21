@@ -1,5 +1,5 @@
 html, body {
-  min-height: 100%;
+  height: 100%;
 }
 
 .clearfloat:after {
@@ -18,6 +18,10 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body div {
   padding: 10.9333333333vw 10.5333333333vw 0 9.6vw;
 }
@@ -26,12 +30,12 @@ body div img {
   width: 100%;
 }
 body div h1 {
-  font-size: 4.8vw;
+  font-size: 5.3333333333vw;
   margin: 4vw auto 4.9333333333vw;
   text-align: center;
 }
 body div p {
-  font-size: 4vw;
+  font-size: 4.5333333333vw;
   line-height: 6.4vw;
 }
 
