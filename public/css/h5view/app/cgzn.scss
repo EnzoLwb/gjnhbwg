@@ -61,6 +61,7 @@
   }
   .item:nth-of-type(5){
     width: 100%;
+    margin-bottom: vw(20);
   }
   img{
     margin-bottom: vw(27);
@@ -73,7 +74,6 @@
   p.remarks{
     text-align: center;
     width: 100%;
-    margin-top: vw(20);
     font-size: vw(21);
     color: #818080;
   }

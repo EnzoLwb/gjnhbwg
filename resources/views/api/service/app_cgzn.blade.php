@@ -30,7 +30,7 @@
     <div class="content content1">
         <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
         {!! $jt->jiaotong !!}
-        <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
+        <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
         {!! $jt->contact !!}
     </div>
     <!--参观须知-->

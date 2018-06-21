@@ -14,23 +14,6 @@
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
 </head>
 <body>
-{{--<p>标题</p>
-{{$data['title']}}
-<p>副标题</p>
-{!! $data->title_1 !!}
-<p>图片</p>
-<img src="{{get_file_url($data['img'])}}">
-<p>地点</p>
-{!! $data->active_place !!}
-<p>活动时间</p>
-{!! $data->active_date !!}
-<p>价格</p>
-{!! $data->active_price !!}
-<p>时长</p>
-{!! $data->active_time !!}
-<p>简介</p>
-{!! $data->content !!}--}}
-
 <div class="wrap clearfloat">
     <img src="{{get_file_url($data['img'])}}">
     <div class="info">

@@ -45,8 +45,9 @@
             position: relative;
             width: 90%;
             /*min-height: 400px;*/
-            margin: 0px auto 20px;
+            margin: 0 auto 10px;
             background-color: #f5f5f5;
+            overflow: visible;
         }
 
         div, a, button, input, textarea {
@@ -63,8 +64,8 @@
         }
 
         #option-div .score-div {
-            height: 100px;
-            margin: 20px;
+            height: 80px;
+            line-height: 80px;
         }
 
         #option-div .score-div > .score-circle {
@@ -73,6 +74,7 @@
             border-radius: 40px;
             background-color: #57B4FE;
             float: left;
+            margin: -10px 25px 10px -25px;
         }
 
         .score-circle-div {
@@ -97,7 +99,7 @@
 
         #option-div .score-div > .score-title label {
             color: #555;
-            margin-top: 30px;
+            /*margin-top: 30px;*/
             font-size: 22px;
         }
 
@@ -162,7 +164,7 @@
             font-size: 20px;
         }
 
-        .btn-div > .btn {
+       /* .btn-div > .btn {
             display: block;
             width: 60%;
             height: 40px;
@@ -175,7 +177,7 @@
             color: #fff;
             border: 1px solid #57B4FE;
             font-size: 18px;
-        }
+        }*/
 
         .layer-div {
             display: none;
@@ -334,10 +336,12 @@
         .table-div > .table > tbody > .self-tr {
             color: #57B4FE;
         }
-
+        .btn-div{
+            text-align: center;
+        }
         .btn-div > .btn {
-            display: block;
-            width: 60%;
+            /*display: block;*/
+            width: 40%;
             height: 40px;
             line-height: 40px;
             margin: 10px auto 0;
@@ -350,12 +354,14 @@
         .btn-div > .yellow-btn {
             background: #57B4FE;
             color: #fff;
+            border: 1px solid #57B4FE;
         }
 
         .btn-div > .white-btn {
             background: #BBBBBB;
             border: 1px solid #BBBBBB;
             color: #fff;
+            margin-right: 25px;
         }
 
         #return-btn {
@@ -414,16 +420,19 @@
         <button type="button" id="prev-btn" class="btn white-btn" style="display:none;">
             上一题
         </button>
-    </div>
-    <div class="btn-div">
         <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
             下一题
         </button>
     </div>
+    {{--<div class="btn-div">
+        <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
+            下一题
+        </button>
+    </div>--}}
     <div class="btn-div">
-        <bnutton type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
+        <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
             返回
-        </bnutton>
+        </button>
     </div>
     <div id="right-layer-div" class="layer-div">
         <img class="layer-div-img" src="{{cdn('morder/images/right.png')}}"/>
@@ -463,7 +472,6 @@
 </div>
 <!-- Swiper JS -->
 <script src="{{cdn('js/dist/js/swiper.min.js')}}"></script>
-
 <!-- Initialize Swiper -->
 <script>
     //$("#next-btn,#prev-btn").hide();

@@ -6,7 +6,7 @@
     <!-- Link Swiper's CSS -->
     <link href="{{cdn('js/dist/css/swiper.min.css')}}" rel="stylesheet" type="text/css">
     {{--<link href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css" rel="stylesheet">--}}
-
+    <title>ksjfksj</title>
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
     <script src="{{cdn('js/bootstrap.min.js')}}"></script>
     <script src="{{cdn('js/plugins/layer/layer.js')}}"></script>
@@ -148,7 +148,7 @@
 
         .answer-label {
             width: 85%;
-            word-break: break-word;
+            word-break: break-all;
         }
 
         .num-div {
@@ -162,9 +162,9 @@
             font-size: 20px;
         }
 
-        .btn-div > .btn {
+       /* .btn-div > .btn {
             display: block;
-            width: 60%;
+            width: 40%;
             height: 40px;
             margin: 20px auto;
             border-radius: 20px;
@@ -175,7 +175,7 @@
             color: #fff;
             border: 1px solid #57B4FE;
             font-size: 18px;
-        }
+        }*/
 
         .layer-div {
             display: none;
@@ -327,10 +327,12 @@
         .table-div > .table > tbody > .self-tr {
             color: #57B4FE;
         }
-
+        .btn-div{
+            text-align: center;
+        }
         .btn-div > .btn {
-            display: block;
-            width: 60%;
+            /*display: block;*/
+            width: 45%;
             height: 40px;
             margin: 10px auto 0;
             border-radius: 20px;
@@ -341,6 +343,7 @@
         .btn-div > .yellow-btn {
             background: #57B4FE;
             color: #fff;
+            border: 1px solid #57B4FE;
         }
 
         .btn-div > .white-btn {
@@ -397,12 +400,15 @@
         <button type="button" id="prev-btn" class="btn white-btn" style="display:none;">
             上一题
         </button>
-    </div>
-    <div class="btn-div">
         <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
             下一题
         </button>
     </div>
+    {{--<div class="btn-div">
+        <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
+            下一题
+        </button>
+    </div>--}}
     <div class="btn-div">
         <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
             返回榜单
@@ -470,7 +476,6 @@
             time = time + 1;
             $('#timershow').html(timerFormat(time));
         }, 1000);
-
         var answer = [];
         var count = 1;
         var swiper = new Swiper('.swiper-container', {
@@ -539,7 +544,6 @@
                     }
                 });
                 layer.closeAll();
-
                 clearInterval(timer);
                 $("#result").html($('#score').html());
                 $('#lasttime').html(timerFormat(time));
