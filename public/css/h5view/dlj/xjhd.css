@@ -31,6 +31,10 @@ body .wrap .leftImg {
   top: 21px;
   left: 40px;
 }
+body .wrap .leftImg img {
+  max-width: 100%;
+  vertical-align: middle;
+}
 body .wrap .info {
   float: right;
   width: 462px;

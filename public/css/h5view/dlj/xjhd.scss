@@ -11,6 +11,10 @@ body{
       position: fixed;
       top: vw(21);
       left: vw(40);
+      img{
+        max-width: 100%;
+        vertical-align: middle;
+      }
     }
     .info{
       float: right;
