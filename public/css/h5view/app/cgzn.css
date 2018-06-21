@@ -43,6 +43,9 @@ p {
   border-bottom: 0.6666666667vw solid #57B4FE;
 }
 
+.content {
+  padding: 7.4666666667vw 10.1333333333vw;
+}
 .content img {
   width: 18.8vw;
 }
@@ -52,7 +55,6 @@ p {
   line-height: 6.6666666667vw;
   color: #6283C2;
   text-align: center;
-  padding: 7.7333333333vw 10.1333333333vw 0;
 }
 .content2 p, .content1 p {
   text-align: left;

@@ -33,7 +33,6 @@ body .wrap .leftImg {
 }
 body .wrap .leftImg img {
   max-width: 100%;
-  vertical-align: middle;
 }
 body .wrap .info {
   float: right;
