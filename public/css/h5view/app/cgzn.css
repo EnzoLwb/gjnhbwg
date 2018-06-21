@@ -44,7 +44,7 @@ p {
 }
 
 .content {
-  padding: 7.4666666667vw 10.1333333333vw;
+  padding: 5.3333333333vw 6.6666666667vw;
 }
 .content img {
   width: 18.8vw;
@@ -64,7 +64,7 @@ p {
   margin: 0 auto;
 }
 .content2 img, .content1 img {
-  margin-bottom: 3.3333333333vw;
+  margin-bottom: 2.6666666667vw;
 }
 .content2 img:nth-of-type(2), .content1 img:nth-of-type(2) {
   margin-top: 4vw;

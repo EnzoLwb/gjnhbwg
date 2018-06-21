@@ -1,7 +1,3 @@
-html, body {
-  min-height: 100%;
-}
-
 .clearfloat:after {
   display: block;
   clear: both;
@@ -18,8 +14,12 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body div {
-  padding: 5.3333333333vw 4.8vw 4vw;
+  padding: 5.3333333333vw 4.8vw 0;
 }
 body div p {
   font-size: 4.5333333333vw;
