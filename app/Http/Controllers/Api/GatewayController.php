@@ -293,14 +293,13 @@ class GatewayController extends Controller
 			'to_client_id'=>$to_client_id,
 			'send_type'=>$type,
 			'device_type'=>$device_type,
+			'is_read'=>0,
 		];
 		$arr['type'] = 'sent_msg';
 		$arr['send_type'] = '1';//1表示文本信息 2表示语音信息
 		$arr['send_content'] = $content;
 		if (!empty($to_client_id)){
 			GatewayLib::sendToClient( $to_client_id,json_encode($arr));
-		}else{
-			$data['is_read']=0;
 		}
 		//保存数据库
 		ChatMessage::create($data);
