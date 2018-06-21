@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Channels\AlidySmsChannel;
 use App\Channels\HnsbSmsChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -34,7 +35,8 @@ class SmsVerification extends Notification implements ShouldQueue
 	public function via($notifiable)
 	{
 		// 添加短信通知频道
-		$via = [HnsbSmsChannel::class];
+		//$via = [HnsbSmsChannel::class];
+		$via = [AlidySmsChannel::class];
 
 		return $via;
 	}
@@ -47,7 +49,7 @@ class SmsVerification extends Notification implements ShouldQueue
 	 */
 	public function toSms($notifiable)
 	{
-		return "{$notifiable->smscode}为您的验证码，请于15分钟内填写。如非本人操作，请忽略。";
+		return "{$notifiable->smscode}";
 	}
 
 }

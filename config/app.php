@@ -179,6 +179,7 @@ return [
 		App\Providers\LogextServiceProvider::class,
 		App\Providers\CaptchaServiceProvider::class,
 		App\Providers\TreeServiceProvider::class,
+		App\Providers\SignaturehelperServiceProvider::class,
 
 //		Yajra\Oci8\Oci8ServiceProvider::class,
     ],

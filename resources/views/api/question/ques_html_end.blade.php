@@ -111,10 +111,10 @@
 </head>
 <body>
 <div class="content">
-   {{-- <div class="intro">
+    <div class="intro">
         <p>{{$arr['a']}}：</p>
         <p>{{$arr['b']}}</p>
-    </div>--}}
+    </div>
     <div class="ques_content">
         <img src="{{cdn('img/h5view/end.png')}}">
         <p>{{$arr['msg']}}</p>

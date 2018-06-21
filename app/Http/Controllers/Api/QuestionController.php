@@ -157,6 +157,9 @@ class QuestionController extends Controller
 			//当前问卷ID
 			$question_id = request('question_id');
 			$end =request('end');
+			$ques_info = Queslist::where('status',1)->where('id',$question_id)->first();
+			$arr['a'] = '您好';
+			$arr['b'] = $ques_info['description'];
 			if ($end == 1) {
 				$arr['msg'] = '您已完成问卷的所有问题,感谢您的参与';
 				return view('api.question.ques_html_end', [
@@ -167,8 +170,6 @@ class QuestionController extends Controller
 				exit;
 			}
 			//获取当前语种的问卷
-
-			$ques_info = Queslist::where('status',1)->where('id',$question_id)->first();
 			if (empty($ques_info)) {
 				$arr['msg'] = '尚未进行';
 				return view('api.question.ques_html_end', [
@@ -180,8 +181,6 @@ class QuestionController extends Controller
 			}
 			$ques_id=$ques_info['id'];
 			$arr['title'] = '问卷调查';
-			$arr['a'] = '您好';
-			$arr['b'] = $ques_info['description'];
 			$arr['c'] = '单选';
 			$arr['d'] = '可多选';
 			$arr['e'] = '其他';
