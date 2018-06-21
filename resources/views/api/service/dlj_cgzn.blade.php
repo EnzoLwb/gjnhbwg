@@ -86,8 +86,8 @@
                 <p> {!! $zl->step5 !!}</p>
             </div>
         </div>
+        <p class="remarks"> <sup>*</sup> 最终解释权归国家（海南）南海博物馆所有</p>
     </div>
-    <!--<p class="remarks"> <sup>*</sup> 最终解释权归国家（海南）南海博物馆所有</p>-->
 </div>
 <script type="text/javascript">
     $(function () {
@@ -95,11 +95,7 @@
             $(this).addClass("active").siblings().removeClass("active");
             $(".content").eq($(this).index()).show().siblings(".content").hide()
         });
-        var val = '';
-        $(".item p").each(function (i) {
-            val = $(this).text().replace(/\s/g,"<br>");
-            $(this).html(val);
-        })
+
     })
 </script>
 </body>

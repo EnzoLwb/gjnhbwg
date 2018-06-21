@@ -1,14 +1,9 @@
-$vw_base: 750;
 @function vw($px) {
-  @return ($px / 1024) * 100px;
+  @return ($px / 1024) * 1024px
 }
 @function vh($px) {
-  @return ($px / 527) * 100px;
+  @return ($px / 600) * 600px;
 }
-
-/*html, body {
-  min-height: 100%;
-}*/
 .clearfloat:after {
   display: block;
   clear: both;

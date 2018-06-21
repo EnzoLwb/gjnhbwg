@@ -1,6 +1,3 @@
-/*html, body {
-  min-height: 100%;
-}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -22,19 +19,19 @@ p {
 }
 
 body .wrap {
-  padding: 1.953125px 3.515625px;
+  padding: 20px 36px;
 }
 body .wrap img {
-  width: 42.3828125px;
-  height: 41.11328125px;
+  width: 434px;
+  height: 421px;
   display: block;
   position: fixed;
-  top: 2.05078125px;
-  left: 3.515625px;
+  top: 21px;
+  left: 36px;
 }
 body .wrap .info {
   float: right;
-  width: 47.36328125px;
+  width: 485px;
 }
 body .wrap .info p {
   font-size: 20px;

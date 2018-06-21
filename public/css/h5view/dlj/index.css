@@ -1,6 +1,3 @@
-/*html, body {
-  min-height: 100%;
-}*/
 .clearfloat:after {
   display: block;
   clear: both;

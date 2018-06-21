@@ -1,6 +1,3 @@
-/*html, body {
-  min-height: 100%;
-}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -23,17 +20,17 @@ p {
 
 body .wrap {
   box-sizing: border-box;
-  padding: 4.19921875vw 3.515625vw;
+  padding: 43px 36px;
   position: relative;
-  height: 29.296875vw;
+  height: 300px;
 }
 body .wrap .swiper-container {
-  width: 28.41796875vw;
-  height: 20.99609375vw;
+  width: 291px;
+  height: 215px;
   display: block;
   position: fixed;
-  top: 4.19921875vw;
-  left: 3.515625vw;
+  top: 43px;
+  left: 36px;
   border-radius: 5px;
 }
 body .wrap .swiper-container img {
@@ -41,21 +38,21 @@ body .wrap .swiper-container img {
 }
 body .wrap .info {
   float: right;
-  width: 43.1640625vw;
+  width: 442px;
   position: relative;
 }
 body .wrap .info p {
-  font-size: 1.953125vw;
-  line-height: 3.125vw;
+  font-size: 20px;
+  line-height: 32px;
   text-indent: 2em;
   color: #8B8B8B;
 }
 body .wrap .info p.title {
-  font-size: 2.44140625vw;
-  line-height: 3.125vw;
+  font-size: 25px;
+  line-height: 32px;
   text-indent: 0;
   color: #000000;
-  margin-bottom: 2.44140625vw;
+  margin-bottom: 25px;
 }
 
 /*# sourceMappingURL=wccp.css.map */

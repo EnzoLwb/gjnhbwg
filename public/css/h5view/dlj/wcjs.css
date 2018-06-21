@@ -1,6 +1,3 @@
-/*html, body {
-  min-height: 100%;
-}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -22,8 +19,8 @@ p {
 }
 
 body div {
-  font-size: 1.953125vw;
-  line-height: 3.41796875vw;
+  font-size: 20px;
+  line-height: 35px;
 }
 
 /*# sourceMappingURL=wcjs.css.map */
