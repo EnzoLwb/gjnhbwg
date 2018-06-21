@@ -45,7 +45,7 @@ p {
 }
 
 .content1 {
-  font-size: 16px;
+  font-size: 22px;
   line-height: 41px;
   color: #6283C2;
 }
@@ -60,7 +60,7 @@ p {
 
 .content2 {
   display: none;
-  font-size: 16px;
+  font-size: 22px;
   line-height: 41px;
   color: #6283C2;
 }
@@ -120,7 +120,7 @@ p {
   width: 100%;
   font-size: 18px;
   color: #818080;
-  margin-top: 10px;
+  margin-top: 40px;
 }
 
 /*# sourceMappingURL=cgzn.css.map */

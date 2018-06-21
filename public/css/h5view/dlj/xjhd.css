@@ -22,23 +22,23 @@ body .wrap {
   padding: 20px 36px;
 }
 body .wrap img {
-  width: 434px;
-  height: 421px;
+  width: 291px;
+  height: 215px;
   display: block;
   position: fixed;
-  top: 21px;
-  left: 36px;
+  top: 0;
+  left: 0;
 }
 body .wrap .info {
   float: right;
-  width: 485px;
+  width: 442px;
 }
 body .wrap .info p {
   font-size: 20px;
   line-height: 38px;
   text-indent: 2em;
   color: #323232;
-  margin-top: 39px;
+  margin-top: 25px;
   word-break: break-all;
 }
 body .wrap .info h2 {
