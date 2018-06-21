@@ -42,6 +42,7 @@ class MapExhibitController extends Controller
 	 * @apiParam {string} p 平台，i：IOS，a：安卓,w:微信
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} map_id 地图编号,传0返回所有数据
+	 * @apiParam {int} [road_id] 线路id
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibit_name 展品名称
 	 * @apiSuccess {int} exhibit_id 展品id
@@ -65,13 +66,30 @@ class MapExhibitController extends Controller
 		]);
 		$language = request('language', 1);
 		$map_id = request('map_id', 0);
+		$road_id = request('road_id', 0);
 		$data = [];
 		//获取展品信息
 		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_map', 1)->select('exhibit_language.exhibit_name', 'exhibit_language.content as exhibit_content', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.map_id', 'exhibit.x', 'exhibit.y', 'exhibit_language.audio');
 		//获取蓝牙关联详情
 		$auto_info = Autonum::select('exhibit_list', 'autonum', 'mx_and', 'mx_ios');
 		if ($map_id) {
-			$exhibit_list = $exhibit_list->where('exhibit.map_id', $map_id);
+
+			$weight_exhibit_ids_mapid = 'weight_exhibit_ids' . $map_id;
+			if($road_id){
+				$road_exhibit = VisitRoad::where('id', $road_id)->where('type', 1)->first();
+				if(empty($road_exhibit)){
+					return response_json(-1, $data,'road_id error');
+				}elseif(empty($road_exhibit[$weight_exhibit_ids_mapid])){
+					return response_json(1, $data);
+				}else{
+					$exhibit_ids = json_decode($road_exhibit[$weight_exhibit_ids_mapid], true);
+					$exhibit_list = $exhibit_list->where('exhibit.map_id', $map_id)->whereIn('exhibit.id', $exhibit_ids);
+				}
+
+			}else{
+				$exhibit_list = $exhibit_list->where('exhibit.map_id', $map_id);
+			}
+
 			$auto_info = $auto_info->where('map_id', $map_id);
 		}
 		$exhibit_list = $exhibit_list->get();
