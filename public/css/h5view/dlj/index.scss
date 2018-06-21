@@ -1,9 +1,9 @@
 $vw_base: 750;
 @function vw($px) {
-  @return ($px / 1024) * 100vw;
+  @return ($px / 1024) * 100px;
 }
 @function vh($px) {
-  @return ($px / 527) * 100vh;
+  @return ($px / 527) * 100px;
 }
 
 /*html, body {

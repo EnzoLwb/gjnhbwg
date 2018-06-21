@@ -23,28 +23,28 @@ p {
 
 body .wrap {
   box-sizing: border-box;
-  padding: 1.953125vw 3.515625vw;
+  padding: 1.953125px 3.515625px;
 }
 body .wrap .swiper-container {
-  width: 42.3828125vw;
-  height: 41.11328125vw;
+  width: 42.3828125px;
+  height: 41.11328125px;
   display: block;
   position: fixed;
-  top: 2.05078125vw;
-  left: 3.515625vw;
+  top: 2.05078125px;
+  left: 3.515625px;
 }
 body .wrap .info {
   float: right;
-  width: 47.36328125vw;
+  width: 47.36328125px;
 }
 body .wrap .info p {
-  font-size: 1.953125vw;
-  line-height: 4.1015625vw;
+  font-size: 20px;
+  line-height: 4.1015625px;
   text-indent: 2em;
   color: #323232;
 }
 body .wrap .info p.title {
-  font-size: 2.83203125vw;
+  font-size: 30px;
   text-indent: 0;
   color: #262932;
   margin-bottom: 10px;

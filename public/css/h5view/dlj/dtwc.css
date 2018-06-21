@@ -1,7 +1,6 @@
-html, body {
+/*html, body {
   min-height: 100%;
-}
-
+}*/
 .clearfloat:after {
   display: block;
   clear: both;
@@ -18,39 +17,43 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+  word-break: break-all;
+}
+
 body .wrap {
-  padding-top: 4.8828125vw;
+  padding-top: 4.8828125px;
   text-align: center;
 }
 body .wrap header {
-  margin-bottom: 6.34765625vw;
+  margin-bottom: 6.34765625px;
   color: #57B4FE;
-  font-size: 3.41796875vw;
+  font-size: 35px;
   text-align: center;
 }
 body .wrap header .text {
-  line-height: 4.19921875vw;
+  line-height: 4.19921875px;
 }
 body .wrap header .scoreTime {
-  width: 15.91796875vw;
-  height: 15.91796875vw;
-  margin: 0 auto 3.61328125vw;
+  width: 15.91796875px;
+  height: 15.91796875px;
+  margin: 0 auto 3.61328125px;
   border-radius: 50%;
   background: #57B4FE;
-  border: 0.09765625vw solid #57B4FE;
+  border: 0.09765625px solid #57B4FE;
   color: #fff;
-  font-size: 2.44140625vw;
+  font-size: 25px;
   text-align: center;
 }
 body .wrap header .scoreTime p:first-child {
-  margin-top: 0.9765625vw;
+  margin-top: 0.9765625px;
 }
 body .wrap header .scoreTime p .score {
   font-size: 45px;
   vertical-align: middle;
 }
 body .wrap header .scoreTime p .timer {
-  font-size: 3.02734375vw;
+  font-size: 30px;
 }
 body .wrap header .scoreTime p sub {
   vertical-align: middle;
@@ -61,17 +64,17 @@ body .wrap header .scoreTime p .timer {
 }
 body .wrap .pre, body .wrap .next {
   display: inline-block;
-  width: 21.97265625vw;
-  height: 5.6640625vw;
-  line-height: 5.6640625vw;
-  font-size: 2.34375vw;
+  width: 21.97265625px;
+  height: 5.6640625px;
+  line-height: 5.6640625px;
+  font-size: 24px;
   color: #fff;
   text-align: center;
-  border-radius: 4.39453125vw;
+  border-radius: 4.39453125px;
 }
 body .wrap .pre {
   background: #BBBBBB;
-  margin-right: 4.8828125vw;
+  margin-right: 4.8828125px;
 }
 body .wrap .next {
   background: #57B4FE;

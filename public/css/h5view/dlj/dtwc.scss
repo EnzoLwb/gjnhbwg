@@ -6,7 +6,7 @@ body{
     header{
       margin-bottom: vw(65);
       color: #57B4FE;
-      font-size: vw(35);
+      font-size: 35px;
       text-align: center;
       .text{
         line-height: vw(43);
@@ -20,7 +20,7 @@ body{
         background: #57B4FE;
         border: vw(1) solid #57B4FE;
         color: #fff;
-        font-size: vw(25);
+        font-size: 25px;
         text-align: center;
         p:first-child{
           margin-top: vw(10);
@@ -31,7 +31,7 @@ body{
             vertical-align: middle;
           }
           .timer{
-            font-size: vw(31);
+            font-size: 30px;
           }
           sub{
             vertical-align: middle;
@@ -48,7 +48,7 @@ body{
       width: vw(225);
       height: vw(58);
       line-height: vw(58);
-      font-size: vw(24);
+      font-size: 24px;
       color: #fff;
       text-align: center;
       border-radius: vw(45);
