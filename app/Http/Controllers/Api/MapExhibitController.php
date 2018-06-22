@@ -13,6 +13,7 @@ use App\Models\VisitRoad;
 use App\Models\NavigationRoad;
 use App\Dao\NavigationDao;
 use App\Models\Trajectory;
+use App\Models\ExUserVisitfoot;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -43,11 +44,13 @@ class MapExhibitController extends Controller
 	 * @apiParam {int} language 语种，1中文，2英语，3韩语，4日语，5法语，6俄语
 	 * @apiParam {int} map_id 地图编号,传0返回所有数据
 	 * @apiParam {int} [road_id] 线路id
+	 * @apiParam {string} [api_token] token(登录后上传)
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {string} exhibit_name 展品名称
 	 * @apiSuccess {int} exhibit_id 展品id
 	 * @apiSuccess {string} exhibit_icon1 地图页图片(亮)
 	 * @apiSuccess {string} exhibit_icon2 地图页图片(暗)
+	 * @apiSuccess {string} show_exhibit_icon 展示地图页图片
 	 * @apiSuccess {int} map_id 地图编号
 	 * @apiSuccess {int} x x轴坐标
 	 * @apiSuccess {int} y y轴坐标
@@ -106,6 +109,15 @@ class MapExhibitController extends Controller
 				];
 			}
 		}
+
+
+		$user = Auth::user();
+		if (false == empty($user)) {
+			$uid = $user->uid;
+		} else {
+			$uid = 0;
+		}
+
 		foreach ($exhibit_list as $k => $g) {
 			$data[$k]['exhibit_id'] = $g->exhibit_id;
 			$data[$k]['exhibit_name'] = $g->exhibit_name;
@@ -121,6 +133,17 @@ class MapExhibitController extends Controller
 			} else {
 				$data[$k]['auto_string'] = '';
 				$data[$k]['auto_list'] = [];
+			}
+
+			if($uid==0){
+				$data[$k]['show_exhibit_icon']=$data[$k]['exhibit_icon1'];
+			}else{
+				$visitfoot = ExUserVisitfoot::where('uid',$uid)->where('exhibit_id',$data[$k]['exhibit_id'])->first();
+				if(empty($visitfoot)){
+					$data[$k]['show_exhibit_icon']=$data[$k]['exhibit_icon1'];
+				}else{
+					$data[$k]['show_exhibit_icon']=$data[$k]['exhibit_icon2'];
+				}
 			}
 		}
 
