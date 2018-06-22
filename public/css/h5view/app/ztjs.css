@@ -22,8 +22,11 @@ p {
   word-break: break-all;
 }
 
+body div {
+  padding: 1.3333333333vw 4.5333333333vw;
+}
 body div p {
-  font-size: 4vw;
+  font-size: 4.8vw;
   line-height: 6.4vw;
   text-indent: 2em;
   color: #022444;
