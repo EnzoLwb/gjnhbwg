@@ -22,6 +22,9 @@ p {
   word-break: break-all;
 }
 
+body div {
+  padding: 0 7.3333333333vw;
+}
 body div p {
   font-size: 4.8vw;
   line-height: 6.4vw;
