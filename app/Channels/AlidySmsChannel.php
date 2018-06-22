@@ -23,12 +23,12 @@ class AlidySmsChannel
 	public function send($notifiable, Notification $notification)
 	{
 		// 取得短信内容
-		$message = $notification->toSms($notifiable);
+		$smscode = $notification->toSmscode($notifiable);
 		// 取得手机号
 		$mobile = $notifiable->mobileForHnsbSms();
 
 		if (is_mobile($mobile)) {
-			self::sendSms($message, $mobile);
+			self::sendSms($smscode, $mobile);
 		}
 	}
 
@@ -36,30 +36,30 @@ class AlidySmsChannel
 	 * 发送短信
 	 *
 	 * @author lxp 20170811
-	 * @param string $content 短信内容
+	 * @param string $smscode 短信验证码
 	 * @param string $mobile 手机号
 	 * @return boolean
 	 */
-	public static function sendSms($content, $mobile)
+	public static function sendSms($smscode, $mobile)
 	{
 		if (!is_mobile($mobile)) {
 			return false;
 		}
 
-		$params = array ();
+		$params = array();
 
-		$accessKeyId = env('SMS_ALIDY_KEYID', 'bzaxjlJryRFwpikN');
-		$accessKeySecret = env('SMS_ALIDY_KEYSECRET', 'UdunXBcsmEvb3AnFbyRtnVy00DJjPz');
+		$accessKeyId = env('SMS_ALIDY_KEYID', '');
+		$accessKeySecret = env('SMS_ALIDY_KEYSECRET', '');
 		$params["PhoneNumbers"] = $mobile;
-		$params["SignName"] = env('SMS_ALIDY_SIGNNAME', '阿里云短信测试专用');
+		$params["SignName"] = '阿里云短信测试专用';
 
 		$params["TemplateCode"] = "SMS_137790159";
 
-		$params['TemplateParam'] = Array (
-			"code" => $content,
+		$params['TemplateParam'] = Array(
+			"code" => $smscode,
 		);
 
-		if(!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
+		if (!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
 			$params["TemplateParam"] = json_encode($params["TemplateParam"], JSON_UNESCAPED_UNICODE);
 		}
 
@@ -67,20 +67,31 @@ class AlidySmsChannel
 		$helper = app('signaturehelper');
 
 		// 此处可能会抛出异常，注意catch
-		$result = $helper->request(
-			$accessKeyId,
-			$accessKeySecret,
-			"dysmsapi.aliyuncs.com",
-			array_merge($params, array(
+		$result = $helper->request($accessKeyId, $accessKeySecret, "dysmsapi.aliyuncs.com", array_merge($params, array(
 				"RegionId" => "cn-hangzhou",
 				"Action" => "SendSms",
 				"Version" => "2017-05-25",
-			))
-		);
+			)));
 
-		return true;
-
-
+		if (strtolower($result['Message']) == 'ok' && strtolower($result['Code']) == 'ok') {
+			$logObj = app('logext');
+			$logObj->init('alidysms_success');
+			$logObj->logbuffer('phone_no', $mobile);
+			$logObj->logbuffer('content', json_encode($params));
+			$logObj->logbuffer('message', $result['Message']);
+			$logObj->logbuffer('result', json_encode($result));
+			$logObj->logend();
+			return true;
+		} else {
+			$logObj = app('logext');
+			$logObj->init('alidysms_error');
+			$logObj->logbuffer('phone_no', $mobile);
+			$logObj->logbuffer('content', json_encode($params));
+			$logObj->logbuffer('message', $result['Message']);
+			$logObj->logbuffer('result', json_encode($result));
+			$logObj->logend();
+			return false;
+		}
 
 	}
 
