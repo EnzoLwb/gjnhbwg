@@ -6,8 +6,22 @@ $vw_base: 750;
   @return ($px / 1334) * 100vh;
 }
 
-html, body {
+/*html, body {
   height: 100%;
+}*/
+@media screen and (max-width: 321px){
+  html, body {
+    height: 100%;
+  }
+  body {
+    box-sizing: content-box;
+    padding-bottom: vw(128);
+  }
+}
+@media screen and (min-width: 321px){
+  html, body {
+    height: 100%;
+  }
 }
 .clearfloat:after {
   display: block;
