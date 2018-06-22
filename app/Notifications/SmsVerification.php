@@ -47,7 +47,7 @@ class SmsVerification extends Notification implements ShouldQueue
 	 * @param $notifiable
 	 * @return string
 	 */
-	public function toSms($notifiable)
+	public function toSmscode($notifiable)
 	{
 		return "{$notifiable->smscode}";
 	}
