@@ -45,7 +45,7 @@ class SignatureHelper {
 
         try {
             $content = $this->fetchContent($url);
-            return json_decode($content);
+            return json_decode($content,true);
         } catch( \Exception $e) {
             return false;
         }

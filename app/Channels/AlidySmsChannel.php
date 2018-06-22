@@ -46,7 +46,7 @@ class AlidySmsChannel
 			return false;
 		}
 
-		$params = array ();
+		$params = array();
 
 		$accessKeyId = env('SMS_ALIDY_KEYID', '');
 		$accessKeySecret = env('SMS_ALIDY_KEYSECRET', '');
@@ -55,11 +55,11 @@ class AlidySmsChannel
 
 		$params["TemplateCode"] = "SMS_137790159";
 
-		$params['TemplateParam'] = Array (
+		$params['TemplateParam'] = Array(
 			"code" => $smscode,
 		);
 
-		if(!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
+		if (!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
 			$params["TemplateParam"] = json_encode($params["TemplateParam"], JSON_UNESCAPED_UNICODE);
 		}
 
@@ -67,20 +67,31 @@ class AlidySmsChannel
 		$helper = app('signaturehelper');
 
 		// 此处可能会抛出异常，注意catch
-		$result = $helper->request(
-			$accessKeyId,
-			$accessKeySecret,
-			"dysmsapi.aliyuncs.com",
-			array_merge($params, array(
+		$result = $helper->request($accessKeyId, $accessKeySecret, "dysmsapi.aliyuncs.com", array_merge($params, array(
 				"RegionId" => "cn-hangzhou",
 				"Action" => "SendSms",
 				"Version" => "2017-05-25",
-			))
-		);
+			)));
 
-		return true;
-
-
+		if (strtolower($result['Message']) == 'ok' && strtolower($result['Code']) == 'ok') {
+			$logObj = app('logext');
+			$logObj->init('alidysms_success');
+			$logObj->logbuffer('phone_no', $mobile);
+			$logObj->logbuffer('content', json_encode($params));
+			$logObj->logbuffer('message', $result['Message']);
+			$logObj->logbuffer('result', json_encode($result));
+			$logObj->logend();
+			return true;
+		} else {
+			$logObj = app('logext');
+			$logObj->init('alidysms_error');
+			$logObj->logbuffer('phone_no', $mobile);
+			$logObj->logbuffer('content', json_encode($params));
+			$logObj->logbuffer('message', $result['Message']);
+			$logObj->logbuffer('result', json_encode($result));
+			$logObj->logend();
+			return false;
+		}
 
 	}
 
