@@ -77,7 +77,7 @@ class CptController extends Controller
 			// 发送短信
 			$smsObj->sendSmsNotification();
 
-			return response_json(1, [], '发送成功');
+			return response_json(1, 1, '发送成功');
 
 
 
@@ -108,7 +108,8 @@ class CptController extends Controller
 				$message->to(trim(request('phoneOremail')))->subject('您的验证码');
 			});
 
-			return response_json(1, $flag, '发送成功');
+			return response_json(1, 1, '发送成功');
+			//return response_json(1, $flag, '发送成功');
 
 		} else {
 			throw new ApiErrorException('vtype error');
