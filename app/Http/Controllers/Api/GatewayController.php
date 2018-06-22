@@ -166,27 +166,33 @@ class GatewayController extends Controller
 			$my_info=[];
 		}
 		$client_id = current(GatewayLib::getClientIdByUid($uid));
-		$group=Group::create([
-			'holder' => $uid,
-			'group_name' => request('group_name'),
-			'group_number' => rand(1000,9999).substr(time(),8),
-		]);
-		$group_id=$group->id;
-		//将群主加入该群 并且绑定client_id
-		$group_member=new GroupMember();
-		$group_member->member_id=$uid;
-		$group_member->add_time=time();
-		$group_member->group_id=$group_id;
-		$group_member->device_type=$plat;
-		$group_member->save();
+		if (!empty($client_id)){
+			$group=Group::create([
+				'holder' => $uid,
+				'group_name' => request('group_name'),
+				'group_number' => rand(1000,9999).substr(time(),8),
+			]);
+			$group_id=$group->id;
+			//将群主加入该群 并且绑定client_id
+			$group_member=new GroupMember();
+			$group_member->member_id=$uid;
+			$group_member->add_time=time();
+			$group_member->group_id=$group_id;
+			$group_member->device_type=$plat;
+			$group_member->save();
 
-		$data['my_info']=$my_info;
-		$group_info['group_id']=$group->id;
-		$group_info['group_number']=$group->group_number;
-		$group_info['name']=request('group_name');
-		$data['group_info']=$group_info;
-		GatewayLib::joinGroup($client_id, $group_id);
-		return response_json(1,$data,'你已成功创建并加入群组');
+			$data['my_info']=$my_info;
+			$group_info['group_id']=$group->id;
+			$group_info['group_number']=$group->group_number;
+			$group_info['name']=request('group_name');
+			$data['group_info']=$group_info;
+			GatewayLib::joinGroup($client_id, $group_id);
+			return response_json(1,$data,'你已成功创建并加入群组');
+		}else{
+			return response_json(0,'','未在线');
+		}
+
+
 	}
 	/**
 	 * 加入群组
@@ -252,13 +258,19 @@ class GatewayController extends Controller
 			'add_time' =>time(),
 			'device_type' =>$plat,
 		]);
-		GatewayLib::joinGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_info['id']);
-		//通知群组里的人
-		$arr['type'] = 'sent_msg';
-		$arr['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
-		$arr['send_content'] = '加入群组';
-		GatewayLib::sendToGroup($group_info['id'],json_encode($arr));
-		return response_json(1, $data, '加入成功');
+		$client_id=current(GatewayLib::getClientIdByUid($user_number));
+		if (!empty($client_id)){
+			GatewayLib::joinGroup($client_id, $group_info['id']);
+			//通知群组里的人
+			$arr['type'] = 'sent_msg';
+			$arr['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
+			$arr['send_content'] = '加入群组';
+			GatewayLib::sendToGroup($group_info['id'],json_encode($arr));
+			return response_json(1, $data, '加入成功');
+		}else{
+			return response_json(0, $data, '未在线');
+		}
+
 	}
 	/**
 	 * 私聊发送消息
@@ -334,13 +346,20 @@ class GatewayController extends Controller
 		$group_id=Group::where('group_number',$group_number)->value('id');
 		$arr=['member_id'=>$user_number,'group_id'=>$group_id];
 		GroupMember::where($arr)->delete();
-		GatewayLib::leaveGroup(current(GatewayLib::getClientIdByUid($user_number)), $group_id);
-		//通知群组里的人
-		$arr2['type'] = 'sent_msg';
-		$arr2['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
-		$arr2['send_content'] = '退出群组';
-		GatewayLib::sendToGroup($group_id,json_encode($arr2));
-		return response_json(1, '', '退出成功');
+		$client_id= current(GatewayLib::getClientIdByUid($user_number));
+		if (!empty($client_id)){
+			GatewayLib::leaveGroup($client_id, $group_id);
+			//通知群组里的人
+			$arr2['type'] = 'sent_msg';
+			$arr2['send_type'] = '3';//1表示文本信息 2表示语音信息 3代表有人退群或者加群
+			$arr2['send_content'] = '退出群组';
+			GatewayLib::sendToGroup($group_id,json_encode($arr2));
+			return response_json(1, '', '退出成功');
+		}else{
+			return response_json(0, '', '未在线');
+		}
+
+
 	}
 	/**
 	 * 聊天发送语音文件
