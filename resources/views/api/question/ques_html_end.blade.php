@@ -44,7 +44,7 @@
         }
         .content .intro{
             width: 90%;
-            height: 20%;
+            /*height: 20%;*/
             margin: 0 auto;
             padding: 20px 0;
             font-size: 1rem;
@@ -54,10 +54,14 @@
             -o-box-sizing: border-box;
             box-sizing: border-box;
         }
+        .content .intro p {
+            margin: 0;
+            color: #57B4FE;
+        }
         /**max width 320px**/
         @media only screen and (max-width:450px) {
             .content .intro{
-                font-size: 0.9rem;
+                font-size: 1.2rem;
             }
             .content .ques_content img{
                 width: 45%;
@@ -77,7 +81,7 @@
             background-repeat: no-repeat;
             position: relative;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             overflow-x: hidden;
             overflow-y: auto;
             color: #E1BC6D;
