@@ -30,13 +30,13 @@
     <div class="content content1">
         <ul>
             <li style="margin-bottom: 40px" class="clearfloat">
-                <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
+                <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
                 <div class="info1">
                     {!! $jt->jiaotong !!}
                 </div>
             </li>
             <li>
-                <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
+                <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
                 <div class="info2">
                     {!! $jt->contact !!}
                 </div>
