@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\ApiErrorException;
 use App\Models\SmsVerify;
+use App\Models\Users;
 use App\Utilities\Captcha\Securimage;
 use Illuminate\Support\Facades\Cache;
 use Mail;
@@ -32,12 +33,14 @@ class CptController extends Controller
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 请求平台，i：IOS，a：安卓，w：Web，t：触屏或手机
 	 * @apiParam {string} phoneOremail 手机号/邮箱
+	 * @apiParam {int} type 用户  1注册  2找回密码
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":{},"msg":""}
 	 */
 	public function send_vcode()
 	{
 		$phoneOremail = trim(request('phoneOremail'));
+		$type = trim(request('type'));
 		if (empty($phoneOremail)) {
 			throw new ApiErrorException('phoneOremail不能为空');
 		}
@@ -52,6 +55,27 @@ class CptController extends Controller
 		} else {
 			throw new ApiErrorException('请填写正确的手机号或者邮箱');
 		}
+
+
+		$userinfo = Users::where('username',$phoneOremail)->first();
+		if ($type == 1) {
+			if($userinfo){
+				$error_msg = $vtype==1?'该手机号已注册':'该邮箱已注册';
+				return response_json(-1, -1, $error_msg);
+			}
+
+		}elseif ($type == 2) {
+
+			if(empty($userinfo)){
+				$error_msg = $vtype==1?'该手机号未注册':'该邮箱未注册';
+				return response_json(-1, -1, $error_msg);
+			}
+
+		}else{
+			throw new ApiErrorException('type error');
+		}
+
+
 
 		if ($vtype == 1) {
 			//短信验证码
