@@ -242,6 +242,7 @@ class PaiController extends Controller
 			} else {
 				$data[$k]->is_like = 0;
 			}
+			$data[$k]->addtime = date('m-d H:i',strtotime($v->addtime));
 			$data[$k]->comment_num = PaiComment::where('pai_id', $v->pid)->where('is_check', 2)->count();
 		}
 		return response_json(1, $data);
@@ -469,6 +470,7 @@ class PaiController extends Controller
 			$data[$k]->comment_num = PaiComment::where('pai_id', $v->pid)->where('is_check', 2)->count();
 			$data[$k]->avatar = Auth::user()->avatar;
 			$data[$k]->nickname = Auth::user()->nickname;
+			$data[$k]->addtime = date('m-d H:i',strtotime($v->addtime));
 		}
 		return response_json(1, $data);
 	}
