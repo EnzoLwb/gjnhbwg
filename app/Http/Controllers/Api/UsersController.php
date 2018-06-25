@@ -272,6 +272,12 @@ class UsersController extends Controller
 		$this->validate([
 			'birthday' => 'required'
 		]);
+
+		$today = date('Y-m-d');
+		if(strtotime(request('birthday'))>strtotime($today)){
+			return response_json(-1, [],'选择的出生日期无效');
+		}
+
 		$users = Users::findOrFail($uid);
 		$users->timestamps = false;
 		$users->birthday = request('birthday');
