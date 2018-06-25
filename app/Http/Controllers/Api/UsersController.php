@@ -683,6 +683,7 @@ class UsersController extends Controller
 		}
 
 		return response_json(1, [
+			'uid' => $user->uid,
 			'username' => $user->username,
 			'api_token' => $user->api_token
 		]);
