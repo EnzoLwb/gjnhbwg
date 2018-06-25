@@ -308,6 +308,7 @@ class PaiController extends Controller
 	 * @apiSuccess {array} data 操作结果1成功0失败
 	 * @apiSuccess {int} data 操作结果1成功0失败
 	 * @apiSuccess {int} is_like 1为已点赞 0为未点赞
+	 * @apiSuccess {int} like_count 点赞数
 	 */
 
 	public function pai_dolike()
@@ -335,6 +336,7 @@ class PaiController extends Controller
 				Pai::where('id', $pai_id)->increment('like_num');
 				$data['is_like']=1;
 			}
+			$count=Pai::where('id', $pai_id)->value('like_num');
 		} else {
 			$this->validate([
 				'comment_id' => 'required|min:1|integer',
@@ -356,7 +358,9 @@ class PaiController extends Controller
 				PaiComment::where('id', $pai_comment_id)->increment('like_num');
 				$data['is_like']=1;
 			}
+			$count= PaiComment::where('id', $pai_comment_id)->value('like_num');
 		}
+		$data['like_count']=$count;
 		if ($r) {
 			return response_json(1, $data);
 		} else {
