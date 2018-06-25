@@ -58,6 +58,13 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小助手位置名</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="dp_name" value="{{$info['dp_name'] or ''}}" class="form-control" />
+                            </div>
+                        </div>
+
                         @if(Auth::id()==1)
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">安卓门限</label>
