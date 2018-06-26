@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\GateWayRent;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -61,7 +62,7 @@ class Kernel extends HttpKernel
 		'can' => \Illuminate\Auth\Middleware\Authorize::class,
 		'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
 		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-
+		'gateway_rent'=>GateWayRent::class,
 		'auth.admin' => \App\Http\Middleware\AuthAdminMiddleware::class,
 		'priv.admin' => \App\Http\Middleware\PrivAdminMiddleware::class
 	];
