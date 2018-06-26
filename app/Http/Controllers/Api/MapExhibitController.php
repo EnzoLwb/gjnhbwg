@@ -121,7 +121,7 @@ class MapExhibitController extends Controller
 		foreach ($exhibit_list as $k => $g) {
 			$data[$k]['exhibit_id'] = $g->exhibit_id;
 			$data[$k]['exhibit_name'] = $g->exhibit_name;
-			$data[$k]['exhibit_content'] = $g->exhibit_content;
+			$data[$k]['exhibit_content'] = strip_tags($g->exhibit_content);
 			$data[$k]['exhibit_icon1'] = json_decode($g->exhibit_img, true)['exhibit_icon1'];
 			$data[$k]['exhibit_icon2'] = json_decode($g->exhibit_img, true)['exhibit_icon2'];
 			$data[$k]['map_id'] = $g->map_id;
