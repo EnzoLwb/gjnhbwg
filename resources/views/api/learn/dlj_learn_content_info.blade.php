@@ -352,15 +352,15 @@
         }
 
         .btn-div > .yellow-btn {
-            background: #57B4FE;
-            color: #fff;
-            border: 1px solid #57B4FE;
-        }
-
-        .btn-div > .white-btn {
             background: #BBBBBB;
             border: 1px solid #BBBBBB;
             color: #fff;
+        }
+
+        .btn-div > .white-btn {
+            background: #57B4FE;
+            color: #fff;
+            border: 1px solid #57B4FE;
             margin-right: 25px;
         }
 
