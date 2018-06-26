@@ -28,16 +28,16 @@
     </div>
     <!--交通周边-->
     <div class="content content1">
-        <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
+        <img src="{{cdn('img/h5view/j1.png')}}" alt=""/>
         {!! $jt->jiaotong !!}
-        <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
+        <img src="{{cdn('img/h5view/j2.png')}}" alt=""/>
         {!! $jt->contact !!}
     </div>
     <!--参观须知-->
     <div class="content content2">
-        <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
-        {!! $xz->shuoming !!}
         <img src="{{cdn('img/h5view/c2.png')}}" alt=""/>
+        {!! $xz->shuoming !!}
+        <img src="{{cdn('img/h5view/c1.png')}}" alt=""/>
         {!! $xz->zysx !!}
     </div>
     <!--设备租赁-->
@@ -69,7 +69,8 @@
     $(function () {
         $(".header div").on("click",function () {
             $(this).addClass("active").siblings().removeClass("active");
-            $(".content").eq($(this).index()).show().siblings(".content").hide()
+            $(".content").eq($(this).index()).show().siblings(".content").hide();
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
         });
         var val = '';
         $(".item p").each(function (i) {

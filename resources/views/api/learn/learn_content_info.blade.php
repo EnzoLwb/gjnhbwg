@@ -612,7 +612,6 @@
             return c;
         }
     }
-
 </script>
 </body>
 </html>
