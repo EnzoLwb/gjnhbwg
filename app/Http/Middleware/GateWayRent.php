@@ -17,7 +17,8 @@ class GateWayRent
     {
 		if (request('p')=='d'){
 			//查询跨库
-			$res = Rent::where('RENT_DEVICENO',request('user_number'))->value('RENT_ID');
+			$user=request('user_number') ? request('user_number'):request('from_user_number');
+			$res = Rent::where('RENT_DEVICENO',$user)->value('RENT_ID');
 			if (!$res) {
 				return response_json('0','','未被租赁状态');
 			}
