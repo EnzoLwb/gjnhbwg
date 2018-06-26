@@ -242,6 +242,7 @@ class PaiController extends Controller
 			} else {
 				$data[$k]->is_like = 0;
 			}
+			$data[$k]->addtime = date('m-d H:i',strtotime($v->addtime));
 			$data[$k]->comment_num = PaiComment::where('pai_id', $v->pid)->where('is_check', 2)->count();
 		}
 		return response_json(1, $data);
@@ -304,14 +305,14 @@ class PaiController extends Controller
 	 * @apiParam {int} type 1随手拍点赞2随手拍评论点赞
 	 * @apiParam {int} [pid] 随手拍id
 	 * @apiParam {int} [comment_id] 随手拍评论id
+	 * @apiSuccess {array} data 操作结果1成功0失败
 	 * @apiSuccess {int} data 操作结果1成功0失败
+	 * @apiSuccess {int} is_like 1为已点赞 0为未点赞
+	 * @apiSuccess {int} like_count 点赞数
 	 */
 
 	public function pai_dolike()
 	{
-		/*$this->validate([
-			'type' => 'required|min:1|max:2|integer',
-		]);*/
 		$uid = Auth::user()->uid;
 		$type = request('type', 1);
 		if ($type == 1) {
@@ -324,6 +325,7 @@ class PaiController extends Controller
 			if ($is_like) {
 				$r = PaiLike::where('uid', $uid)->where('type', $type)->where('pai_id', $pai_id)->delete();
 				Pai::where('id', $pai_id)->decrement('like_num');
+				$data['is_like']=0;
 			} else {
 				$r = PaiLike::create([
 					'type' => $type,
@@ -332,7 +334,9 @@ class PaiController extends Controller
 					'pai_comment_id' => 0,
 				]);
 				Pai::where('id', $pai_id)->increment('like_num');
+				$data['is_like']=1;
 			}
+			$count=Pai::where('id', $pai_id)->value('like_num');
 		} else {
 			$this->validate([
 				'comment_id' => 'required|min:1|integer',
@@ -343,6 +347,7 @@ class PaiController extends Controller
 			if ($is_like) {
 				$r = PaiLike::where('uid', $uid)->where('type', $type)->where('pai_comment_id', $pai_comment_id)->delete();
 				PaiComment::where('id', $pai_comment_id)->decrement('like_num');
+				$data['is_like']=0;
 			} else {
 				$r = PaiLike::create([
 					'type' => $type,
@@ -351,12 +356,15 @@ class PaiController extends Controller
 					'pai_comment_id' => $pai_comment_id,
 				]);
 				PaiComment::where('id', $pai_comment_id)->increment('like_num');
+				$data['is_like']=1;
 			}
+			$count= PaiComment::where('id', $pai_comment_id)->value('like_num');
 		}
+		$data['like_count']=$count;
 		if ($r) {
-			return response_json(1, 1);
+			return response_json(1, $data);
 		} else {
-			return response_json(1, 0);
+			return response_json(0, $data);
 		}
 	}
 
@@ -469,6 +477,7 @@ class PaiController extends Controller
 			$data[$k]->comment_num = PaiComment::where('pai_id', $v->pid)->where('is_check', 2)->count();
 			$data[$k]->avatar = Auth::user()->avatar;
 			$data[$k]->nickname = Auth::user()->nickname;
+			$data[$k]->addtime = date('m-d H:i',strtotime($v->addtime));
 		}
 		return response_json(1, $data);
 	}

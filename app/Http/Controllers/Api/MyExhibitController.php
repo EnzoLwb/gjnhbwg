@@ -287,7 +287,7 @@ class MyExhibitController extends Controller
 		$take = request('take', 10);
 		$info=ExhibitComment::where('exhibit_comment.type',2)->join('exhibit', 'exhibit.id', '=', 'exhibit_comment.exhibit_id')->join('exhibit_language', function ($join) use ($language) {
 			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
-		})->where('exhibit_comment.uid', $uid)->skip($skip)->take($take)->select('exhibit_comment.created_at as datetime', 'exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_comment.id as comment_id','exhibit_comment.comment','exhibit_comment.is_check')->get();
+		})->where('exhibit_comment.uid', $uid)->skip($skip)->take($take)->select('exhibit_comment.created_at as datetime', 'exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit_comment.id as comment_id','exhibit_comment.comment','exhibit_comment.is_check')->orderBy('exhibit_comment.created_at','desc')->get();
 		$data=[];
 		foreach ($info as $k=>$g){
 			$imgs=json_decode($g->exhibit_img, true);

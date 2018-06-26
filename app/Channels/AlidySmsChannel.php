@@ -53,7 +53,7 @@ class AlidySmsChannel
 		$params["PhoneNumbers"] = $mobile;
 		$params["SignName"] = '阿里云短信测试专用';
 
-		$params["TemplateCode"] = "SMS_137790159";
+		$params["TemplateCode"] = "SMS_137673941";
 
 		$params['TemplateParam'] = Array(
 			"code" => $smscode,

@@ -272,6 +272,12 @@ class UsersController extends Controller
 		$this->validate([
 			'birthday' => 'required'
 		]);
+
+		$today = date('Y-m-d');
+		if(strtotime(request('birthday'))>strtotime($today)){
+			return response_json(-1, [],'选择的出生日期无效');
+		}
+
 		$users = Users::findOrFail($uid);
 		$users->timestamps = false;
 		$users->birthday = request('birthday');
@@ -667,9 +673,14 @@ class UsersController extends Controller
 		}
 
 		if (request('password_old')) {
+			if (request('password_old')==request('password')) {
+				throw new ApiErrorException('输入的新密码和旧密码重复');
+			}
+
 			if (get_password(request('password_old'), $user->salt) != $user->password) {
 				throw new ApiErrorException('原密码错误');
 			}
+
 		}
 
 		// 新密码不与老密码相同，允许修改密码
@@ -683,6 +694,7 @@ class UsersController extends Controller
 		}
 
 		return response_json(1, [
+			'uid' => $user->uid,
 			'username' => $user->username,
 			'api_token' => $user->api_token
 		]);

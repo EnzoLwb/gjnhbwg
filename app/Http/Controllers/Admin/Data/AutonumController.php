@@ -86,6 +86,7 @@ class AutonumController extends BaseAdminController
 			}
 			$data = [
 				'autonum'=>request('autonum'),
+				'dp_name'=>request('dp_name'),
 				'exhibit_list'=>json_encode($auto_exhibit_id),
 				'exhibit_name' => json_encode($exhibit_name),
 				'x'=>round($avg_x,0),

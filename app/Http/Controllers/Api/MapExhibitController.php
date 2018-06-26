@@ -438,7 +438,11 @@ class MapExhibitController extends Controller
 			$exhibit_ids = json_decode($road_exhibit[$weight_exhibit_ids_mapid], true);
 
 			//获取要经过展品
-			$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->whereIn('exhibit.id', $exhibit_ids)->where('exhibit.map_id', $map_id)->where('exhibit.is_show_map', 1)->select('exhibit.auto_num', 'exhibit.x', 'exhibit.y')->orderBy('exhibit.auto_num', 'asc')->get()->toArray();
+			foreach ($exhibit_ids as $exhibit_id) {
+				$exhibit_list[] = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.id', $exhibit_id)->where('exhibit.map_id', $map_id)->where('exhibit.is_show_map', 1)->select('exhibit.auto_num', 'exhibit.x', 'exhibit.y')->first()->toArray();
+			}
+
+			//$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->whereIn('exhibit.id', $exhibit_ids)->where('exhibit.map_id', $map_id)->where('exhibit.is_show_map', 1)->select('exhibit.auto_num', 'exhibit.x', 'exhibit.y')->orderBy('exhibit.auto_num', 'asc')->get()->toArray();
 			if (!empty($exhibit_list)) {
 				$n = count($exhibit_list);
 				$road_arr_info = [];

@@ -208,7 +208,7 @@ class ExhibitController extends Controller
 		$take = request('take', 10);
 		$exhibition_id = request('exhibition_id', 0);
 		$data = [];
-		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->skip($skip)->take($take)->get()->toArray();
+		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->where('exhibit.is_show_list', 1)->select('exhibit_language.exhibit_name', 'exhibit_language.audio', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibit.look_num', 'exhibit.like_num')->where('exhibit.exhibition_id', $exhibition_id)->orderBy('exhibit.order_id', 'asc')->orderBy('exhibit.id', 'asc')->skip($skip)->take($take)->get()->toArray();
 		foreach ($exhibit_list as $k => $g) {
 			$imgs = json_decode($g['exhibit_img'], true);
 			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
@@ -301,7 +301,7 @@ class ExhibitController extends Controller
 
 			$road_id = intval(request('road_id', 0));
 			if ($road_id == 0) {
-				$reorder = Exhibit::where('exhibition_id', $exhibit_info['exhibition_id'])->where('is_show_list', 1)->select('id')->orderBy('exhibit.order_id', 'asc')->get()->toArray();
+				$reorder = Exhibit::where('exhibition_id', $exhibit_info['exhibition_id'])->where('is_show_list', 1)->select('id')->orderBy('exhibit.order_id', 'asc')->orderBy('exhibit.id', 'asc')->get()->toArray();
 				$reorder_array = array();
 				if ($reorder) {
 					foreach ($reorder as $k => $v) {
