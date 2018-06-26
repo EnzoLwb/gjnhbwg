@@ -807,6 +807,7 @@ class MapExhibitController extends Controller
 					$info['exhibit_' . $g['dir']][$kk]['autonum_list'] = '';
 					$info['exhibit_' . $g['dir']][$kk]['mx_dlj_list'] = '';
 				}
+				$info['exhibit_' . $g['dir']][$kk]['exhibit_content']=strip_tags($gg['exhibit_content']);
 			}
 		}
 
