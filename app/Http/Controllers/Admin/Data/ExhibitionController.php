@@ -325,7 +325,12 @@ class ExhibitionController extends BaseAdminController
 	 */
 	public function add_learn($id){
 
-		$learn_list = Learn::orderBy('id','desc')->get();
+		$query = Learn::orderBy('id','desc');
+
+		if (request('learn_title')) {
+			$query = $query->where('learn.title', 'LIKE', '%' . request('learn_title') . '%');
+		}
+		$learn_list = $query->get();
 
 		foreach($learn_list as $k=>$v){
 			$count = LearnRelation::where('type_id',1)->where('rela_id',$id)->where('learn_id',$v['id'])->count();
