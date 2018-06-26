@@ -69,7 +69,7 @@ class ExhibitController extends Controller
 		foreach ($data['theme'] as $k => $g) {
 			$img_arr = json_decode($g['exhibition_img'], true);
 			$data['theme'][$k]['exhibition_img'] = $img_arr['list_img'];
-			$data['theme'][$k]['remark'] = str_limit($data['theme'][$k]['content'], $limit = 100, $end = '...');
+			$data['theme'][$k]['remark'] = str_limit(strip_tags($data['theme'][$k]['content']), $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
 
 			$data['theme'][$k]['learn_url'] = "/api/learn_content_info?type_id=1&p=" . request('p') . "&rela_id=" . $g['exhibition_id'] . "&api_token=";
