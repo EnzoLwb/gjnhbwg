@@ -344,16 +344,15 @@
         }
 
         .btn-div > .yellow-btn {
-            background: #BBBBBB;
-            border: 1px solid #BBBBBB;
-            color: #fff;
-        }
-
-        .btn-div > .white-btn {
             background: #57B4FE;
             color: #fff;
             border: 1px solid #57B4FE;
-            margin-right: 25px;
+        }
+
+        .btn-div > .white-btn {
+            background: #BBBBBB;
+            border: 1px solid #BBBBBB;
+            color: #fff;
         }
         #again-btn,#answer-btn{
             width:40%;
@@ -456,10 +455,10 @@
         </table>
     </div>--}}
     <div style="text-align: center" class="btn-div">
-        <button type="button" id="again-btn" class="btn yellow-btn">
+        <button type="button" id="again-btn" class="btn white-btn">
             再来一次
         </button>
-        <button type="button" id="answer-btn" class="btn white-btn" >
+        <button type="button" id="answer-btn" class="btn yellow-btn" >
             查看答案
         </button>
     </div>
