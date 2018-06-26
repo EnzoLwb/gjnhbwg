@@ -555,15 +555,18 @@ class ExhibitController extends BaseAdminController
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
 	 */
 	public function add_learn($id){
-		$query = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')
-			->OrderBy('learn.id','desc');
-		if (request('learn_title')) {
-			$query = $query->where('learn.title', 'LIKE', '%' . request('learn_title') . '%');
+		$learn_list = Learn::orderBy('id','desc')->get();
+
+		foreach($learn_list as $k=>$v){
+			$count = LearnRelation::where('type_id',2)->where('rela_id',$id)->where('learn_id',$v['id'])->count();
+			if($count>0){
+				$learn_list[$k]['is_check'] = 1;
+			}else{
+				$learn_list[$k]['is_check'] = 0;
+			}
 		}
-		$list = $query->select('learn.id','learn.title','learn_relation.learn_id')->paginate(60);
-		$list->appends(app('request')->all());
 		return view('admin.data.learn_exhibit', [
-			'list' => $list,
+			'list' => $learn_list,
 			'exhibit_id'=>$id
 		]);
 	}
