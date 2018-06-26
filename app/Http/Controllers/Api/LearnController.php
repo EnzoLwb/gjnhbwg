@@ -6,6 +6,7 @@ use App\Models\Exhibit;
 use App\Models\Learn;
 use App\Models\LearnData;
 use App\Models\LearnOption;
+use App\Models\Users;
 use App\Exceptions\ApiErrorException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -143,15 +144,25 @@ class LearnController extends Controller
 		$rela_id = request('rela_id');
 		$type_id = request('type_id');
 		$newid = request('newid');
-		$list = LearnData::where('rela_id',$rela_id)->where('type_id',$type_id)->orderBy('score','desc')->orderBy('timecost','asc')->limit(10)->get();
+		$list = LearnData::where('rela_id',$rela_id)->where('type_id',$type_id)->where('uid','<>',0)->orderBy('score','desc')->orderBy('timecost','asc')->limit(10)->get();
 		foreach($list as $k=>$v){
 			$ids[]=$v['id'];
+			$list[$k]['add_date']= date('Y.m.d',strtotime($v['add_time']));
+			$temp_userinfo = Users::where('uid',$v['uid'])->select('nickname')->first();
+			$list[$k]['nickname']=$temp_userinfo['nickname'];
 		}
+
 
 		if ($newid && !in_array($newid, $ids)) {
 			// 如果没在前10名，则取出最近记录的名次
 			$sql = "SELECT * FROM (SELECT * ,@rownum :=@rownum + 1 AS rownum FROM `nh_learn_data`, (SELECT(@rownum := 0)) b ORDER BY score DESC, timecost ASC, add_time ASC) r WHERE id = {$newid}";
 			$myrecord = DB::select($sql)[0];
+			if($myrecord){
+
+				$temp_userinfo = Users::where('uid',$myrecord['uid'])->select('nickname')->first();
+				$myrecord['nickname']=$temp_userinfo['nickname'];
+				$myrecord['add_date']=date('Y.m.d',strtotime($myrecord['add_time']));
+			}
 		}else{
 			$myrecord=[];
 		}
