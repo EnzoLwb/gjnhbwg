@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Dao\UploadedFileDao;
 use App\Exceptions\ApiErrorException;
 use App\Models\ChatMessage;
-use App\Models\Dlj;
 use App\Models\Group;
 use App\Models\GroupMember;
 use App\Models\Trajectory;
 use App\Models\Users;
 use GatewayWorker\Lib\Gateway AS GatewayLib;
-use Illuminate\Support\Facades\Auth;
+
 
 class GatewayController extends Controller
 {
@@ -20,6 +19,8 @@ class GatewayController extends Controller
 	{
 		parent::_init();
 		GatewayLib::$registerAddress = env('WM_REGISTER_IP', '127.0.0.1').':'.env('WM_REGISTER_PORT', '1238');
+		//如果是导览机应该判断是否是租赁状态
+
 	}
 	/**
 	 * tcp监听协议
@@ -97,7 +98,7 @@ class GatewayController extends Controller
 			'user_number' => 'required|max:20',
 		]);
 		$user_number=request('user_number');
-		if (!GatewayLib::isUidOnline($user_number)) {
+		if (GatewayLib::isUidOnline($user_number)) {
 			//判断当前机器号是否绑定过client_id
 			$is_bind_arr = GatewayLib::getClientIdByUid($user_number);
 			if (!empty($is_bind_arr)) {
@@ -106,8 +107,17 @@ class GatewayController extends Controller
 					GatewayLib::closeClient($g);
 				}
 			}
+			//如果是导览机还要推出群组以及删除聊天记录
+			if (request('p')=='d'){
+				$user_number=request('user_number');
+				GroupMember::where('member_id',$user_number)->delete();
+				ChatMessage::where('from_user_number',$user_number)->orWhere('to_user_number',$user_number)->delete();
+			}
+			return response_json(1, '', '已经断开连接');
+		}else{
+			return response_json(0, '', '未在线设备');
 		}
-		return response_json(1, '', '已经断开连接');
+
 
 	}
 	/**
