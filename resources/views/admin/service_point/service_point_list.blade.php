@@ -42,6 +42,7 @@
                         <thead>
                         <tr role="row">
                             <th width="170">服务设施名称</th>
+                            <th width="170">类型</th>
                             <th width="250">设施图片</th>
                             <th width="180">编辑时间</th>
                             <th width="150">操作</th>
@@ -50,6 +51,7 @@
                         @foreach($info as $g)
                             <tr class="gradeA">
                                 <td>{{$g['service_name']}}</td>
+                                <td>{{config('stype')[$g['stype']]}}</td>
                                 <td><img src="{{$g['img']}}" width="100px"></td>
                                 <td>{{$g['updated_at']}}</td>
                                 <td>
