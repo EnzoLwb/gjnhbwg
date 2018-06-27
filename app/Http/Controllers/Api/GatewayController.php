@@ -98,7 +98,7 @@ class GatewayController extends Controller
 			'user_number' => 'required|max:20',
 		]);
 		$user_number=request('user_number');
-		if (!GatewayLib::isUidOnline($user_number)) {
+		if (GatewayLib::isUidOnline($user_number)) {
 			//判断当前机器号是否绑定过client_id
 			$is_bind_arr = GatewayLib::getClientIdByUid($user_number);
 			if (!empty($is_bind_arr)) {
@@ -113,8 +113,11 @@ class GatewayController extends Controller
 				GroupMember::where('member_id',$user_number)->delete();
 				ChatMessage::where('from_user_number',$user_number)->orWhere('to_user_number',$user_number)->delete();
 			}
+			return response_json(1, '', '已经断开连接');
+		}else{
+			return response_json(0, '', '未在线设备');
 		}
-		return response_json(1, '', '已经断开连接');
+
 
 	}
 	/**
