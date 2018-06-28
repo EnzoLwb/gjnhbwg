@@ -366,9 +366,9 @@
     <div class="back-div2"></div>
     <div class="swiper-container">
         <div class="score-div">
-            <div class="score-circle">
+            {{--<div class="score-circle">
                 <div class="score-circle-div"><label class="score-label" id="score">0</label><label>分</label></div>
-            </div>
+            </div>--}}
             <div class="score-title">
                 <label>耗时：</label><label class="time-label" id="timershow">00:00:00</label>
             </div>
@@ -427,8 +427,9 @@
 <div id="list-div">
     <div class="score-div">
         <div class="score-circle">
-            <div class="score-circle-div"><label class="score-label" id="result">
-                    100</label><label>分</label>
+            <div class="score-circle-div">
+                <label class="score-label" id="result"></label>
+                <label>%</label>
                 <br/><br/>
                 <label class="center-label">耗时</label>
                 <br/><br/>
