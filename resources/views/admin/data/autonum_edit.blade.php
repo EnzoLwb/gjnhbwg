@@ -130,7 +130,7 @@
                                                     <h1>{{$g['exhibition_name']}}</h1>
                                                     @foreach($g['exhibit_list'] as $kk=>$gg)
                                                         <div class="exhibit_box">
-                                                            <input type="checkbox" name="auto_exhibit_id[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}
+                                                            <input type="checkbox" name="auto_exhibit_id[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}(蓝牙号：{{$gg['exhibit_auto_num']}})
                                                             <input type="hidden" name="exhibiti_name[{{$gg['exhibit_id']}}]" value="{{$gg['exhibiti_name']}}" />
                                                         </div>
                                                     @endforeach
