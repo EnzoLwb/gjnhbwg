@@ -112,7 +112,7 @@ $gateway->startPort = env('WM_GATEWAY_STARTPORT', 3000);
 // 服务注册地址
 $gateway->registerAddress = "$registerIP:$registerPort";
 // 心跳间隔
-//$gateway->pingInterval = 10;
+$gateway->pingInterval = 10;
 // 心跳数据
 $gateway->pingData = '{"client_id":"","type":"heart","send_type":"","send_content":"心跳响应"}';
 

@@ -35,18 +35,13 @@
                             </thead>
                             @foreach($list as $k=>$v)
                                 <tr class="gradeA">
-                                    <td><input type="checkbox" name="items[]" class="checkItem" @if(isset($v['learn_id']))checked @endif value="{{$v['id']}}"></td>
+                                    <td><input type="checkbox" name="items[]" class="checkItem" @if($v['is_check']==1)checked @endif value="{{$v['id']}}"></td>
                                     <td>{{$v['title']}}</td>
 
                                 </tr>
                             @endforeach
                         </table>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div>共 {{ $list->total() }} 条记录</div>
-                                {!! $list->links() !!}
-                            </div>
-                        </div>
+
                 </div>
             </div>
         </div>

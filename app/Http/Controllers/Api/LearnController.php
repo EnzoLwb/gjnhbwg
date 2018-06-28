@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Dao\ExhibitDao;
 use App\Models\Exhibit;
 use App\Models\Learn;
+use App\Models\LearnRelation;
 use App\Models\LearnData;
 use App\Models\LearnOption;
 use App\Models\Users;
@@ -54,7 +55,7 @@ class LearnController extends Controller
 
 
 		//随机抽选10题
-		$list = Learn::leftJoin('learn_relation','learn.id','learn_relation.learn_id')->where('learn_relation.rela_id',$rela_id)
+		$list = LearnRelation::leftJoin('learn','learn.id','learn_relation.learn_id')->where('learn_relation.rela_id',$rela_id)
 			->where('type_id',$type_id)
 			->select('learn.id','learn.title','learn_relation.rela_id')->orderBy(DB::raw('RAND()'))->limit(10)->get();
 
@@ -65,6 +66,7 @@ class LearnController extends Controller
 			$uid=0;
 			return view('api.learn.dlj_learn_content_info',[
 				'list'=>$list,
+				'tcount'=>count($list),
 				'p'=>request('p'),
 				'rela_id'=>$rela_id,
 				'type_id'=>$type_id,
@@ -81,6 +83,7 @@ class LearnController extends Controller
 
 			return view('api.learn.learn_content_info_exhibit',[
 				'list'=>$list,
+				'tcount'=>count($list),
 				'p'=>request('p'),
 				'rela_id'=>$rela_id,
 				'type_id'=>$type_id,
@@ -96,6 +99,7 @@ class LearnController extends Controller
 			$uid=$userinfo->uid;
 			return view('api.learn.learn_content_info',[
 				'list'=>$list,
+				'tcount'=>count($list),
 				'p'=>request('p'),
 				'rela_id'=>$rela_id,
 				'type_id'=>$type_id,
@@ -115,11 +119,13 @@ class LearnController extends Controller
 
 		// 处理答题数据，得到分数
 		$score = 0;
+		if($answer){
 		foreach ($answer as $v) {
 			$tempids = explode('_', $v);
 			if (LearnOption::where('id',$tempids[1])->where('learn_id',$tempids[0])->where('isanswer',1)->count() > 0) {
 				$score += 10;
 			}
+		}
 		}
 
 		$newid = LearnData::insertGetId([

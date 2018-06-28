@@ -45,6 +45,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {array} temporary 临时展览
 	 * @apiSuccess {array} theme 主题展览
 	 * @apiSuccess {string} exhibition_name 展厅名称
+	 * @apiSuccess {string} exhibition_subtitle 展厅副标题
 	 * @apiSuccess {string} exhibition_address 展厅地址
 	 * @apiSuccess {string} exhibition_img 展厅图片
 	 * @apiSuccess {int} exhibition_id 展览id
@@ -59,17 +60,17 @@ class ExhibitController extends Controller
 		$language = request('language', 1);
 		$data = [];
 		//获取临时展览
-		$data['temporary'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 2)->where('exhibition.is_show_list', 1)->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_address', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
+		$data['temporary'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 2)->where('exhibition.is_show_list', 1)->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_subtitle','exhibition_language.exhibition_address', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
 		foreach ($data['temporary'] as $k => $g) {
 			$img_arr = json_decode($g['exhibition_img'], true);
 			$data['temporary'][$k]['exhibition_img'] = $img_arr['list_img'];
 		}
 		//获取主题展览
-		$data['theme'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 1)->where('exhibition_language.language', $language)->where('exhibition.is_show_list', 1)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_address', 'exhibition_language.content', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
+		$data['theme'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 1)->where('exhibition_language.language', $language)->where('exhibition.is_show_list', 1)->select('exhibition_language.exhibition_name','exhibition_language.exhibition_subtitle', 'exhibition_language.exhibition_address', 'exhibition_language.content', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
 		foreach ($data['theme'] as $k => $g) {
 			$img_arr = json_decode($g['exhibition_img'], true);
 			$data['theme'][$k]['exhibition_img'] = $img_arr['list_img'];
-			$data['theme'][$k]['remark'] = str_limit(strip_tags($data['theme'][$k]['content']), $limit = 100, $end = '...');
+			$data['theme'][$k]['remark'] = str_limit(cutstr_html($data['theme'][$k]['content']), $limit = 100, $end = '...');
 			unset($data['theme'][$k]['content']);
 
 			$data['theme'][$k]['learn_url'] = "/api/learn_content_info?type_id=1&p=" . request('p') . "&rela_id=" . $g['exhibition_id'] . "&api_token=";
@@ -115,7 +116,7 @@ class ExhibitController extends Controller
 		$data = [];
 		$p = request('p', 'a');
 		//获取展览简介
-		$exhibition = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id', $exhibition_id)->select('exhibition_language.exhibition_name', 'exhibition.' . $language_img . 'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id', 'exhibition.floor_id as floor')->first();
+		$exhibition = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id', $exhibition_id)->select('exhibition_language.exhibition_name','exhibition_language.exhibition_subtitle', 'exhibition.' . $language_img . 'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id', 'exhibition.floor_id as floor')->first();
 		if (!empty($exhibition)) {
 
 			$imgs = json_decode($exhibition['exhibition_img'], true);
