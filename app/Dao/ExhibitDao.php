@@ -133,7 +133,7 @@ class ExhibitDao extends Exhibit
 
 		$data=[];
 		//获取展品详情
-		$exhibit_list = Exhibit::where('is_show_map', 1)->select('id as exhibit_id','exhibit_name','exhibition_id')->get();
+		$exhibit_list = Exhibit::where('is_show_list', 1)->select('id as exhibit_id','exhibit_name','exhibition_id')->get();
 		//获取展厅列表
 		$exhibition=Exhibition::select('exhibition_name','floor_id','id as exhibition_id')->get();
 		$is_add=1;
