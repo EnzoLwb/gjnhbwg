@@ -245,7 +245,7 @@ class MapExhibitController extends Controller
 		$data = [];
 		foreach ($exhibit_list as $k => $g) {
 			$imgs = json_decode($g['exhibit_img'], true);
-			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
+			$imgs = isset($imgs['exhibit_icon1']) ? $imgs['exhibit_icon1'] : '';
 			$data[$k]['exhibit_name'] = $g['exhibit_name'];
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
 			$data[$k]['exhibit_list_img'] = $imgs;
