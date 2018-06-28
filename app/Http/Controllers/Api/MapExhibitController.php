@@ -785,6 +785,9 @@ class MapExhibitController extends Controller
 		foreach (config('language') as $k => $g) {
 			//展厅数据
 			$info['exhibition_' . $g['dir']] = Exhibition::join('exhibition_language', 'exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $k)->select('exhibition_language.exhibition_id', 'exhibition_language.exhibition_name', 'exhibition_language.exhibition_address', 'exhibition_language.exhibition_subtitle', 'exhibition_language.content as exhibition_content', 'exhibition.is_lb', 'exhibition.type', 'exhibition.is_show_list', 'exhibition.order_id', 'exhibition.floor_id')->get()->toArray();
+			foreach ($info['exhibition_' . $g['dir']] as $kk => $gg) {
+				$info['exhibition_' . $g['dir']][$kk]['exhibition_content']=cutstr_html($gg['exhibition_content']);
+			}
 		}
 		//获取蓝牙关联详情
 		$auto_info = Autonum::select('exhibit_list', 'autonum', 'mx_and', 'mx_ios', 'mx_dlj');
