@@ -67,6 +67,7 @@ class LearnController extends Controller
 			return view('api.learn.dlj_learn_content_info',[
 				'list'=>$list,
 				'tcount'=>count($list),
+				'tponit'=>round((100/count($list)),1),
 				'p'=>request('p'),
 				'rela_id'=>$rela_id,
 				'type_id'=>$type_id,
@@ -84,6 +85,7 @@ class LearnController extends Controller
 			return view('api.learn.learn_content_info_exhibit',[
 				'list'=>$list,
 				'tcount'=>count($list),
+				'tponit'=>round((100/count($list)),1),
 				'p'=>request('p'),
 				'rela_id'=>$rela_id,
 				'type_id'=>$type_id,
@@ -100,6 +102,7 @@ class LearnController extends Controller
 			return view('api.learn.learn_content_info',[
 				'list'=>$list,
 				'tcount'=>count($list),
+				'tponit'=>round((100/count($list)),1),
 				'p'=>request('p'),
 				'rela_id'=>$rela_id,
 				'type_id'=>$type_id,
@@ -116,16 +119,21 @@ class LearnController extends Controller
 		$timecost = request('timecost');
 		$rela_id = request('rela_id');
 		$type_id = request('type_id');
+		$tcount= request('tcount');
 
 		// 处理答题数据，得到分数
 		$score = 0;
 		if($answer){
-		foreach ($answer as $v) {
-			$tempids = explode('_', $v);
-			if (LearnOption::where('id',$tempids[1])->where('learn_id',$tempids[0])->where('isanswer',1)->count() > 0) {
-				$score += 10;
+			$tpoint =round((100/$tcount),1);
+			foreach ($answer as $v) {
+				$tempids = explode('_', $v);
+				if (LearnOption::where('id',$tempids[1])->where('learn_id',$tempids[0])->where('isanswer',1)->count() > 0) {
+					$score += $tpoint;
+					if($score>99){
+						$score=100;
+					}
+				}
 			}
-		}
 		}
 
 		$newid = LearnData::insertGetId([
