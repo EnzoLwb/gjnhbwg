@@ -212,6 +212,9 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {string} exhibit_name 展品名称
 	 * @apiSuccess {string} exhibition_name 展厅名称
 	 * @apiSuccess {string} floor 所在楼层
+	 * @apiSuccess {string} exhibit_content 内容
+	 * @apiSuccess {int} x x坐标
+	 * @apiSuccess {int} y y坐标
 	 *
 	 */
 	public function map_near_exhibit()
@@ -237,7 +240,7 @@ class MapExhibitController extends Controller
 			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 		})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
 			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
-		})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name', 'exhibition.floor_id')->get();
+		})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name','exhibit_language.content as exhibit_content', 'exhibition.floor_id')->get();
 
 		$data = [];
 		foreach ($exhibit_list as $k => $g) {
@@ -248,6 +251,9 @@ class MapExhibitController extends Controller
 			$data[$k]['exhibit_list_img'] = $imgs;
 			$data[$k]['exhibition_name'] = $g['exhibition_name'];
 			$data[$k]['floor'] = $g['floor_id'];
+			$data[$k]['exhibit_content'] = cutstr_html($g['exhibit_content']);
+			$data[$k]['x'] = $g['x'];
+			$data[$k]['y'] = $g['y'];
 		}
 		return response_json(1, $data);
 	}
