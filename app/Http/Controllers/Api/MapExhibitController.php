@@ -242,7 +242,7 @@ class MapExhibitController extends Controller
 			$join->on('exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', '=', $language);
 		})->join('exhibition', 'exhibition.id', '=', 'exhibit.exhibition_id')->join('exhibition_language', function ($join) use ($language) {
 			$join->on('exhibition.id', '=', 'exhibition_language.exhibition_id')->where('exhibition_language.language', '=', $language);
-		})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name','exhibit_language.content as exhibit_content', 'exhibition.floor_id')->get();
+		})->where('exhibit.is_show_list', 1)->whereIn('exhibit.id', $exhibit_arr)->select('exhibit_language.exhibit_name', 'exhibit.exhibit_img','exhibit.x','exhibit.y', 'exhibit.id as exhibit_id', 'exhibition_language.exhibition_name','exhibit_language.content as exhibit_content', 'exhibition.floor_id')->orderBy('exhibit.is_show_map','asc')->get();
 
 		$data = [];
 		foreach ($exhibit_list as $k => $g) {
