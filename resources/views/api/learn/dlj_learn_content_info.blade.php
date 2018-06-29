@@ -431,7 +431,7 @@
     </div>--}}
     <div class="btn-div">
         <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
-            返回
+            返回成绩单
         </button>
     </div>
     <div id="right-layer-div" class="layer-div">

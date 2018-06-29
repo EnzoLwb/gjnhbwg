@@ -410,7 +410,7 @@
     </div>
     <div class="btn-div">
         <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
-            返回榜单
+            返回成绩单
         </button>
     </div>
     <div id="right-layer-div" class="layer-div">
@@ -543,12 +543,12 @@
                         tcount:{{$tcount}}
                     },
                     success: function (newid) {
-                        $.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {
-                            $('#list').append(data);
+                        //$.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {
+                            //$('#list').append([]);
                             $("#option-div").hide();
                             $("#list-div").show();
                             $("html").css("background-color", "#f5f5f5");
-                        });
+                        //});
                     }
                 });
                 layer.closeAll();
