@@ -93,6 +93,7 @@ class ExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {array} exhibition_info 展厅详情
 	 * @apiSuccess {string} exhibition_name 展厅名称
+	 * @apiSuccess {string} exhibition_address 展厅地址
 	 * @apiSuccess {string} exhibition_imgs 展厅图片
 	 * @apiSuccess {int} floor  所在楼层
 	 * @apiSuccess {string} content_url 内容h5
@@ -116,7 +117,7 @@ class ExhibitController extends Controller
 		$data = [];
 		$p = request('p', 'a');
 		//获取展览简介
-		$exhibition = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id', $exhibition_id)->select('exhibition_language.exhibition_name','exhibition_language.exhibition_subtitle', 'exhibition.' . $language_img . 'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id', 'exhibition.floor_id as floor')->first();
+		$exhibition = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->where('exhibition.id', $exhibition_id)->select('exhibition_language.exhibition_name','exhibition_language.exhibition_subtitle','exhibition_language.exhibition_address', 'exhibition.' . $language_img . 'exhibition_img as exhibition_img', 'exhibition.id as exhibition_id', 'exhibition.floor_id as floor')->first();
 		if (!empty($exhibition)) {
 
 			$imgs = json_decode($exhibition['exhibition_img'], true);
