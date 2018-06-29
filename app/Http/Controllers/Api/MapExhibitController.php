@@ -210,6 +210,8 @@ class MapExhibitController extends Controller
 	 * @apiSuccess {json} data 数据详情
 	 * @apiSuccess {int} exhibit_id 展品编号
 	 * @apiSuccess {string} exhibit_name 展品名称
+	 * @apiSuccess {string} exhibit_list_img 列表方图
+	 * @apiSuccess {string} exhibit_icon1_img 地图上展品poi图
 	 * @apiSuccess {string} exhibition_name 展厅名称
 	 * @apiSuccess {string} floor 所在楼层
 	 * @apiSuccess {string} exhibit_content 内容
@@ -245,12 +247,12 @@ class MapExhibitController extends Controller
 		$data = [];
 		foreach ($exhibit_list as $k => $g) {
 			$imgs = json_decode($g['exhibit_img'], true);
-			$imgs = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
-			$icon1_imgs = isset($imgs['exhibit_icon1']) ? $imgs['exhibit_icon1'] : '';
+			$list_img = isset($imgs['exhibit_list']) ? $imgs['exhibit_list'] : '';
+			$icon1_img = isset($imgs['exhibit_icon1']) ? $imgs['exhibit_icon1'] : '';
 			$data[$k]['exhibit_name'] = $g['exhibit_name'];
 			$data[$k]['exhibit_id'] = $g['exhibit_id'];
-			$data[$k]['exhibit_list_img'] = $imgs;
-			$data[$k]['exhibit_icon1_img'] = $icon1_imgs;
+			$data[$k]['exhibit_list_img'] = $list_img;
+			$data[$k]['exhibit_icon1_img'] = $icon1_img;
 			$data[$k]['exhibition_name'] = $g['exhibition_name'];
 			$data[$k]['floor'] = $g['floor_id'];
 			$data[$k]['exhibit_content'] = cutstr_html($g['exhibit_content']);
