@@ -316,7 +316,7 @@ class ExhibitController extends Controller
 				if (!$visitroad) {
 					return response_json(0, '', 'error road_id');
 				} else {
-					$weight_exhibit_ids = json_decode($visitroad['weight_exhibit_ids'], true);
+					$weight_exhibit_ids = json_decode($visitroad['weight_exhibit_ids_all'], true);
 					if (!in_array($exhibit_id, $weight_exhibit_ids)) {
 						return response_json(0, '', 'error road_id,no exhibit_id');
 					} else {

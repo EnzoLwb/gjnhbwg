@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\AppRoad;
 
 use App\Dao\ExhibitDao;
 use App\Dao\ResourceDao;
+use App\Models\Exhibit;
 use App\Models\VisitRoad;
 use App\Models\VisitRoadLanguage;
 use Illuminate\Http\Request;
@@ -91,6 +92,8 @@ class AppRoadController extends BaseAdminController
 
 			arsort($weight_exhibit_ids);
 			$data['weight_exhibit_ids'] = json_encode(array_keys($weight_exhibit_ids));
+
+			$data['weight_exhibit_ids_all']= $this->weight_exhibit_ids_all($data['weight_exhibit_ids']);
 			//all end
 
 			$road1_data = $this->road_handle($road_raw_list1, $weight_ex_quanzhong);
@@ -108,6 +111,10 @@ class AppRoadController extends BaseAdminController
 			$data['weight_exhibit_ids1'] = $road1_data['weight_exhibit_ids'];
 			$data['weight_exhibit_ids2'] = $road2_data['weight_exhibit_ids'];
 			$data['weight_exhibit_ids3'] = $road3_data['weight_exhibit_ids'];
+
+			$data['weight_exhibit_ids1_all']= $this->weight_exhibit_ids_all($data['weight_exhibit_ids1']);
+			$data['weight_exhibit_ids2_all']= $this->weight_exhibit_ids_all($data['weight_exhibit_ids2']);
+			$data['weight_exhibit_ids3_all']= $this->weight_exhibit_ids_all($data['weight_exhibit_ids3']);
 
 			//基本信息入库
 			if ($id == 'add') {
@@ -197,6 +204,32 @@ class AppRoadController extends BaseAdminController
 			return $data;
 		}
 	}
+
+	public function weight_exhibit_ids_all($weight_exhibit_ids)
+	{
+
+		if (empty($weight_exhibit_ids)) {
+			return '';
+		}else{
+			$weight_exhibit_ids = json_decode($weight_exhibit_ids,true);
+			$data=array();
+			foreach ($weight_exhibit_ids as $exhibit_id) {
+				$data[]=$exhibit_id;
+				$auto_num=Exhibit::where('id',$exhibit_id)->value('auto_num');
+				$ex_auto_num_counts= Exhibit::where('auto_num',$auto_num)->count();
+				if($ex_auto_num_counts>1){
+					$gl_temp= Exhibit::where('auto_num',$auto_num)->where('id','<>',$exhibit_id)->select('id as exhibit_id')->orderBy('exhibit.order_id', 'asc')->orderBy('exhibit.id', 'asc')->get();
+
+					foreach ($gl_temp as $item) {
+						$data[]= $item['exhibit_id'];
+					}
+
+				}
+			}
+			return json_encode($data);
+		}
+	}
+
 
 	/**
 	 * 路线删除

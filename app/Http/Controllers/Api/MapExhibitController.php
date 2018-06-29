@@ -330,7 +330,7 @@ class MapExhibitController extends Controller
 			$road_info = $road_arr_info;
 			$data['road_info'] = $road_info;
 
-			$start_ex = Exhibit::where('auto_num',$trajectory_info['auto_num'])->first();
+			$start_ex = Exhibit::where('auto_num',$trajectory_info['auto_num'])->orderBy('is_show_map','asc')->first();
 			//$exhibit_arr[]=$start_ex['id'];
 			//$exhibit_arr[]=$exhibit_info_last['id'];
 
@@ -544,7 +544,7 @@ class MapExhibitController extends Controller
 			return response_json(1, []);
 		} else {
 			$query = VisitRoad::orderBy('visit_road.id', 'asc')->join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road.type', 1)->where('visit_road.id', $road_id)->where('visit_road_language.language', $language);
-			$road_data = $query->select('visit_road.id as road_id', 'visit_road.road_long', 'visit_road.weight_exhibit_ids', 'visit_road.weight_exhibit_ids1', 'visit_road.weight_exhibit_ids2', 'visit_road.weight_exhibit_ids3', 'visit_road_language.road_name')->first();
+			$road_data = $query->select('visit_road.id as road_id', 'visit_road.road_long', 'visit_road.weight_exhibit_ids', 'visit_road.weight_exhibit_ids1', 'visit_road.weight_exhibit_ids2', 'visit_road.weight_exhibit_ids3','visit_road.weight_exhibit_ids_all', 'visit_road.weight_exhibit_ids1_all', 'visit_road.weight_exhibit_ids2_all', 'visit_road.weight_exhibit_ids3_all', 'visit_road_language.road_name')->first();
 			if (empty($road_data)) {
 				return response_json(1, []);
 			} else {
@@ -552,11 +552,11 @@ class MapExhibitController extends Controller
 				$data = array();
 				$data['road_name'] = $road_data['road_name'];
 
-				$data['floor1'] = $this->exhibit_handle($road_data['weight_exhibit_ids1'], 1, $language);
-				$data['floor2'] = $this->exhibit_handle($road_data['weight_exhibit_ids2'], 2, $language);
-				$data['floor3'] = $this->exhibit_handle($road_data['weight_exhibit_ids3'], 3, $language);
+				$data['floor1'] = $this->exhibit_handle($road_data['weight_exhibit_ids1_all'], 1, $language);
+				$data['floor2'] = $this->exhibit_handle($road_data['weight_exhibit_ids2_all'], 2, $language);
+				$data['floor3'] = $this->exhibit_handle($road_data['weight_exhibit_ids3_all'], 3, $language);
 
-				$exhibit_ids = json_decode($road_data['weight_exhibit_ids'], true);
+				$exhibit_ids = json_decode($road_data['weight_exhibit_ids_all'], true);
 				$data['exhibit_counts'] = count($exhibit_ids);
 				$data['road_long'] = $road_data['road_long'];
 
@@ -608,7 +608,7 @@ class MapExhibitController extends Controller
 			foreach ($road_exhibits as $rk => $rv) {
 
 				$query = VisitRoad::orderBy('visit_road.id', 'asc')->join('visit_road_language', 'visit_road.id', '=', 'visit_road_language.road_id')->where('visit_road.type', 1)->where('visit_road.id', $rv['id'])->where('visit_road_language.language', $language);
-				$road_data = $query->select('visit_road.id as road_id', 'visit_road.road_long', 'visit_road.weight_exhibit_ids', 'visit_road.weight_exhibit_ids1', 'visit_road.weight_exhibit_ids2', 'visit_road.weight_exhibit_ids3', 'visit_road_language.road_name')->first();
+				$road_data = $query->select('visit_road.id as road_id', 'visit_road.road_long', 'visit_road.weight_exhibit_ids', 'visit_road.weight_exhibit_ids1', 'visit_road.weight_exhibit_ids2', 'visit_road.weight_exhibit_ids3','visit_road.weight_exhibit_ids_all', 'visit_road.weight_exhibit_ids1_all', 'visit_road.weight_exhibit_ids2_all', 'visit_road.weight_exhibit_ids3_all', 'visit_road_language.road_name')->first();
 				if (empty($road_data)) {
 				} else {
 					$road_data = $road_data->toArray();
@@ -616,22 +616,22 @@ class MapExhibitController extends Controller
 					$data['road_id'] = $road_data['road_id'];
 					$data['road_name'] = $road_data['road_name'];
 
-					$floor1 = $this->exhibit_handle($road_data['weight_exhibit_ids1'], 1, $language);
+					$floor1 = $this->exhibit_handle($road_data['weight_exhibit_ids1_all'], 1, $language);
 					if ($floor1) {
 						$data['floor'][] = $floor1;
 					}
 
-					$floor2 = $this->exhibit_handle($road_data['weight_exhibit_ids2'], 2, $language);
+					$floor2 = $this->exhibit_handle($road_data['weight_exhibit_ids2_all'], 2, $language);
 					if ($floor2) {
 						$data['floor'][] = $floor2;
 					}
 
-					$floor3 = $this->exhibit_handle($road_data['weight_exhibit_ids3'], 3, $language);
+					$floor3 = $this->exhibit_handle($road_data['weight_exhibit_ids3_all'], 3, $language);
 					if ($floor3) {
 						$data['floor'][] = $floor3;
 					}
 
-					$exhibit_ids = json_decode($road_data['weight_exhibit_ids'], true);
+					$exhibit_ids = json_decode($road_data['weight_exhibit_ids_all'], true);
 					$data['exhibit_counts'] = count($exhibit_ids);
 					$data['road_long'] = $road_data['road_long'];
 
@@ -650,7 +650,7 @@ class MapExhibitController extends Controller
 		if ($weight_exhibit_ids) {
 			$exhibit_ids_floor = json_decode($weight_exhibit_ids, true);
 			$exhibition_info = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.id', $map_id)->where('exhibition_language.language', $language)->where('exhibition.is_show_list', 1)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_address', 'exhibition.id as exhibition_id')->first()->toarray();
-			$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->whereIn('exhibit.id', $exhibit_ids_floor)->where('exhibit.map_id', $map_id)->where('exhibit.is_show_map', 1)->select('exhibit.id as exhibit_id', 'exhibit_language.exhibit_name')->get()->toArray();
+			$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit_language.language', $language)->whereIn('exhibit.id', $exhibit_ids_floor)->where('exhibit.map_id', $map_id)->where('exhibit.is_show_list', 1)->select('exhibit.id as exhibit_id', 'exhibit_language.exhibit_name')->get()->toArray();
 
 			$data['exhibition_id'] = $exhibition_info['exhibition_id'];
 			$data['exhibition_name'] = $exhibition_info['exhibition_name'];
