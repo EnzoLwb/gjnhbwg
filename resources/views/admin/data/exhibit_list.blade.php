@@ -78,8 +78,8 @@
                             <div class="list-info">
                                 <span><i class="fa fa-eye fa-lg"></i>{{$g['look_num']}}人浏览</span>
                                 <span><i class="fa fa-thumbs-o-up fa-lg"></i>{{$g['like_num']}}人点赞</span>
-                                <span><i class="fa fa-commenting-o fa-lg"></i>{{$g['collection_num']}}人评论</span>
-                                <span><i class="fa fa-star-o fa-lg"></i>{{$g['comment_num']}}人收藏</span>
+                                <span><i class="fa fa-commenting-o fa-lg"></i>{{$g['comment_num']}}人评论</span>
+                                <!--<span><i class="fa fa-star-o fa-lg"></i>{{$g['collection_num']}}人收藏</span>-->
                             </div>
 
                         </li>
