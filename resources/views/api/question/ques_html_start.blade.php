@@ -164,7 +164,9 @@
             font-size: 16px;
             display: none;
         }
-
+        .content form .action_btn .btn-prev{
+            background: #BBBBBB;
+        }
         .content form .action_btn .btn.show {
             display: inline-block;
             margin: 0 20px;

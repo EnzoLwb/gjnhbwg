@@ -133,7 +133,7 @@ class ExhibitDao extends Exhibit
 
 		$data=[];
 		//获取展品详情
-		$exhibit_list = Exhibit::where('is_show_map', 1)->select('id as exhibit_id','exhibit_name','exhibition_id')->get();
+		$exhibit_list = Exhibit::where('is_show_list', 1)->select('id as exhibit_id','exhibit_name','exhibition_id','auto_num')->orderBy('auto_num','asc')->get();
 		//获取展厅列表
 		$exhibition=Exhibition::select('exhibition_name','floor_id','id as exhibition_id')->get();
 		$is_add=1;
@@ -152,6 +152,7 @@ class ExhibitDao extends Exhibit
 				'exhibiti_name'=>$g->exhibit_name,
 				'exhibit_id'=>$g->exhibit_id,
 				'is_check'=>in_array($g->exhibit_id,$auto_list)?1:0,
+				'exhibit_auto_num'=>$g->auto_num,
 			];
 			$data[$g->exhibition_id]['exhibit_list'][]=$exhibit_info;
 			if($exhibit_info['is_check']==1){

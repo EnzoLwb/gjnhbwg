@@ -369,9 +369,9 @@
     <div class="back-div2"></div>
     <div class="swiper-container">
         <div class="score-div">
-            <div class="score-circle">
-                <div class="score-circle-div"><label class="score-label" id="score">0</label><label>分</label></div>
-            </div>
+            <div class="score-circle" style="display: none;">
+                    <div class="score-circle-div"><label class="score-label" id="score">0</label><label>%</label></div>
+                </div>
             <div class="score-title">
                 <label>耗时：</label><label class="time-label" id="timershow">00:00:00</label>
             </div>
@@ -396,7 +396,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="num-div"><label class="num-label">1</label><label>/10</label></div>
+        <div class="num-div"><label class="num-label">1</label><label>/{{$tcount}}</label></div>
     </div>
     <div class="btn-div">
         <button type="button" id="prev-btn" class="btn white-btn" style="display:none;">
@@ -410,7 +410,7 @@
     </div>
     <div class="btn-div">
         <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
-            返回榜单
+            返回成绩单
         </button>
     </div>
     <div id="right-layer-div" class="layer-div">
@@ -427,8 +427,9 @@
 <div id="list-div">
     <div class="score-div">
         <div class="score-circle">
-            <div class="score-circle-div"><label class="score-label" id="result">
-                    100</label><label>分</label>
+            <div class="score-circle-div">
+                <label class="score-label" id="result"></label>
+                <label>%</label>
                 <br/><br/>
                 <label class="center-label">耗时</label>
                 <br/><br/>
@@ -470,7 +471,9 @@
 <script>
     //$("#next-btn,#prev-btn").hide();
     $(function () {
-        var time = 0;
+        var tcount  = {{$tcount}};
+        var tponit  = {{$tponit}};
+		var time = 0;
         var timer = setInterval(function () {
             time = time + 1;
             $('#timershow').html(timerFormat(time));
@@ -494,7 +497,11 @@
             var content = $('#right-layer-div');
             if (/right-li/.test($(this).attr("class"))) {
                 showRight($(this));
-                $('#score').html(parseInt($('#score').html()) + 10);
+                nowscore = parseFloat($('#score').html()) + tponit;
+                if(nowscore>99){
+                    nowscore= 100;
+                }
+                $('#score').html(nowscore);
                 answer.push(this.id);
             } else {
                 content = $('#wrong-layer-div');
@@ -502,7 +509,7 @@
                 showRight($(this).parent().find(".right-li"));
             }
 
-            if (count == 10) {
+            if (count == tcount) {
                 content.find(".next").text("完成答题");
             }
             layer.open({
@@ -516,7 +523,7 @@
             });
         });
         $(".next").click(function () {
-            if (count < 10) {
+            if (count < tcount) {
                 count++;
                 layer.closeAll();
                 swiper.slideNext();
@@ -532,15 +539,16 @@
                         p:"{{$p}}",
                         rela_id:{{$rela_id}},
                         type_id:{{$type_id}},
-                        uid:{{$uid}}
+                        uid:{{$uid}},
+                        tcount:{{$tcount}}
                     },
                     success: function (newid) {
-                        $.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {
-                            $('#list').append(data);
+                        //$.get("{{route('api.learn.answer_list')}}", {type_id:{{$type_id}},rela_id:{{$rela_id}},p:"{{$p}}",newid:newid}, function (data) {
+                            //$('#list').append([]);
                             $("#option-div").hide();
                             $("#list-div").show();
                             $("html").css("background-color", "#f5f5f5");
-                        });
+                        //});
                     }
                 });
                 layer.closeAll();
@@ -552,12 +560,12 @@
         });
 
         $("#next-btn").click(function () {
-            if (count < 10) {
+            if (count < tcount) {
                 $(".num-label").text(++count);
                 $("#prev-btn").show();
             }
             swiper.slideNext();
-            if ($("ul[data-read]").length == $(".num-label").text() - 1 || count == 10) {
+            if ($("ul[data-read]").length == $(".num-label").text() - 1 || count == tcount) {
                 $("#next-btn").hide();
             }
         });
