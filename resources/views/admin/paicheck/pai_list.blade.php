@@ -57,10 +57,10 @@
                             <th width="10"><input type="checkbox" class="checkAll"></th>
                             <th width="100">用户账号</th>
                             <th width="100">用户昵称</th>
-                            <th width="100">发布时间</th>
-                            <th width="200">图片</th>
+                            <th width="150">发布时间</th>
+                            <th width="180">图片</th>
                             <th width="250">发布内容</th>
-                            <th width="100">操作</th>
+                            <th width="150">操作</th>
                         </tr>
                         </thead>
                         @foreach($info as $k=>$v)
