@@ -170,7 +170,7 @@ class MenuDao extends BaseMdl
 			[
 				'text' => '统计管理',
 				'priv' => 'stat',
-				'icon' => 'fa fa-users',
+				'icon' => 'fa fa-pie-chart',
 				'order_num' => 10,
 				'nodes' => [
 					[
