@@ -250,7 +250,7 @@ class ExhibitDao extends Exhibit
 		//获取展品详情
 		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit.is_show_map', 1)->where('exhibit_language.language', $language)->select('exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibit_language.exhibit_name','exhibit.exhibition_id','exhibit.like_num')->get();
 		//获取展厅列表
-		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name','exhibition.floor_id','exhibition.id as exhibition_id')->get();
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name','exhibition.floor_id','exhibition.id as exhibition_id')->orderBy('order_id', 'desc')->orderBy('id', 'asc')->get();
 		if(!empty($exhibition)){
 			foreach ($exhibition as $k=>$g) {
 				$data[$g->exhibition_id]=[
@@ -293,7 +293,7 @@ class ExhibitDao extends Exhibit
 				$data[$g->exhibition_id]['is_all_check']=0;
 			}
 		}
-		sort($data);
+		//sort($data);
 		return $data;
 	}
 
