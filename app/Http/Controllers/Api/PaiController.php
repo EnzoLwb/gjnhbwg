@@ -19,19 +19,19 @@ class PaiController extends Controller
 	}
 
 	/**
-	 * 随手拍图片/留言图片上传
+	 * 随手拍图片/留言图片上传/在线征集中的图片
 	 *
 	 * @author yyj 20171113
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
 	 *
-	 * @api {POST} /pai_uploadimg 00.随手拍图片/留言图片上传
+	 * @api {POST} /pai_uploadimg 00.随手拍图片/留言图片上传/在线征集中的图片/在线征集中的视频
 	 * @apiGroup  Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：Web，t：触屏或手机
 	 * @apiParam {string} api_token 用户token
-	 * @apiParam {int} type 类型 1代表随手拍 2代表留言
-	 * @apiParam {file} img_file 图片最大上传5M,app上传前压缩处理一下
+	 * @apiParam {int} type 类型 1代表随手拍 2代表留言 3代表征集文章 4代表在线征集中视频
+	 * @apiParam {file} img_file 图片最大上传5M,app上传前压缩处理一下 视频不能超过20M
 	 * @apiSuccess {string} data 图片地址
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":"\u65b0\u6635\u79f0","msg":""}
@@ -42,13 +42,42 @@ class PaiController extends Controller
 			'img_file' => 'required|file'
 		]);
 		$uid = Auth::id();
-		$type=request('type',1)==1?'FT_PAI':'FT_MESSAGE';
+		switch (request('type',1)){
+			case 1:
+				$type='FT_PAI';
+				break;
+			case 2:
+				$type='FT_MESSAGE';
+				break;
+			case 3:
+				$type='FT_ARTICLE_IMG';
+				break;
+			case 4:
+				$type='FT_ARTICLE_DESC_VIDEO';
+				break;
+			case 5:
+				$this->getVideoCover(request('img_file'),'1','test_video.jpg');
+				break;
+			default:
+				return response_json(0,'','type error');
+		}
 		// 保存图片
 		$file = UploadedFileDao::saveFile('img_file', $type, $uid);
 		if (!$file['status']) {
 			throw new ApiErrorException($file['data']);
 		}
 		return response_json(1, $file['data']->file_path . '/' . $file['data']->file_name);
+	}
+	//获得视频文件的缩略图
+	function getVideoCover($file,$time,$name) {
+		if(empty($time))$time = '1';//默认截取第一秒第一帧
+		$strlen = strlen($file);
+		// $videoCover = substr($file,0,$strlen-4);
+		// $videoCoverName = $videoCover.'.jpg';//缩略图命名
+//		exec("ffmpeg -i ".$file." -y -f mjpeg -ss ".$time." -t 0.001 -s 320x240 ".$name."",$out,$status);
+		$str = "ffmpeg -i ".$file." -y -f mjpeg -ss 3 -t ".$time." -s 320x240 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
+		//echo $str."</br>";
+		exec($str);
 	}
 	/**
 	 * 留言
