@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+
+    <meta itemprop="name" content="这是分享的标题11"/>
+    <meta itemprop="image" content="http://imgcache.qq.com/qqshow/ac/v4/global/logo.png" />
+    <meta name="description" itemprop="description" content="这是要分享的内容111" />
+
     <meta name="applicable-device" content="mobile">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>{{$info->exhibit_name or ''}}</title>
-    <meta itemprop="name" content="这是分享的标题"/>
-    <meta itemprop="image" content="http://imgcache.qq.com/qqshow/ac/v4/global/logo.png" />
-    <meta name="description" itemprop="description" content="这是要分享的内容" />
+
 </head>
 <body>
 <h1>展品名称</h1>
