@@ -277,7 +277,7 @@ class ExhibitController extends Controller
 		if (!empty($exhibit_info)) {
 			$data['exhibit_id'] = $exhibit_info->exhibit_id;
 			$data['exhibit_name'] = $exhibit_info->exhibit_name;
-			$data['exhibit_content'] = $exhibit_info->exhibit_content;
+			$data['exhibit_content'] = cutstr_html($exhibit_info->exhibit_content);
 			$data['exhibit_imgs'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_imgs'];
 			$data['exhibit_list'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_list'];
 			$data['exhibit_icon1'] = json_decode($exhibit_info->exhibit_img, true)['exhibit_icon1'];
