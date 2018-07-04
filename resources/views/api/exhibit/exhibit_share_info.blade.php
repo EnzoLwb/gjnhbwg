@@ -9,6 +9,8 @@
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>{{$info->exhibit_name or ''}}</title>
+    <meta itemprop="name" content="{{$info->exhibit_name or ''}}"/>
+    <meta name="description" itemprop="description" content="这是要分享的内容" />
 </head>
 <body>
 <h1>展品名称</h1>
