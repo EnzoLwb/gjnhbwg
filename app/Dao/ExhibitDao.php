@@ -256,6 +256,7 @@ class ExhibitDao extends Exhibit
 				$data[$g->exhibition_id]=[
 					'exhibition_name'=>config('floor')[$g->floor_id].' '.$g->exhibition_name,
 					'exhibition_id'=>$g->exhibition_id,
+					'floor_id'=>$g->floor_id,
 					'is_all_check'=>1,
 					'exhibit_list'=>[]
 				];
