@@ -60,13 +60,13 @@ class ExhibitController extends Controller
 		$language = request('language', 1);
 		$data = [];
 		//获取临时展览
-		$data['temporary'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 2)->where('exhibition.is_show_list', 1)->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_subtitle','exhibition_language.exhibition_address', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
+		$data['temporary'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 2)->where('exhibition.is_show_list', 1)->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name', 'exhibition_language.exhibition_subtitle','exhibition_language.exhibition_address', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->orderBy('exhibition.order_id', 'desc')->orderBy('exhibition.id', 'asc')->get()->toarray();
 		foreach ($data['temporary'] as $k => $g) {
 			$img_arr = json_decode($g['exhibition_img'], true);
 			$data['temporary'][$k]['exhibition_img'] = $img_arr['list_img'];
 		}
 		//获取主题展览
-		$data['theme'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 1)->where('exhibition_language.language', $language)->where('exhibition.is_show_list', 1)->select('exhibition_language.exhibition_name','exhibition_language.exhibition_subtitle', 'exhibition_language.exhibition_address', 'exhibition_language.content', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->get()->toarray();
+		$data['theme'] = Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition.type', 1)->where('exhibition_language.language', $language)->where('exhibition.is_show_list', 1)->select('exhibition_language.exhibition_name','exhibition_language.exhibition_subtitle', 'exhibition_language.exhibition_address', 'exhibition_language.content', 'exhibition.exhibition_img', 'exhibition.id as exhibition_id')->orderBy('exhibition.order_id', 'desc')->orderBy('exhibition.id', 'asc')->get()->toarray();
 		foreach ($data['theme'] as $k => $g) {
 			$img_arr = json_decode($g['exhibition_img'], true);
 			$data['theme'][$k]['exhibition_img'] = $img_arr['list_img'];

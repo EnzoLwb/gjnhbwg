@@ -135,7 +135,7 @@ class ExhibitDao extends Exhibit
 		//获取展品详情
 		$exhibit_list = Exhibit::where('is_show_list', 1)->select('id as exhibit_id','exhibit_name','exhibition_id','auto_num')->orderBy('auto_num','asc')->get();
 		//获取展厅列表
-		$exhibition=Exhibition::select('exhibition_name','floor_id','id as exhibition_id')->get();
+		$exhibition=Exhibition::select('exhibition_name','floor_id','id as exhibition_id')->orderBy('order_id', 'desc')->orderBy('id', 'asc')->get();
 		$is_add=1;
 		if(!empty($exhibition)){
 			foreach ($exhibition as $k=>$g) {
