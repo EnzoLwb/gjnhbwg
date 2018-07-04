@@ -61,7 +61,7 @@ class PaiController extends Controller
 		// 保存图片
 		$file = UploadedFileDao::saveFile('img_file', $type, $uid);
 		$all_file_name=$file['data']->file_path . '/' . $file['data']->file_name;
-		if ($type==4){
+		if (request('type')==4){
 			//上传的视频 需要返回视频封面
 			$cover_name=public_path(env('FILE_PATH').$file['data']->file_path).'/'.current(explode('.', $file['data']->file_name)).'.jpg';
 			$video_cover_path=public_path(env('FILE_PATH').$all_file_name);///uploadfiles/article_content_video/20180704/201807041620226836.mp4
