@@ -55,27 +55,34 @@ class PaiController extends Controller
 			case 4:
 				$type='FT_ARTICLE_DESC_VIDEO';
 				break;
-			case 5:
-				$this->getVideoCover(request('img_file'),'1','test_video.jpg');
-				break;
 			default:
 				return response_json(0,'','type error');
 		}
 		// 保存图片
 		$file = UploadedFileDao::saveFile('img_file', $type, $uid);
+		$all_file_name=$file['data']->file_path . '/' . $file['data']->file_name;
+		if ($type==4){
+			//上传的视频 需要返回视频封面
+			$cover_name=public_path(env('FILE_PATH').$file['data']->file_path).'/'.current(explode('.', $file['data']->file_name)).'.jpg';
+			$video_cover_path=public_path(env('FILE_PATH').$all_file_name);///uploadfiles/article_content_video/20180704/201807041620226836.mp4
+//			$str = "ffmpeg -i ".$video_cover_path." -y -f mjpeg -ss 3 -t 1 -s 700x400 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
+//			exec($str);
+		}
+		dd($cover_name,$video_cover_path);
 		if (!$file['status']) {
 			throw new ApiErrorException($file['data']);
 		}
-		return response_json(1, $file['data']->file_path . '/' . $file['data']->file_name);
+		return response_json(1, $all_file_name);
 	}
 	//获得视频文件的缩略图
 	function getVideoCover($file,$time,$name) {
 		if(empty($time))$time = '1';//默认截取第一秒第一帧
-		$strlen = strlen($file);
+
+		$file=
 		// $videoCover = substr($file,0,$strlen-4);
 		// $videoCoverName = $videoCover.'.jpg';//缩略图命名
 //		exec("ffmpeg -i ".$file." -y -f mjpeg -ss ".$time." -t 0.001 -s 320x240 ".$name."",$out,$status);
-		$str = "ffmpeg -i ".$file." -y -f mjpeg -ss 3 -t ".$time." -s 320x240 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
+		$str = "ffmpeg -i ".$file." -y -f mjpeg -ss 3 -t ".$time." -s 700x400 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
 		//echo $str."</br>";
 		exec($str);
 	}
