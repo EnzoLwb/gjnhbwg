@@ -9,7 +9,8 @@
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>{{$info->exhibit_name or ''}}</title>
-    <meta itemprop="name" content="{{$info->exhibit_name or ''}}"/>
+    <meta itemprop="name" content="这是分享的标题"/>
+    <meta itemprop="image" content="http://imgcache.qq.com/qqshow/ac/v4/global/logo.png" />
     <meta name="description" itemprop="description" content="这是要分享的内容" />
 </head>
 <body>
