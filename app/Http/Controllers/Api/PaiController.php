@@ -63,10 +63,10 @@ class PaiController extends Controller
 		$all_file_name=$file['data']->file_path . '/' . $file['data']->file_name;
 		if (request('type')==4){
 			//上传的视频 需要返回视频封面
-			$cover_name=public_path(env('FILE_PATH').$file['data']->file_path).'/'.current(explode('.', $file['data']->file_name)).'.jpg';
-			$video_cover_path=public_path(env('FILE_PATH').$all_file_name);///uploadfiles/article_content_video/20180704/201807041620226836.mp4
-//			$str = "ffmpeg -i ".$video_cover_path." -y -f mjpeg -ss 3 -t 1 -s 700x400 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
-//			exec($str);
+			$cover_name=public_path($file['data']->file_path).'/'.current(explode('.', $file['data']->file_name)).'.jpg';
+			$video_cover_path=public_path($all_file_name);///uploadfiles/article_content_video/20180704/201807041620226836.mp4
+			$str = "ffmpeg -i ".$video_cover_path." -y -f mjpeg -ss 3 -t 1 -s 700x400 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
+			exec($str);
 		}
 		dd($cover_name,$video_cover_path);
 		if (!$file['status']) {
