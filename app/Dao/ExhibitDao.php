@@ -160,7 +160,7 @@ class ExhibitDao extends Exhibit
 				$is_add=2;
 			}
 		}
-		sort($data);
+		//sort($data);
 		$re_data['data']=$data;
 		$re_data['is_add']=$is_add;
 		return $re_data;
