@@ -35,5 +35,7 @@ Route::group([
 	Route::post('article_publish', 'PaiController@article_publish');
 	//我的在线征集文章删除
 	Route::get('del_my_online_article', 'PaiController@del_my_online_article');
+	//我的文章列表
+	Route::get('my_online_article_list', 'PaiController@my_online_article_list');
 
 });
