@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Dao\UploadedFileDao;
 use App\Models\ExUserVisit;
+use App\Models\OnlineArticle;
 use App\Models\Pai;
 use App\Exceptions\ApiErrorException;
 use App\Models\PaiComment;
 use App\Models\PaiLike;
+use App\Models\Users;
 use App\Models\Words;
+use function foo\func;
 use Illuminate\Support\Facades\Auth;
 
 class PaiController extends Controller
@@ -32,7 +35,9 @@ class PaiController extends Controller
 	 * @apiParam {string} api_token 用户token
 	 * @apiParam {int} type 类型 1代表随手拍 2代表留言 3代表征集文章 4代表在线征集中视频
 	 * @apiParam {file} img_file 图片最大上传5M,app上传前压缩处理一下 视频不能超过20M
-	 * @apiSuccess {string} data 图片地址
+	 * @apiSuccess {string} data 图片地址 如果上传视频 视频封面即为返回的视频地址 将地址中.mp4 变成 .jpg
+	 例如data为"/uploadfiles/article_content_video/20180704/201807041713094199.mp4" 则视频封面为"/uploadfiles/article_content_video/20180704/201807041713094199.jpg"
+	 其它地方的视频封面也是这样 就不单独再返回视频封面地址了。
 	 * @apiSuccessExample {json} 返回值
 	 * {"status":1,"data":"\u65b0\u6635\u79f0","msg":""}
 	 */
@@ -72,18 +77,6 @@ class PaiController extends Controller
 			throw new ApiErrorException($file['data']);
 		}
 		return response_json(1, $all_file_name);
-	}
-	//获得视频文件的缩略图
-	function getVideoCover($file,$time,$name) {
-		if(empty($time))$time = '1';//默认截取第一秒第一帧
-
-		$file=
-		// $videoCover = substr($file,0,$strlen-4);
-		// $videoCoverName = $videoCover.'.jpg';//缩略图命名
-//		exec("ffmpeg -i ".$file." -y -f mjpeg -ss ".$time." -t 0.001 -s 320x240 ".$name."",$out,$status);
-		$str = "ffmpeg -i ".$file." -y -f mjpeg -ss 3 -t ".$time." -s 700x400 ".'/home/www/wwwroot/gjnhbwg/public/uploadfiles/article_content_video/test2_vi9_article.jpg';
-		//echo $str."</br>";
-		exec($str);
 	}
 	/**
 	 * 留言
@@ -546,5 +539,170 @@ class PaiController extends Controller
 		} else {
 			return response_json(1, 0);
 		}
+	}
+
+	/**
+	 * 9 在线征集发布
+	 *
+	 * @author lwb 20180704
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws ApiErrorException
+	 * @api {Post} /del_my_pai_list 09.在线征集发布
+	 * @apiGroup Pai
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
+	 * @apiParam {string} api_token 用户token
+	 * @apiParam {string} title 标题
+	 * @apiParam {string} cover 封面地址
+	 * @apiParam {string} article_content 正文 可以包括文字 图片地址 视频地址 视频封面等
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function article_publish()
+
+	{
+		$this->validate([
+			'article_content' => 'required|string',
+			'cover' => 'required|string',
+			'title' => 'required|string',
+		]);
+		$uid = Auth::user()->uid;
+		$content = request('article_content');
+		if (config('app_check')['pai_article']) {
+			$is_check = 1;
+		} else {
+			$is_check = 2;
+		}
+		$r = OnlineArticle::create([
+			'uid' => $uid,
+			'content' => $content,
+			'cover' => request('cover'),
+			'is_check' => $is_check
+		]);
+		if ($r) {
+			return response_json(1, 1);
+		} else {
+			return response_json(1, 0);
+		}
+	}
+
+	/**
+	 * 10 我的在线征集文章删除
+	 *
+	 * @api {GET} /del_my_online_article 08.我的在线征集文章删除
+	 * @apiGroup Pai
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
+	 * @apiParam {string} api_token 用户token
+	 * @apiParam {int} article_id 文章id
+	 * @apiSuccess {int} data 操作结果1成功0失败
+	 */
+	public function del_my_online_article()
+	{
+		$this->validate([
+			'article_id' => 'required|min:1|integer',
+		]);
+		$uid = Auth::user()->uid;
+		$article_id = request('article_id', 0);
+		$r = OnlineArticle::where('article_id', $article_id)->where('uid', $uid)->delete();
+		if ($r) {
+			return response_json(1, '');
+		} else {
+			return response_json(0, '','删除失败');
+		}
+	}
+
+	/**
+	 * 11 我的征集文章列表
+	 *
+	 * @api {GET} /my_online_article_list 11.我的征集文章列表
+	 * @apiGroup Pai
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
+	 * @apiParam {int} skip 数据偏移量
+	 * @apiParam {int} take 查询数量
+	 * @apiParam {string} api_token 用户token
+	 * @apiSuccess {array} data 数据详情
+	 * @apiSuccess {int} article_id 编号
+	 * @apiSuccess {int} is_check 1未审核 2审核通过 3未通过
+	 * @apiSuccess {string} content 内容
+	 * @apiSuccess {string} addtime 发布时间 2017.1.22
+	 * @apiSuccess {string} cover 封面路径
+	 */
+	public function my_online_article_list()
+	{
+		$this->validate([
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
+		]);
+		$skip = request('skip', 0);
+		$take = request('take', 10);
+		$uid = Auth::user()->uid;
+		$data = OnlineArticle::where('uid', $uid)
+				->select('article_id', 'content', 'created_at as addtime','cover','is_check')
+				->orderBy('article_id', 'desc')->skip($skip)->take($take)
+				->get();
+		foreach ($data as $k => $v) {
+			$data[$k]->addtime = date('Y.n.j',strtotime($v->addtime));
+		}
+		return response_json(1, $data);
+	}
+
+	/**
+	 * 12 在线征集列表
+	 *
+	 * @api {GET} /pai_list 12.在线征集列表
+	 * @apiGroup Pai
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
+	 * @apiParam {int} skip 数据偏移量 默认为0 表示第一页
+	 * @apiParam {int} take 查询数量  默认为10 表示一页显示多少
+	 * @apiSuccess {array} data 数据详情
+	 * @apiSuccess {int} article_id 编号
+	 * @apiSuccess {string} content 内容
+	 * @apiSuccess {string} cover 封面
+	 * @apiSuccess {string} addtime 发布时间
+	 */
+	public function online_article_list()
+	{
+		$this->validate([
+			'skip' => 'required|min:0|integer',
+			'take' => 'required|min:0|integer',
+		]);
+		$skip = request('skip', 0);
+		$take = request('take', 10);
+		$data = OnlineArticle::where('is_check', 2)
+			->select('article_id', 'content', 'created_at as addtime','cover')
+			->orderBy('article_id', 'desc')->skip($skip)->take($take)
+			->get();
+		foreach ($data as $k => $v) {
+			$data[$k]->addtime = date('Y.n.j',strtotime($v->addtime));
+		}
+		return response_json(1, $data);
+	}
+	/**
+	 * 13 获取文章详情web页面
+	 *
+	 * @api {GET} /online_article_url 13.文章详情web地址
+	 * @apiGroup Pai
+	 * @apiVersion 1.0.0
+	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
+	 * @apiParam {int} article_id 文章id
+	 * @apiSuccess {object} data
+	 * @apiSuccess {string} data.url web地址
+	 */
+	public function online_article_url()
+	{
+		$res['url']=route("api.online_article.detail",['p'=>request('p'),'article_id'=>request('article_id')]);
+		return  response_json(1,$res);
+	}
+	//web详情页
+	public function online_article_detail()
+	{
+		$id=request('article_id');
+		$data = OnlineArticle::where('article_id',$id)->select('cover','content','uid')->first()->toArray();
+		$user = Users::where('uid',$data['uid'])->select('avatar','nickname')->first()->toArray();
+		$res['essay'] = json_encode( $data );
+		$res['user'] = json_encode( $user );
+		return view('api.online_article.detail',$res);
 	}
 }
