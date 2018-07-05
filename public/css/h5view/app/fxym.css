@@ -1,0 +1,51 @@
+html, body {
+  height: 100%;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfloat {
+  zoom: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  word-break: break-all;
+}
+
+.wrap {
+  position: relative;
+}
+.wrap h1 {
+  position: absolute;
+  width: 100%;
+  top: 2.6666666667vw;
+  color: #fff;
+  font-size: 5.3333333333vw;
+  text-align: center;
+}
+.wrap img {
+  width: 100%;
+}
+.wrap .videoWrap {
+  height: 25.3333333333vw;
+  text-align: center;
+  padding-top: 5.3333333333vw;
+}
+.wrap .content {
+  color: #000000;
+  font-size: 4.8vw;
+  line-height: 8vw;
+  padding: 0 5.8666666667vw;
+}
+
+/*# sourceMappingURL=fxym.css.map */
