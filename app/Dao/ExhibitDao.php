@@ -135,7 +135,7 @@ class ExhibitDao extends Exhibit
 		//获取展品详情
 		$exhibit_list = Exhibit::where('is_show_list', 1)->select('id as exhibit_id','exhibit_name','exhibition_id','auto_num')->orderBy('auto_num','asc')->get();
 		//获取展厅列表
-		$exhibition=Exhibition::select('exhibition_name','floor_id','id as exhibition_id')->get();
+		$exhibition=Exhibition::select('exhibition_name','floor_id','id as exhibition_id')->orderBy('order_id', 'desc')->orderBy('id', 'asc')->get();
 		$is_add=1;
 		if(!empty($exhibition)){
 			foreach ($exhibition as $k=>$g) {
@@ -160,7 +160,7 @@ class ExhibitDao extends Exhibit
 				$is_add=2;
 			}
 		}
-		sort($data);
+		//sort($data);
 		$re_data['data']=$data;
 		$re_data['is_add']=$is_add;
 		return $re_data;
@@ -250,12 +250,13 @@ class ExhibitDao extends Exhibit
 		//获取展品详情
 		$exhibit_list = Exhibit::join('exhibit_language', 'exhibit_language.exhibit_id', '=', 'exhibit.id')->where('exhibit.is_show_map', 1)->where('exhibit_language.language', $language)->select('exhibit.exhibit_img', 'exhibit.id as exhibit_id','exhibit_language.exhibit_name','exhibit.exhibition_id','exhibit.like_num')->get();
 		//获取展厅列表
-		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name','exhibition.floor_id','exhibition.id as exhibition_id')->get();
+		$exhibition=Exhibition::join('exhibition_language', 'exhibition_language.exhibition_id', '=', 'exhibition.id')->where('exhibition_language.language', $language)->select('exhibition_language.exhibition_name','exhibition.floor_id','exhibition.id as exhibition_id')->orderBy('exhibition.order_id', 'desc')->orderBy('exhibition.id', 'asc')->get();
 		if(!empty($exhibition)){
 			foreach ($exhibition as $k=>$g) {
 				$data[$g->exhibition_id]=[
 					'exhibition_name'=>config('floor')[$g->floor_id].' '.$g->exhibition_name,
 					'exhibition_id'=>$g->exhibition_id,
+					'floor_id'=>$g->floor_id,
 					'is_all_check'=>1,
 					'exhibit_list'=>[]
 				];
@@ -293,7 +294,7 @@ class ExhibitDao extends Exhibit
 				$data[$g->exhibition_id]['is_all_check']=0;
 			}
 		}
-		sort($data);
+		//sort($data);
 		return $data;
 	}
 

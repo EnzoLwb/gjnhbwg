@@ -52,7 +52,7 @@
                                     <h1>{{$g['exhibition_name']}}</h1>
                                     @foreach($g['exhibit_list'] as $kk=>$gg)
                                         <div class="exhibit_box">
-                                            <input type="checkbox" name="road_exhibit_id{{$g['exhibition_id']}}[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}<br/>
+                                            <input type="checkbox" name="road_exhibit_id{{$g['floor_id']}}[]" value="{{$gg['exhibit_id']}}" @if($gg['is_check']==1)checked @endif />{{$gg['exhibiti_name']}}<br/>
 
                                             <!--排序权值-->
                                             @if(isset($road_raw_info[$gg['exhibit_id']]))

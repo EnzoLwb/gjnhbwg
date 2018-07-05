@@ -32,7 +32,7 @@ class ExhibitionController extends BaseAdminController
 	public function exhibition_list()
 	{
 		// 处理排序
-		$query = Exhibition::orderBy('order_id', 'asc')->orderBy('id', 'asc');
+		$query = Exhibition::orderBy('order_id', 'desc')->orderBy('id', 'asc');
 		// 筛选是名称
 		if (request('exhibition_name')) {
 			$query->where('exhibition_name', 'LIKE', "%" . request('exhibition_name') . "%");

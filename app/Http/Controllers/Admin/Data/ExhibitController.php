@@ -129,6 +129,10 @@ class ExhibitController extends BaseAdminController
 					]
 				]);
 
+				if(request('is_show_map')==1){
+					Exhibit::where('auto_num', request('auto_num'))->update(['is_show_map'=>2]);
+				}
+
 				$new_info = Exhibit::create($data);
 				$exhibit_id = $new_info->id;
 				$old_info = [];
@@ -141,6 +145,11 @@ class ExhibitController extends BaseAdminController
 				if (config('exhibit_config.is_version_zip')) {
 					$old_info = $this->get_old_info($id);
 				}
+
+				if(request('is_show_map')==1){
+					Exhibit::where('auto_num', request('auto_num'))->update(['is_show_map'=>2]);
+				}
+
 				Exhibit::where('id', $id)->update($data);
 				$exhibit_id = $id;
 				ExhibitLanguage::where('exhibit_id', $exhibit_id)->delete();

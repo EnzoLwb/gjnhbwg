@@ -166,6 +166,22 @@ class MenuDao extends BaseMdl
 				]
 			],
 
+
+			[
+				'text' => '统计管理',
+				'priv' => 'stat',
+				'icon' => 'fa fa-pie-chart',
+				'order_num' => 10,
+				'nodes' => [
+					[
+						'text' => '展品热度统计',
+						'url' => route('admin.stat.stat.exhibit_hot'),
+						'priv' => 'admin-stat-stat-exhibit_hot',
+						'order_num' => 10,
+					]
+				]
+			],
+
 		];
 
 		//功能模块配置加载

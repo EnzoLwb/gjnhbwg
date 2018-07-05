@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">多模蓝牙编号(*)</label>
                             <div class="col-sm-4">
-                                <input type="text" name="auto_num" value="{{$info['auto_num'] or ''}}" class="form-control" maxlength="10" required/>
+                                <input type="text" id="auto_num" name="auto_num" value="{{$info['auto_num'] or ''}}" class="form-control" maxlength="10" required/>
                             </div>
                         </div>
 
@@ -190,7 +190,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-6 col-md-offset-2">
-                                <button class="btn btn-primary" type="submit">保存</button>
+                                <button class="btn btn-primary" type="button" onclick="confirmAutonum()">保存</button>
                                 <button class="btn btn-white" type="button" onclick="window.history.back()">返回</button>
                             </div>
                         </div>
@@ -266,5 +266,29 @@
         @endforeach
         @endforeach
 
+    </script>
+    <script>
+        function confirmAutonum(){
+            var auto_num = $('#auto_num').val();
+            auto_num = Number(auto_num);
+
+            if(auto_num==0||isNaN(auto_num)){
+                layer.alert('请设置有效的多模蓝牙编号', {icon: 5});
+                return false;
+            }else{
+                var is_show_map = $("input[name='is_show_map']:checked").val();
+                if(is_show_map==2){
+                    $('.ajaxForm').submit();
+                }else if(is_show_map==1){
+                    layer.confirm('确定把该展品设置成填写的蓝牙号地图展示展品？', {icon: 0}, function (e) {
+                        layer.close(e);
+                        $('.ajaxForm').submit();
+                    }, function (e) {
+                        layer.close(e);
+                        return false;
+                    });
+                }
+            }
+        }
     </script>
 @endsection
