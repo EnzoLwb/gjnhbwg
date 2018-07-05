@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     <!-- Link Swiper's CSS -->
+    <title>App学习单</title>
     <link href="{{cdn('js/dist/css/swiper.min.css')}}" rel="stylesheet" type="text/css">
     {{--<link href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css" rel="stylesheet">--}}
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
@@ -90,9 +91,9 @@
         }
 
         #option-div .score-div > .score-title {
-            float: right;
+            /*float: right;*/
             height: 100px;
-
+            padding-left: 10px;
         }
 
         #option-div .score-div > .score-title label {
@@ -105,9 +106,13 @@
             width: 95%;
             margin: auto;
         }
-
+        .qa-div .question-div{
+            font-size: 20px;
+            line-height: 30px;
+        }
         ul {
             margin: 20px;
+            padding: 0;
         }
 
         li {
@@ -274,9 +279,7 @@
         #list-div .score-div > .score-title label {
             color: #57B4FE;
             margin-top: 30px;
-            margin-left: 15px;
             font-size: 23px;
-
         }
 
         #list-div .score-label {

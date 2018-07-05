@@ -6,7 +6,7 @@
     <!-- Link Swiper's CSS -->
     <link href="{{cdn('js/dist/css/swiper.min.css')}}" rel="stylesheet" type="text/css">
     {{--<link href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css" rel="stylesheet">--}}
-
+    <title>导览机学习单/问答</title>
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
     <script src="{{cdn('js/bootstrap.min.js')}}"></script>
     <script src="{{cdn('js/plugins/layer/layer.js')}}"></script>
@@ -94,7 +94,7 @@
 
         #option-div .score-div > .score-title {
             height: 100px;
-
+            padding-left: 56px;
         }
 
         #option-div .score-div > .score-title label {
@@ -107,7 +107,10 @@
             width: 95%;
             margin: auto;
         }
-
+        .qa-div .question-div{
+            font-size: 20px;
+            line-height: 30px;
+        }
         li {
             line-height: 30px;
             background-color: #a1a1a1;
@@ -244,7 +247,7 @@
             display: none;
             background-color: #fff;
             color: #aaa;
-            height: 100%;
+            /*height: 100%;*/
             padding-top: 50px;
             /*margin-top: 20px;*/
         }
@@ -287,9 +290,7 @@
         #list-div > .score-title label {
             color: #57B4FE;
             margin-top: 30px;
-            /*margin-left: 15px;*/
             font-size: 35px;
-
         }
 
         #list-div .score-label {
@@ -387,8 +388,8 @@
     <div class="swiper-container">
         <div class="score-div">
             <div class="score-circle" style="display: none;">
-                    <div class="score-circle-div"><label class="score-label" id="score">0</label><label>%</label></div>
-                </div>
+                <div class="score-circle-div"><label class="score-label" id="score">0</label><label>%</label></div>
+            </div>
             <div class="score-title">
                 <label>耗时：</label><label class="time-label" id="timershow">00:00:00</label>
             </div>

@@ -1,0 +1,26 @@
+@import "index";
+.wrap{
+  position: relative;
+  h1{
+    position: absolute;
+    width: 100%;
+    top: vw(20);
+    color: #fff;
+    font-size:vw(40);
+    text-align: center;
+  }
+  img{
+    width:100%;
+  }
+  .videoWrap{
+    height: vw(150);
+    text-align: center;
+    padding-top: vw(40);
+  }
+  .content{
+    color: #000000;
+    font-size: vw(36);
+    line-height: vw(60);
+    padding: 0 vw(44);
+  }
+}

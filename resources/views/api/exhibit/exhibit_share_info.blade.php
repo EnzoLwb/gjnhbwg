@@ -9,17 +9,27 @@
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>{{$info->exhibit_name or ''}}</title>
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/reset.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/h5view/app/fxym.css')}}">
+    <link rel="stylesheet" href="{{cdn('css/audioplayer.css')}}">
+    <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
+    <script src="{{cdn('js/audioplayer.js')}}"></script>
 </head>
 <body>
-<h1>展品名称</h1>
-{{$info->exhibit_name or ''}}
-<h1>展品详情图</h1>
-@if(!empty($info->exhibit_img))
+<div class="wrap">
+    <h1>{{$info->exhibit_name or ''}}</h1>
+    @if(!empty($info->exhibit_img))
         <img src="{{get_file_url(json_decode($info->exhibit_img,true)['exhibit_imgs'])}}">
-@endif
-<h1>展品语音</h1>
-<audio src="{{$info->audio or ''}}" id="audio"></audio>
-<h1>展品内容</h1>
-{!! $info->content or '' !!}
-
+    @endif
+   {{-- <img src="{{cdn('img/h5view/996.png')}}" alt="">--}}
+    <div class="videoWrap">
+        <audio preload="auto" controls="" src="{{$info->audio or ''}}"></audio>
+    </div>
+    <div class="content">
+        {!! $info->content or '' !!}
+    </div>
+</div>
+<script>
+    $('audio').audioPlayer();
+</script>
 </body>
