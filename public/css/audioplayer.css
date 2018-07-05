@@ -35,7 +35,7 @@
 	cursor: pointer;
 	z-index: 2;
 	top: 0;
-	left: 0;
+	left: -0.5em;
 }
 
 .audioplayer:not(.audioplayer-mini) .audioplayer-playpause {
