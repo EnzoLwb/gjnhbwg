@@ -6,7 +6,7 @@
     <!-- Link Swiper's CSS -->
     <link href="{{cdn('js/dist/css/swiper.min.css')}}" rel="stylesheet" type="text/css">
     {{--<link href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css" rel="stylesheet">--}}
-    <title>dsklfjkl</title>
+    <title>app展品问答</title>
     <script src="{{cdn('js/jquery-1.12.4.min.js')}}"></script>
     <script src="{{cdn('js/bootstrap.min.js')}}"></script>
     <script src="{{cdn('js/plugins/layer/layer.js')}}"></script>
@@ -93,9 +93,9 @@
         }
 
         #option-div .score-div > .score-title {
-            float: right;
+            /*float: right;*/
             height: 100px;
-
+            padding-left: 10px;
         }
 
         #option-div .score-div > .score-title label {
@@ -108,9 +108,13 @@
             width: 95%;
             margin: auto;
         }
-
+        .qa-div .question-div{
+            font-size: 20px;
+            line-height: 30px;
+        }
         ul {
             margin: 20px;
+            padding: 0;
         }
 
         li {
@@ -262,15 +266,13 @@
             margin: 0 auto;
             /*float: left;*/
         }
-
-        #list-div .score-div > .score-circle > .center-label {
-            margin: auto 36px;
-        }
-
-        #list-div .score-div > .score-circle > .time-label {
-            margin-left: 22px;
-        }
-
+        /*#list-div .score-div > .score-circle .center-label {
+            font-size: 28px;
+            line-height: 40px;
+        }*/
+        /*#list-div .score-div > .score-circle .time-label {
+            font-size: 20px;
+        }*/
         #list-div .score-title {
             /*float: left;*/
             height: 100px;
@@ -334,8 +336,8 @@
         }
 
         .btn-div > .btn {
-            display: block;
-            width: 60%;
+            /*display: block;*/
+            width: 45%;
             height: 40px;
             margin: 10px auto 0;
             border-radius: 20px;
@@ -402,12 +404,15 @@
         <button type="button" id="prev-btn" class="btn white-btn" style="display:none;">
             上一题
         </button>
-    </div>
-    <div class="btn-div">
         <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
             下一题
         </button>
     </div>
+    {{--<div class="btn-div">
+        <button type="button" id="next-btn" class="btn yellow-btn" style="display:none;">
+            下一题
+        </button>
+    </div>--}}
     <div class="btn-div">
         <button type="button" id="return-btn" class="btn yellow-btn" style="display:none;">
             返回成绩单
