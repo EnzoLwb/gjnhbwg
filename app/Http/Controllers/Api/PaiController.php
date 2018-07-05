@@ -71,7 +71,7 @@ class PaiController extends Controller
 			$video_cover_path=public_path($file['data']->file_path).'/'.current(explode('.', $file['data']->file_name)).'.jpg';
 			$video_file_path=public_path($all_file_name);// /uploadfiles/article_content_video/20180704/201807041620226836.mp4
 			$str = "ffmpeg -i ".$video_file_path." -y -f mjpeg -ss 3 -t 1 -s 700x400 ".$video_cover_path;
-			exec($str);
+			@exec($str);
 		}
 		if (!$file['status']) {
 			throw new ApiErrorException($file['data']);
@@ -547,7 +547,7 @@ class PaiController extends Controller
 	 * @author lwb 20180704
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws ApiErrorException
-	 * @api {Post} /del_my_pai_list 09.在线征集发布
+	 * @api {Post} /article_publish 09.在线征集发布
 	 * @apiGroup Pai
 	 * @apiVersion 1.0.0
 	 * @apiParam {string} p 平台，i：IOS，a：安卓，w：微信
